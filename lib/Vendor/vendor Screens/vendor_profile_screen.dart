@@ -1,0 +1,15 @@
+import 'package:flutter/material.dart';
+
+class VendorProfileScreen extends StatelessWidget {
+  const VendorProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        "Vendor Profile Screen",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
