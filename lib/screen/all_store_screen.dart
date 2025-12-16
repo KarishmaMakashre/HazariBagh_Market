@@ -8,152 +8,184 @@ class AllStoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Correctly define and use the size variable
-    final size = MediaQuery.of(context).size;
-    // You can also define width and height for cleaner access
-    final double screenWidth = size.width;
-    final double screenHeight = size.height; // Not strictly needed here but good practice
+    final mq = MediaQuery.of(context).size;
+    final w = mq.width;
+    final h = mq.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: Colors.grey.shade100,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TopHeader(),
-          const SizedBox(height: 10),
 
-          // **CORRECTION HERE:** Replaced undefined 'width' with 'screenWidth' or 'size.width'
-          Padding(
-            padding: EdgeInsets.all(screenWidth * 0.03), // Use screenWidth
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back, color: Colors.blue, size: screenWidth * 0.055), // Use screenWidth
-                SizedBox(width: screenWidth * 0.02), // Use screenWidth
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Back",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: screenWidth * 0.038, // Use screenWidth
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          /// 🔙 BACK + TITLE (MediaQuery based)
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: w * 0.04,
+              vertical: h * 0.015,
+            ),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
                 ),
               ],
             ),
+            child: InkWell(
+              onTap: () => Navigator.pop(context),
+              borderRadius: BorderRadius.circular(30),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(w * 0.015),
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: w * 0.05,
+                    ),
+                  ),
+                  SizedBox(width: w * 0.03),
+                  Text(
+                    "All Stores",
+                    style: TextStyle(
+                      fontSize: w * 0.05,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          /// CONTENT
+
+
+          /// 🏬 STORE LIST
           Expanded(
-            child: Padding(
-              // Consider using screenWidth for horizontal padding too if you want it relative to screen size
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // Example: 4% of width
-              // Original: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView.builder(
+              padding: EdgeInsets.all(w * 0.04),
+              itemCount: nearbyStores.length,
+              itemBuilder: (context, index) {
+                final store = nearbyStores[index];
 
-              child: ListView.builder(
-                itemCount: nearbyStores.length,
-                itemBuilder: (context, index) {
-                  final store = nearbyStores[index];
-
-                  return GestureDetector(
+                return TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: 1),
+                  duration: Duration(milliseconds: 300 + index * 100),
+                  builder: (_, value, child) => Opacity(
+                    opacity: value,
+                    child: Transform.translate(
+                      offset: Offset(0, (1 - value) * 40),
+                      child: child,
+                    ),
+                  ),
+                  child: GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => StoreDetailsScreen(store: store),
+                        PageRouteBuilder(
+                          transitionDuration:
+                          const Duration(milliseconds: 350),
+                          pageBuilder: (_, a, __) => FadeTransition(
+                            opacity: a,
+                            child: StoreDetailsScreen(store: store),
+                          ),
                         ),
                       );
                     },
-
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 14),
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(14),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.07),
+                            color: Colors.black.withOpacity(0.06),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
-                          )
+                          ),
                         ],
                       ),
-
                       child: Row(
                         children: [
                           /// IMAGE
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: Image.asset(
-                              store.image,
-                              // Correctly using size.width for relative sizing
-                              height: screenWidth * 0.22,
-                              width: screenWidth * 0.22,
-                              fit: BoxFit.cover,
-                            ),
+                          Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  store.image,
+                                  height: h * 0.10,
+                                  width: w * 0.22,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Positioned(
+                                top: 6,
+                                right: 6,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        size: 12,
+                                        color: Colors.orange,
+                                      ),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        "${store.rating}",
+                                        style:
+                                        const TextStyle(fontSize: 11),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
 
-                          const SizedBox(width: 12),
+                          SizedBox(width: w * 0.03),
 
                           /// DETAILS
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // You might also consider using screenWidth for font sizes for better responsiveness
                                 Text(
                                   store.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: screenWidth * 0.042, // Example: 4.2% of width
-                                    fontWeight: FontWeight.w700,
+                                    fontSize: w * 0.04,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  // Original: fontSize: 16,
                                 ),
-
-                                const SizedBox(height: 6),
-
+                                SizedBox(height: h * 0.004),
                                 Text(
                                   store.category,
                                   style: TextStyle(
-                                    fontSize: screenWidth * 0.038, // Example: 3.8% of width
-                                    color: Colors.grey.shade600,
+                                    fontSize: w * 0.032,
+                                    color: Colors.grey,
                                   ),
-                                  // Original: fontSize: 14,
                                 ),
-
-                                const SizedBox(height: 6),
-
+                                SizedBox(height: h * 0.006),
                                 Row(
                                   children: [
-                                    Icon(Icons.location_on,
-                                        size: screenWidth * 0.04, color: Colors.red), // Use screenWidth
+                                    const Icon(
+                                      Icons.location_on,
+                                      size: 14,
+                                      color: Colors.grey,
+                                    ),
                                     const SizedBox(width: 4),
                                     Text(
                                       store.distance,
                                       style: TextStyle(
-                                        fontSize: screenWidth * 0.035, // Example: 3.5% of width
-                                        color: Colors.grey.shade700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 6),
-
-                                Row(
-                                  children: [
-                                    Icon(Icons.star,
-                                        size: screenWidth * 0.04, color: Colors.orange), // Use screenWidth
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "${store.rating}",
-                                      style: TextStyle(
-                                        fontSize: screenWidth * 0.038, // Example: 3.8% of width
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: w * 0.032,
                                       ),
                                     ),
                                   ],
@@ -161,12 +193,19 @@ class AllStoreScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                          /// ➡️ ARROW
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: w * 0.04,
+                            color: Colors.grey,
+                          ),
                         ],
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],

@@ -3,7 +3,6 @@ import 'package:hazari_bagh_market/provider/store_provider.dart';
 import 'package:hazari_bagh_market/screen/all_store_screen.dart';
 import 'package:hazari_bagh_market/screen/categories/view_store_screen.dart';
 import 'package:provider/provider.dart';
-
 import '../../Model/home_model.dart';
 import '../../Model/store_model.dart';
 import '../../all_categories_screen.dart';
@@ -11,6 +10,16 @@ import '../../widgets/top_header.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
+
+  /// 🔥 COMMON METHOD (Card + Button dono ke liye)
+  void _openStore(BuildContext context, StoreModel store) {
+    Provider.of<StoreProvider>(context, listen: false).setStore(store);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ViewStoreScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,6 @@ class CategoryScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-
       body: Column(
         children: [
           const TopHeader(),
@@ -32,7 +40,7 @@ class CategoryScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  /// TITLE
+                  /// 🔹 CATEGORIES TITLE
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -59,11 +67,13 @@ class CategoryScreen extends StatelessWidget {
 
                   SizedBox(height: h * 0.01),
 
-                  /// CATEGORY GRID (6 only)
+                  /// 🔹 CATEGORY GRID
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: homeCategories.length > 6 ? 6 : homeCategories.length,
+                    itemCount: homeCategories.length > 6
+                        ? 6
+                        : homeCategories.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       crossAxisSpacing: 12,
@@ -112,7 +122,7 @@ class CategoryScreen extends StatelessWidget {
 
                   SizedBox(height: h * 0.02),
 
-                  /// EXPLORE STORES TITLE
+                  /// 🔹 EXPLORE STORES TITLE
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -126,12 +136,10 @@ class CategoryScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const AllStoreScreen()),
-                          );
-                        },
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AllStoreScreen()),
+                        ),
                         child: const Text(
                           "View All",
                           style: TextStyle(
@@ -145,123 +153,133 @@ class CategoryScreen extends StatelessWidget {
 
                   SizedBox(height: h * 0.015),
 
-                  /// 🔥 DYNAMIC STORE LIST
+                  /// 🔥 STORE CARD LIST (FULL CARD CLICKABLE)
                   SizedBox(
-                    height: h * 0.27,
+                    height: h * 0.25, // ⬅️ flexible but safe height
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: nearbyStores.length,
                       itemBuilder: (context, index) {
                         final store = nearbyStores[index];
 
-                        return Container(
-                          width: w * 0.42,
-                          margin: const EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: h * 0.11,
-                                width: double.infinity,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(12)),
-                                  child: Image.asset(
-                                    store.image,
-                                    fit: BoxFit.cover,
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () => _openStore(context, store),
+                          child: Container(
+                            width: w * 0.40, // ⬅️ responsive width
+                            margin: const EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.06),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+
+                                /// 🖼 IMAGE (ASPECT RATIO BASED)
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(14),
+                                    ),
+                                    child: Image.asset(
+                                      store.image,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
 
-                              Padding(
-                                padding: EdgeInsets.all(w * 0.02),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      store.name,
-                                      style: TextStyle(
-                                        fontSize: w * 0.035,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-
-                                    SizedBox(height: h * 0.005),
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                /// 📄 CONTENT
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(w * 0.03),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          store.distance,
+                                          store.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              color: Colors.blue, fontSize: w * 0.028),
+                                            fontSize: w * 0.04,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                        Text(
-                                          "${store.rating} ⭐",
-                                          style: TextStyle(
-                                              color: Colors.orange, fontSize: w * 0.028),
+
+                                        const SizedBox(height: 6),
+
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              store.distance,
+                                              style: TextStyle(
+                                                color: Colors.blue,
+                                                fontSize: w * 0.032,
+                                              ),
+                                            ),
+                                            Text(
+                                              "${store.rating} ⭐",
+                                              style: TextStyle(
+                                                color: Colors.orange,
+                                                fontSize: w * 0.032,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        const Spacer(),
+
+                                        /// 🔘 BUTTON
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 40, // ⬅️ minimum touch size
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color(0xFF3670A3),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            onPressed: () => _openStore(context, store),
+                                            child: const Text(
+                                              "Visit Store",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
-
-                                    SizedBox(height: h * 0.01),
-
-                                    SizedBox(
-                                      height: h * 0.035,
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xFF3670A3),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Provider.of<StoreProvider>(
-                                            context,
-                                            listen: false,
-                                          ).setStore(store);
-
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => const ViewStoreScreen(),
-                                            ),
-                                          );
-                                        },
-                                        child: Text(
-                                          "Visit Store",
-                                          style: TextStyle(
-                                              fontSize: w * 0.028, color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
 
+
                   SizedBox(height: h * 0.03),
 
-                  /// ⭐ BANNER IMAGE SECTION (Reduced Height)
+                  /// 🔹 BANNER
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: SizedBox(
-                      height: h * 0.18,   // ⬅️ Reduced height (previously full auto height)
+                      height: h * 0.18,
                       width: double.infinity,
                       child: Image.asset(
                         "assets/images/electronics.jpg",
@@ -270,9 +288,9 @@ class CategoryScreen extends StatelessWidget {
                     ),
                   ),
 
-
                   SizedBox(height: h * 0.03),
 
+                  /// 🔹 OFFER
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(w * 0.08),
@@ -293,13 +311,16 @@ class CategoryScreen extends StatelessWidget {
                         SizedBox(height: 6),
                         Text(
                           "Get flat 30% off on all orders",
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: h * 0.03),
 
+                  SizedBox(height: h * 0.03),
                 ],
               ),
             ),

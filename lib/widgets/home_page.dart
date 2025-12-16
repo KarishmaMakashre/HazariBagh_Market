@@ -18,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> pages = [
     const HomeScreen(),
     const CategoryScreen(),
-    const CartScreen(),
     const MyOrdersScreen(),
     SupportPage(),
   ];
@@ -55,9 +54,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             _navItem(Icons.home, "Home", 0, w, h),
             _navItem(Icons.list, "Categories", 1, w, h),
-            _navItem(Icons.shopping_cart, "Cart", 2, w, h),
-            _navItem(Icons.inventory, "Orders", 3, w, h),
-            _navItem(Icons.headset_mic, "Support", 4, w, h),
+            _navItem(Icons.inventory, "Orders", 2, w, h),
+            _navItem(Icons.headset_mic, "Support", 3, w, h),
           ],
         ),
       ),

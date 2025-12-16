@@ -237,12 +237,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           backgroundColor: const Color(0xFF3670A3),
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const VendorDashboardHomeScreen(),
-                            ),
-                          );
+
                         },
                         child: const Text(
                           "Register & Continue",

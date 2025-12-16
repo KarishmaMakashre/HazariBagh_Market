@@ -114,7 +114,7 @@ final List<HomeCategoryModel> homeCategories = [
   ),
 
   HomeCategoryModel(
-    image: "assets/Icons/purchaseFlat.png",
+    image: "assets/images/purchaseFlat.png",
     title: "Purchase Flat & Home",
     screen: const HomePurchaseScreen(),
   ),

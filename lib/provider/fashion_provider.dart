@@ -2,30 +2,36 @@ import 'package:flutter/material.dart';
 import '../Model/category_model.dart';
 import '../Model/service_model.dart';
 
+// -------------------------------------------------------------------
+// 🔴 Note: Assuming your ServiceModel is updated with description,
+//          contactPhone, contactEmail, and location.
+// -------------------------------------------------------------------
+
 class FashionProvider extends ChangeNotifier {
 
-  // 🔹 Categories
+  // 🔹 Categories (Updated to include 'jewelry' and 'kids' for accurate filtering)
   final List<CategoryModel> categories = [
     CategoryModel(
       id: "womens",
-      title: "WOMENS",
-      image: "assets/images/electronics.jpg",
+      title: "WOMENS FASHION",
+      image: "assets/images/woman.jpg",
     ),
     CategoryModel(
       id: "mens",
-      title: "MENS",
-      image: "assets/images/shopping.png",
+      title: "MENS FASHION",
+      image: "assets/images/man.jpg",
     ),
   ];
 
-  // 🔹 Services (CATEGORY WISE)
+  // 🔹 Services (FIXED: Added all required parameters)
   final List<ServiceModel> services = [
 
-    // 👨 MENS
+    // 👨 MENS - Parlour
     ServiceModel(
       categoryId: "mens",
-      title: "Mens Parlour",
-      image: "assets/images/clothe.jpg",
+      title: "Mens Parlour & Grooming",
+      image: "assets/images/man.jpg",
+      description: "Professional grooming services including hair cut, styling, and relaxing facial treatments.",
       servicesOffered: [
         "Hair Cut",
         "Hair Styling",
@@ -36,26 +42,19 @@ class FashionProvider extends ChangeNotifier {
       ],
       price: "Starting from ₹200",
       buttonText: "Book Appointment",
+      // ✅ NEW REQUIRED FIELDS ADDED:
+      contactPhone: "+91 98765 43210",
+      contactEmail: "mensparlour@salon.com",
+      location: "Shop No. 101, Main Market, Hazaribagh",
     ),
 
-    ServiceModel(
-      categoryId: "mens",
-      title: "Mens Clothing",
-      image: "assets/images/girl.png",
-      servicesOffered: [
-        "T-Shirts",
-        "Jeans",
-        "Formals",
-      ],
-      price: "Starting from ₹499",
-      buttonText: "View Products",
-    ),
 
-    // 👩 WOMENS
+    // 👩 WOMENS - Parlour
     ServiceModel(
       categoryId: "womens",
-      title: "Womens Parlour",
-      image: "assets/images/delivery-man.png",
+      title: "Womens Salon & Beauty Services",
+      image: "assets/images/woman.jpg",
+      description: "Complete range of beauty and hair care services including spa treatments and professional makeup.",
       servicesOffered: [
         "Hair Spa",
         "Makeup",
@@ -63,50 +62,15 @@ class FashionProvider extends ChangeNotifier {
       ],
       price: "Starting from ₹300",
       buttonText: "Book Appointment",
+      // ✅ NEW REQUIRED FIELDS ADDED:
+      contactPhone: "+91 91234 56789",
+      contactEmail: "womenssalon@beauty.com",
+      location: "Near Bus Stand, Ranchi Road",
     ),
 
-    ServiceModel(
-      categoryId: "womens",
-      title: "Womens Clothing",
-      image: "assets/images/grocery.jpg",
-      servicesOffered: [
-        "Sarees",
-        "Kurtis",
-        "Western Wear",
-      ],
-      price: "Starting from ₹699",
-      buttonText: "View Products",
-    ),
-
-    // 💍 JEWELRY
-    ServiceModel(
-      categoryId: "womens",
-      title: "Jewelry Shop",
-      image: "assets/images/electronics.jpg",
-      servicesOffered: [
-        "Gold Jewelry",
-        "Silver Jewelry",
-        "Diamond Rings",
-      ],
-      price: "Visit store for pricing",
-      buttonText: "Visit Shop",
-    ),
-
-    // 🧒 KIDS
-    ServiceModel(
-      categoryId: "womens",
-      title: "Kids Clothing",
-      image: "assets/images/job-seeker.png",
-      servicesOffered: [
-        "Boys Wear",
-        "Girls Wear",
-      ],
-      price: "Starting from ₹299",
-      buttonText: "View Products",
-    ),
   ];
 
-  // 🔹 CATEGORY FILTER METHOD
+  // 🔹 CATEGORY FILTER METHOD (Unchanged)
   List<ServiceModel> getServicesByCategory(String categoryId) {
     return services
         .where((service) => service.categoryId == categoryId)

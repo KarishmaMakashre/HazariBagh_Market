@@ -5,8 +5,47 @@ import '../../../provider/fashion_provider.dart';
 import '../../../colors/AppColors.dart';
 import 'service_detail_screen.dart';
 
-class FashionScreen extends StatelessWidget {
+class FashionScreen extends StatefulWidget {
   const FashionScreen({super.key});
+
+  @override
+  State<FashionScreen> createState() => _FashionScreenState();
+}
+
+class _FashionScreenState extends State<FashionScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fade;
+  late Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _fade = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.08),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,123 +55,90 @@ class FashionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.bgLight,
-      body: Stack(
-        children: [
+      body: FadeTransition(
+        opacity: _fade,
+        child: SlideTransition(
+          position: _slide,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const TopHeader(),
+                SizedBox(height: h * 0.01),
 
-          /// 🔽 SCROLLABLE BODY
-          Positioned.fill(
-            top: kToolbarHeight + 10,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: h * 0.04),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  SizedBox(height: h * 0.01),
-
-                  /// 🔙 BACK BUTTON
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: w * 0.04, vertical: h * 0.01),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Row(
-                        children: [
-                          Icon(Icons.arrow_back,
-                              color: const Color(0xFF3670A3),
-                              size: w * 0.06),
-                          SizedBox(width: w * 0.02),
-                          Text(
-                            "Back",
-                            style: TextStyle(
-                              fontSize: w * 0.045,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF3670A3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  /// 🔵 TOP BANNER
-                  Padding(
-                    padding: EdgeInsets.all(w * 0.02),
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * 0.05,
-                        vertical: h * 0.025,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Fashion Store",
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: w * 0.055,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: h * 0.008),
-                          Text(
-                            "Explore latest fashion & trends",
-                            style: TextStyle(
-                              color: AppColors.textGrey,
-                              fontSize: w * 0.035,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  /// 🖼 PROMO BANNERS
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                /// 🔙 BACK
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: w * 0.04, vertical: h * 0.01),
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context),
                     child: Row(
                       children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: Image.asset(
-                              "assets/images/offer.jpg",
-                              height: h * 0.13,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: w * 0.03),
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: Image.asset(
-                              "assets/images/sales.png",
-                              height: h * 0.13,
-                              fit: BoxFit.cover,
-                            ),
+                        Icon(Icons.arrow_back,
+                            color: AppColors.primary, size: w * 0.06),
+                        SizedBox(width: w * 0.02),
+                        Text(
+                          "Back",
+                          style: TextStyle(
+                            fontSize: w * 0.045,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
                     ),
                   ),
+                ),
 
-                  SizedBox(height: h * 0.03),
+                /// 🔵 BANNER
+                Padding(
+                  padding: EdgeInsets.all(w * 0.02),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: w * 0.05, vertical: h * 0.025),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Fashion Store",
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: w * 0.055,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: h * 0.008),
+                        Text(
+                          "Explore latest fashion & trends",
+                          style: TextStyle(
+                            color: AppColors.textGrey,
+                            fontSize: w * 0.035,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
-                  /// 📂 CATEGORIES
-                  _sectionTitle("Categories", w),
-                  SizedBox(height: h * 0.015),
+                SizedBox(height: h * 0.03),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                    child: Row(
-                      children: provider.categories.map((cat) {
-                        return Expanded(
+                /// 📂 CATEGORIES (Fade-in images)
+                _sectionTitle("Categories", w),
+                SizedBox(height: h * 0.015),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                  child: Row(
+                    children: provider.categories.map((cat) {
+                      return Expanded(
+                        child: AnimatedOpacity(
+                          opacity: 1,
+                          duration: const Duration(milliseconds: 800),
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
                             height: h * 0.14,
@@ -174,39 +180,52 @@ class FashionScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        ),
+                      );
+                    }).toList(),
                   ),
+                ),
 
-                  SizedBox(height: h * 0.03),
+                SizedBox(height: h * 0.03),
 
-                  /// 🛍 SERVICES
-                  _sectionTitle("Services", w),
-                  SizedBox(height: h * 0.015),
+                /// 🛍 SERVICES (Tap scale animation)
+                _sectionTitle("Services", w),
+                SizedBox(height: h * 0.015),
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: provider.services.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: w * 0.03,
-                        mainAxisSpacing: w * 0.03,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemBuilder: (context, index) {
-                        final service = provider.services[index];
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(w * 0.035),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: provider.services.length,
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: w * 0.03,
+                      mainAxisSpacing: w * 0.03,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemBuilder: (context, index) {
+                      final service = provider.services[index];
+
+                      return TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 1, end: 1),
+                        duration: const Duration(milliseconds: 200),
+                        builder: (_, scale, child) {
+                          return Transform.scale(
+                            scale: scale,
+                            child: child,
+                          );
+                        },
+                        child: InkWell(
+                          borderRadius:
+                          BorderRadius.circular(w * 0.035),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) =>
-                                    ServiceDetailScreen(service: service),
+                                    ServiceListScreen(),
                               ),
                             );
                           },
@@ -230,29 +249,28 @@ class FashionScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.vertical(
                                       top: Radius.circular(w * 0.035),
                                     ),
-                                    child: Image.asset(
-                                      service.image,
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
+                                    child: Hero(
+                                      tag: service.image,
+                                      child: Image.asset(
+                                        service.image,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      ),
                                     ),
                                   ),
                                 ),
                                 Expanded(
                                   flex: 3,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: w * 0.015),
-                                    child: Center(
-                                      child: Text(
-                                        service.title.toUpperCase(),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: w * 0.028,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.textDark,
-                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      service.title.toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: w * 0.028,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.textDark,
                                       ),
                                     ),
                                   ),
@@ -260,28 +278,21 @@ class FashionScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+
+                SizedBox(height: h * 0.04),
+              ],
             ),
           ),
-
-          /// 🔝 FIXED TOP HEADER
-          const Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: TopHeader(),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  /// 🔹 SECTION TITLE
   Widget _sectionTitle(String title, double w) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: w * 0.04),
