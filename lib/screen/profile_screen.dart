@@ -7,11 +7,11 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: Column(
         children: [
           /// 🔵 TOP HEADER
@@ -19,119 +19,134 @@ class ProfileScreen extends StatelessWidget {
 
           /// 🔙 BACK BUTTON
           Padding(
-            padding: const EdgeInsets.only(left: 16, top: 12, bottom: 8),
+            padding: EdgeInsets.only(
+              left: w * 0.04,
+              top: h * 0.015,
+              bottom: h * 0.01,
+            ),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    // decoration: BoxDecoration(
-                    //   // color: Colors.white,          // ✅ White BG
-                    //   borderRadius: BorderRadius.circular(10),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Colors.black.withOpacity(0.08),
-                    //       blurRadius: 6,
-                    //       offset: const Offset(0, 3),
-                    //     ),
-                    //   ],
-                    // ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.arrow_back, size: 20, color: Colors.black87),
-                        SizedBox(width: 6),
-                        Text(
-                          "Back",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_back,
+                        size: w * 0.055,
+                        color: Colors.black87,
+                      ),
+                      SizedBox(width: w * 0.015),
+                      Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: w * 0.04,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
 
-          /// MAIN BODY
+          /// 🔽 MAIN BODY
           Expanded(
             child: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                color: Colors.white,                // ✅ White Body
-
+                padding: EdgeInsets.symmetric(
+                  horizontal: w * 0.05,
+                  vertical: h * 0.025,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Profile Image
+                    /// 👤 PROFILE IMAGE
                     CircleAvatar(
-                      radius: 45,
-                      backgroundImage: AssetImage("assets/images/girl.png"),
+                      radius: w * 0.12,
+                      backgroundImage:
+                      const AssetImage("assets/images/girl.png"),
                     ),
-                    const SizedBox(height: 12),
 
-                    // Name
-                    const Text(
+                    SizedBox(height: h * 0.015),
+
+                    /// 👤 NAME
+                    Text(
                       "Jonathan Patterson",
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontSize: w * 0.05,
                       ),
                     ),
 
-                    const SizedBox(height: 4),
-                    const Text(
+                    SizedBox(height: h * 0.005),
+
+                    /// ✉ EMAIL
+                    Text(
                       "hello@reallygreatsite.com",
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                      style: TextStyle(
+                        fontSize: w * 0.035,
+                        color: Colors.black54,
+                      ),
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: h * 0.035),
 
+                    /// ✏ EDIT PROFILE
                     profileTile(
+                      w: w,
                       icon: Icons.edit,
                       title: "Edit Profile",
-                      onTap: () {},
                       iconColor: Colors.green,
+                      onTap: () {},
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: h * 0.02),
 
-                    const Align(
+                    /// ⚙ GENERAL SETTINGS
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "General Settings",
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                          fontSize: w * 0.045,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: h * 0.015),
 
-                    // Mode Switch
+                    /// 🌗 MODE SWITCH
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: h * 0.015),
                       child: Row(
                         children: [
                           CircleAvatar(
-                            radius: 14,
+                            radius: w * 0.04,
                             backgroundColor: Colors.black87,
-                            child: const Icon(Icons.dark_mode, color: Colors.white, size: 16),
+                            child: Icon(
+                              Icons.dark_mode,
+                              color: Colors.white,
+                              size: w * 0.04,
+                            ),
                           ),
-                          const SizedBox(width: 12),
-                          const Column(
+                          SizedBox(width: w * 0.03),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Mode", style: TextStyle(fontSize: 14)),
+                              Text(
+                                "Mode",
+                                style: TextStyle(fontSize: w * 0.038),
+                              ),
                               Text(
                                 "Dark & Light",
-                                style: TextStyle(fontSize: 12, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: w * 0.03,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ],
                           ),
@@ -141,41 +156,80 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
 
-                    profileTile(icon: Icons.language, title: "Language", onTap: () {}, iconColor: Colors.amber),
-                    profileTile(icon: Icons.settings, title: "Setting", onTap: () {}, iconColor: Colors.grey),
-                    profileTile(icon: Icons.info_outline, title: "About", onTap: () {}, iconColor: Colors.purple),
-                    profileTile(icon: Icons.description, title: "Terms & Conditions", onTap: () {}, iconColor: Colors.blue),
-                    profileTile(icon: Icons.privacy_tip, title: "Privacy Policy", onTap: () {}, iconColor: Colors.red),
-                    profileTile(icon: Icons.star_rate, title: "Rate This App", onTap: () {}, iconColor: Colors.deepPurple),
-                    profileTile(icon: Icons.share, title: "Share This App", onTap: () {}, iconColor: Colors.pink),
+                    profileTile(
+                        w: w,
+                        icon: Icons.language,
+                        title: "Language",
+                        iconColor: Colors.amber,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.settings,
+                        title: "Settings",
+                        iconColor: Colors.grey,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.info_outline,
+                        title: "About",
+                        iconColor: Colors.purple,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.description,
+                        title: "Terms & Conditions",
+                        iconColor: Colors.blue,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.privacy_tip,
+                        title: "Privacy Policy",
+                        iconColor: Colors.red,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.star_rate,
+                        title: "Rate This App",
+                        iconColor: Colors.deepPurple,
+                        onTap: () {}),
+                    profileTile(
+                        w: w,
+                        icon: Icons.share,
+                        title: "Share This App",
+                        iconColor: Colors.pink,
+                        onTap: () {}),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: h * 0.03),
 
-                    /// LOGOUT
+                    /// 🚪 LOGOUT BUTTON
                     InkWell(
                       onTap: () {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (_) => const LoginScreen()),
+                          MaterialPageRoute(
+                              builder: (_) => const LoginScreen()),
                               (route) => false,
                         );
                       },
                       child: Container(
-                        width: mq.width * 0.8,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        width: w * 0.8,
+                        padding:
+                        EdgeInsets.symmetric(vertical: h * 0.015),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(w * 0.08),
                           color: Colors.grey.shade100,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.logout, color: Colors.red),
-                            SizedBox(width: 8),
+                          children: [
+                            Icon(Icons.logout,
+                                color: Colors.red, size: w * 0.05),
+                            SizedBox(width: w * 0.02),
                             Text(
                               "Logout",
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
+                                fontSize: w * 0.04,
                                 color: Colors.red,
                               ),
                             ),
@@ -184,7 +238,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: h * 0.05),
                   ],
                 ),
               ),
@@ -195,22 +249,26 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Reusable Tile
+  /// ♻ REUSABLE PROFILE TILE
   Widget profileTile({
+    required double w,
     required IconData icon,
     required String title,
-    required Function() onTap,
     required Color iconColor,
+    required VoidCallback onTap,
   }) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
-        radius: 14,
+        radius: w * 0.04,
         backgroundColor: iconColor.withOpacity(0.2),
-        child: Icon(icon, color: iconColor, size: 16),
+        child: Icon(icon, color: iconColor, size: w * 0.04),
       ),
-      title: Text(title, style: const TextStyle(fontSize: 14)),
-      trailing: const Icon(Icons.chevron_right),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: w * 0.038),
+      ),
+      trailing: Icon(Icons.chevron_right, size: w * 0.05),
       onTap: onTap,
     );
   }

@@ -20,22 +20,20 @@ class ProductListScreen extends StatelessWidget {
     final List<ProductModel> products =
     groceryProvider.getProductsByCategory(categoryTitle);
 
-    final w = MediaQuery.of(context).size.width; // 🔑 Width is defined here
+    final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-
       body: Column(
         children: [
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          /// 🔙 BACK BUTTON + TITLE (Custom Header)
+          /// 🔙 BACK + TITLE
           Padding(
             padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 8),
             child: Row(
               children: [
-                // Back Button
                 IconButton(
                   icon: const Icon(Icons.arrow_back, color: AppColors.success),
                   onPressed: () => Navigator.pop(context),
@@ -43,7 +41,6 @@ class ProductListScreen extends StatelessWidget {
                   constraints: const BoxConstraints(),
                 ),
                 SizedBox(width: w * 0.02),
-                // Title
                 Text(
                   categoryTitle,
                   style: const TextStyle(
@@ -56,22 +53,27 @@ class ProductListScreen extends StatelessWidget {
             ),
           ),
 
-          /// 🧺 PRODUCT LIST (Expanded to fill remaining space)
+          /// 🧺 PRODUCT LIST
           Expanded(
             child: products.isEmpty
                 ? Center(
               child: Text(
                 "No products currently listed for $categoryTitle.",
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
               ),
             )
                 : ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               itemCount: products.length,
               itemBuilder: (context, index) {
-                final product = products[index];
-                // 🔑 Pass context AND width (w) to the card builder
-                return _buildProductCard(context, product, w);
+                return _buildProductCard(
+                  context,
+                  products[index],
+                  w,
+                );
               },
             ),
           ),
@@ -80,53 +82,75 @@ class ProductListScreen extends StatelessWidget {
     );
   }
 
-  /// 🟢 Product Card Widget to display individual item details
-  // 🔑 Updated signature to accept double w
-  Widget _buildProductCard(BuildContext context, ProductModel product, double w) {
+  /// 🟢 PRODUCT CARD
+  Widget _buildProductCard(
+      BuildContext context,
+      ProductModel product,
+      double w,
+      ) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
-    // Define responsive sizes
-    final imageSize = w * 0.20; // Approx 80px for standard 400w device
-    final horizontalPadding = w * 0.03; // Approx 12px
+    final imageSize = w * 0.20;
+    final padding = w * 0.03;
 
     return Card(
-      // 🔑 Use w for responsive margin
       margin: EdgeInsets.symmetric(vertical: w * 0.02),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 2,
       child: Padding(
-        // 🔑 Use w for responsive padding
-        padding: EdgeInsets.all(horizontalPadding),
+        padding: EdgeInsets.all(padding),
         child: Row(
           children: [
-            // 🖼 Product Image
+            /// 🖼 IMAGE
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10),
               child: Image.asset(
                 product.image,
-                width: imageSize, // 🔑 Responsive image size
-                height: imageSize, // 🔑 Responsive image size
+                width: imageSize,
+                height: imageSize,
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(width: horizontalPadding), // 🔑 Responsive spacing
 
-            // 📝 Details
+            SizedBox(width: padding),
+
+            /// 📝 DETAILS
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /// Product Name
                   Text(
                     product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: w * 0.04, // 🔑 Responsive font size
+                      fontSize: w * 0.04,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: w * 0.01), // 🔑 Responsive spacing
+
+                  SizedBox(height: w * 0.008),
+
+                  /// 🏪 STORE NAME (IMPORTANT)
+                  Text(
+                    product.storeName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: w * 0.032,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  SizedBox(height: w * 0.01),
+
+                  /// Price
                   Text(
                     product.price,
                     style: TextStyle(
-                      fontSize: w * 0.035, // 🔑 Responsive font size
+                      fontSize: w * 0.035,
                       color: AppColors.success,
                       fontWeight: FontWeight.w600,
                     ),
@@ -135,33 +159,44 @@ class ProductListScreen extends StatelessWidget {
               ),
             ),
 
-            // 🛒 Action Button
+            /// 🛒 ADD TO CART (STORE INCLUDED)
             ElevatedButton.icon(
               onPressed: () {
                 cartProvider.addItem({
                   "name": product.name,
-                  "price": double.tryParse(product.price.replaceAll(RegExp(r'[^\d.]'), '')) ?? 0.0,
+                  "price": double.tryParse(
+                    product.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                  ) ??
+                      0.0,
                   "qty": 1,
                   "image": product.image,
+
+                  /// 🔑 VERY IMPORTANT
+                  "store": product.storeName,
                 });
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text("${product.name} added to cart! (${cartProvider.cartCount} items)"),
+                    content: Text(
+                      "${product.name} added from ${product.storeName}",
+                    ),
                     duration: const Duration(milliseconds: 800),
                   ),
                 );
               },
-              icon: Icon(Icons.add_shopping_cart, size: w * 0.045), // 🔑 Responsive icon size
-              label: Text("Add cart"),
+              icon: Icon(Icons.add_shopping_cart, size: w * 0.045),
+              label: const Text("Add"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
-                padding: EdgeInsets.symmetric(horizontal: w * 0.02, vertical: w * 0.015), // 🔑 Responsive padding
+                padding: EdgeInsets.symmetric(
+                  horizontal: w * 0.025,
+                  vertical: w * 0.015,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                textStyle: TextStyle(fontSize: w * 0.035), // 🔑 Responsive text size
+                textStyle: TextStyle(fontSize: w * 0.035),
               ),
             ),
           ],

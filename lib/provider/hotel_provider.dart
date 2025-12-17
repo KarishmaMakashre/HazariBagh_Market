@@ -30,29 +30,78 @@ class HotelProvider extends ChangeNotifier {
 
   /// 🍽 DUMMY PRODUCT DATA (Hotels/Restaurants)
   final List<ProductModel> _dummyProducts = [
-    // ------------------- HOTELS -------------------
-    ProductModel(name: "Grand Palace Hotel", image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg", price: "₹4500/Night", category: "Hotels"),
-    ProductModel(name: "City Inn Residency", image: "assets/images/bedroom.png", price: "₹2500/Night", category: "Hotels"),
 
-    // ------------------- RESTAURANTS -------------------
-    ProductModel(name: "Spice Garden (Indian)", image: "assets/images/bedroomSecond.png", price: "₹800/2-person", category: "Restaurants"),
-    ProductModel(name: "Italiano Pizzas", image: "assets/images/Beverages.jpg", price: "₹650/2-person", category: "Restaurants"),
-
-    // --------------------- CAFES ---------------------
-    ProductModel(name: "Brew Ha Coffee", image: "assets/images/clothe.jpg", price: "₹300/person", category: "Cafes"),
-    ProductModel(name: "The Corner Cafe", image: "assets/images/electronics.jpg", price: "₹250/person", category: "Cafes"),
-
-    // ------------------- FAST FOOD -------------------
-    ProductModel(name: "Burger King Outlet", image: "assets/images/eric-prouzet-52DMHPBAvXY-unsplash.jpg", price: "₹400/2-person", category: "Fast Food"),
-
-    // ------------------- Fine Dining -------------------
-    ProductModel(name: "The Grand Bistro", image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg", price: "₹3000/2-person", category: "Fine Dining"
+    // ------------------- VEGETABLES -------------------
+    ProductModel(
+      name: "Fresh Tomatoes",
+      image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg",
+      price: "₹40/kg",
+      category: "Vegetables",
+      storeName: "Sharma Grocery Store",
+    ),
+    ProductModel(
+      name: "Onions (Local)",
+      image: "assets/images/vivek-sharma-rDDICrot22U-unsplash.jpg",
+      price: "₹25/kg",
+      category: "Vegetables",
+      storeName: "Sharma Grocery Store",
     ),
 
-    // ------------------- Bakery -------------------
-    ProductModel(name: "Artisan Bakehouse", image: "assets/images/pules.jpg", price: "₹600/2-person", category: "Bakery"
+    // --------------------- FRUITS ---------------------
+    ProductModel(
+      name: "Apples (Shimla)",
+      image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg",
+      price: "₹150/kg",
+      category: "Fruits",
+      storeName: "Sharma Grocery Store",
+    ),
+
+    // --------------------- RICE ---------------------
+    ProductModel(
+      name: "Basmati Rice",
+      image: "assets/images/rice.jpg",
+      price: "₹120/kg",
+      category: "Rice",
+      storeName: "Sharma Grocery Store",
+    ),
+
+    // --------------------- SNACKS ---------------------
+    ProductModel(
+      name: "Potato Chips",
+      image: "assets/images/snacks.jpg",
+      price: "₹30",
+      category: "Snacks",
+      storeName: "Delicious Food Point",
+    ),
+
+    // --------------------- BEVERAGES ---------------------
+    ProductModel(
+      name: "Soda Pack",
+      image: "assets/images/Beverages.jpg",
+      price: "₹200",
+      category: "Beverages",
+      storeName: "Delicious Food Point",
+    ),
+
+    // --------------------- SPICES ---------------------
+    ProductModel(
+      name: "Turmeric Powder",
+      image: "assets/images/spices.jpg",
+      price: "₹120/100g",
+      category: "Spices",
+      storeName: "Sharma Grocery Store",
+    ),
+
+    // --------------------- PULSES ---------------------
+    ProductModel(
+      name: "Arhar Dal",
+      image: "assets/images/pules.jpg",
+      price: "₹110/kg",
+      category: "Pulses",
+      storeName: "Sharma Grocery Store",
     ),
   ];
+
 
 
   // Asynchronous data load for categories

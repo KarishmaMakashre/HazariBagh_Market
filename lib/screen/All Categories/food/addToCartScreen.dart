@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../provider/cart_provider.dart';
 import '../../cart/cart_page.dart';
 
-
 class AddToCartScreen extends StatelessWidget {
   final String itemName;
   final String itemPrice;
@@ -17,64 +16,81 @@ class AddToCartScreen extends StatelessWidget {
     required this.itemImage,
   });
 
+  static const Color themeColor = Color(0xFFD0B5B5);
+
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
 
+      /// 🔝 APP BAR
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.5,
-        title: const Text(
+        title: Text(
           "Add To Cart",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: w * 0.05,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(16),
-
+        padding: EdgeInsets.all(w * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
+            /// 🖼 PRODUCT IMAGE
             ClipRRect(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(w * 0.04),
               child: Image.asset(
                 itemImage,
-                height: 180,
+                height: h * 0.28,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: h * 0.025),
 
+            /// 📛 PRODUCT NAME
             Text(
               itemName,
-              style: const TextStyle(
-                fontSize: 22,
+              style: TextStyle(
+                fontSize: w * 0.055,
                 fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: h * 0.012),
 
+            /// 💰 PRICE
             Text(
               "₹$itemPrice",
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.green,
+              style: TextStyle(
+                fontSize: w * 0.05,
+                color: themeColor,
                 fontWeight: FontWeight.w600,
               ),
             ),
 
             const Spacer(),
 
+            /// 🛒 ADD TO CART BUTTON
             ElevatedButton(
               onPressed: () {
-                Provider.of<CartProvider>(context, listen: false).addItem({
+                Provider.of<CartProvider>(
+                  context,
+                  listen: false,
+                ).addItem({
                   "name": itemName,
                   "price": double.parse(itemPrice),
                   "image": itemImage,
@@ -82,19 +98,27 @@ class AddToCartScreen extends StatelessWidget {
                   "store": "Fashion Hub",
                 });
 
-                /// Navigate to Cart Page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const CartScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const CartScreen(),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.red,
+                minimumSize: Size(double.infinity, h * 0.065),
+                backgroundColor: themeColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(w * 0.04),
+                ),
               ),
-              child: const Text(
-                "Add Cart",
-                style: TextStyle(fontSize: 18),
+              child: Text(
+                "Add to Cart",
+                style: TextStyle(
+                  fontSize: w * 0.045,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

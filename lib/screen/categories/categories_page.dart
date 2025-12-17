@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hazari_bagh_market/provider/store_provider.dart';
 import 'package:hazari_bagh_market/screen/all_store_screen.dart';
 import 'package:hazari_bagh_market/screen/categories/view_store_screen.dart';
@@ -82,6 +83,7 @@ class CategoryScreen extends StatelessWidget {
                     ),
                     itemBuilder: (context, index) {
                       final item = homeCategories[index];
+
                       return GestureDetector(
                         onTap: () => Navigator.push(
                           context,
@@ -102,15 +104,28 @@ class CategoryScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(item.image, height: w * 0.12),
+                              /// 🔹 IMAGE
+                              Image.asset(
+                                item.image,
+                                height: w * 0.12,
+                                fit: BoxFit.contain,
+                              ),
+
                               SizedBox(height: w * 0.02),
-                              Text(
-                                item.title,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: w * 0.03,
-                                  fontWeight: FontWeight.w600,
+
+                              /// 🔹 TITLE (GOOGLE FONT)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                child: Text(
+                                  item.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontSize: w * 0.032,
+                                    fontWeight: FontWeight.w600, // SemiBold look
+                                    color: Colors.black87,
+                                  ),
                                 ),
                               ),
                             ],
@@ -120,36 +135,46 @@ class CategoryScreen extends StatelessWidget {
                     },
                   ),
 
+
                   SizedBox(height: h * 0.02),
 
                   /// 🔹 EXPLORE STORES TITLE
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      /// 🔹 TITLE
                       Expanded(
                         child: Text(
-                          "Explore Stores By Category & \nDistance",
-                          style: TextStyle(
+                          "Explore Stores By Category &\nDistance",
+                          style: GoogleFonts.inter(
                             fontSize: w * 0.045,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            height: 1.3,
                           ),
                         ),
                       ),
+
+                      /// 🔹 VIEW ALL BUTTON
                       GestureDetector(
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const AllStoreScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const AllStoreScreen(),
+                          ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "View All",
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
+                            fontSize: w * 0.034,
+                            fontWeight: FontWeight.w600,
                             color: Colors.blue,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ],
                   ),
+
 
                   SizedBox(height: h * 0.015),
 
@@ -279,10 +304,10 @@ class CategoryScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: SizedBox(
-                      height: h * 0.18,
+                      height: h * 0.20,
                       width: double.infinity,
                       child: Image.asset(
-                        "assets/images/electronics.jpg",
+                        "assets/images/specOffer20%Off.jpg",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -293,27 +318,50 @@ class CategoryScreen extends StatelessWidget {
                   /// 🔹 OFFER
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.all(w * 0.08),
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 28,
                     ),
-                    child: const Column(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFFFF9800), // orange
+                          Color(0xFFFFB300), // yellow-orange
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.orange.withOpacity(0.4),
+                          blurRadius: 14,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Special Weekend Offer!",
-                          style: TextStyle(
+                          "Special Weekend\nOffer!",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
+                            height: 1.3,
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 12),
                         Text(
-                          "Get flat 30% off on all orders",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
+                          "Get flat 30% off on all orders\nabove ₹999",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white70,
+                            height: 1.4,
                           ),
                         ),
                       ],

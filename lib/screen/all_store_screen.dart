@@ -86,7 +86,7 @@ class AllStoreScreen extends StatelessWidget {
                           const Duration(milliseconds: 350),
                           pageBuilder: (_, a, __) => FadeTransition(
                             opacity: a,
-                            child: StoreDetailsScreen(store: store),
+                            child: StoreDetailsScreen(),
                           ),
                         ),
                       );

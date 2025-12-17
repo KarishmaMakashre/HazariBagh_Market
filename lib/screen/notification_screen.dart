@@ -5,35 +5,46 @@ import '../../widgets/top_header.dart';
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
+  static const Color primaryColor = Color(0xFF3670A3);
+
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-
       body: Column(
         children: [
           const TopHeader(),
 
-          /// ✅ TITLE BAR
+          /// 🔙 BACK + TITLE
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            padding: EdgeInsets.symmetric(
+              horizontal: w * 0.02,
+              vertical: h * 0.005,
+            ),
             child: Row(
               children: [
-                // ✅ BACK BUTTON
                 IconButton(
                   onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const HomeScreen(),
+                      ),
+                    );
                   },
-                  icon: const Icon(Icons.keyboard_backspace_outlined, size: 20),
+                  icon: Icon(
+                    Icons.keyboard_backspace_outlined,
+                    size: w * 0.06,
+                  ),
                 ),
 
-                // const SizedBox(width: 2),
-
-                // ✅ SHOPPING CART TEXT
-                const Text(
-                  "Shopping Cart",
+                Text(
+                  "Notifications",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: w * 0.05,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -41,64 +52,72 @@ class NotificationScreen extends StatelessWidget {
             ),
           ),
 
-
-          /// ✅ TODAY + MARK AS READ
+          /// 📅 TODAY + MARK AS READ
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text("Today", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("Make as read",
-                    style: TextStyle(
-                      color: Color(0xFF3670A3),
-                      fontWeight: FontWeight.bold,
-                    )),
+              children: [
+                Text(
+                  "Today",
+                  style: TextStyle(
+                    fontSize: w * 0.04,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Mark as read",
+                  style: TextStyle(
+                    fontSize: w * 0.035,
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
 
-          const SizedBox(height: 10),
+          SizedBox(height: h * 0.015),
 
-          /// ✅ NOTIFICATION LIST
+          /// 🔔 NOTIFICATION LIST
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(w * 0.04),
               children: [
-
                 _notificationCard(
+                  w: w,
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
                   status: "Out for Delivery",
                   price: "₹12,000",
                 ),
-
                 _notificationCard(
+                  w: w,
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
                   status: "Out for Delivery",
                   price: "₹15,000",
                 ),
-
                 _notificationCard(
+                  w: w,
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
                   status: "Out for Delivery",
                   price: "₹18,000",
                 ),
-
                 _notificationCard(
+                  w: w,
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
                   status: "Out for Delivery",
                   price: "₹9,000",
                 ),
-
                 _notificationCard(
+                  w: w,
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
@@ -113,8 +132,9 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  /// ✅ SINGLE NOTIFICATION CARD
+  /// 🔔 SINGLE NOTIFICATION CARD
   static Widget _notificationCard({
+    required double w,
     required String image,
     required String transactionId,
     required String date,
@@ -122,60 +142,90 @@ class NotificationScreen extends StatelessWidget {
     required String price,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.only(bottom: w * 0.03),
+      padding: EdgeInsets.all(w * 0.03),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(w * 0.04),
       ),
       child: Row(
         children: [
-          /// ✅ PRODUCT IMAGE
+          /// 🖼 IMAGE
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(w * 0.02),
             child: Image.asset(
               image,
-              height: 50,
-              width: 50,
+              height: w * 0.13,
+              width: w * 0.13,
               fit: BoxFit.cover,
             ),
           ),
 
-          const SizedBox(width: 10),
+          SizedBox(width: w * 0.03),
 
-          /// ✅ ORDER DETAILS
+          /// 📦 DETAILS
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Transaction ID : $transactionId",
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text("Scheduled for : $date",
-                    style: const TextStyle(fontSize: 12)),
-                Text(status,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange)),
-                Text(price,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green)),
+                Text(
+                  "Transaction ID : $transactionId",
+                  style: TextStyle(
+                    fontSize: w * 0.035,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: w * 0.01),
+                Text(
+                  "Scheduled for : $date",
+                  style: TextStyle(
+                    fontSize: w * 0.03,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: w * 0.01),
+                Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: w * 0.032,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                ),
+                SizedBox(height: w * 0.005),
+                Text(
+                  price,
+                  style: TextStyle(
+                    fontSize: w * 0.035,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
               ],
             ),
           ),
 
-          /// ✅ TRACK ORDER BUTTON
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF3670A3),
-              minimumSize: const Size(70, 30),
-              padding: EdgeInsets.zero,
-            ),
-            onPressed: () {},
-            child: const Text(
-              "Track Order",
-              style: TextStyle(fontSize: 10, color: Colors.white),
+          /// 🚚 TRACK ORDER BUTTON
+          SizedBox(
+            height: w * 0.08,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+                padding:
+                EdgeInsets.symmetric(horizontal: w * 0.025),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(w * 0.02),
+                ),
+              ),
+              onPressed: () {},
+              child: Text(
+                "Track",
+                style: TextStyle(
+                  fontSize: w * 0.03,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         ],

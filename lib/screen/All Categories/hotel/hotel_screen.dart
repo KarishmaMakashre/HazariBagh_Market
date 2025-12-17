@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../provider/hotel_provider.dart';
 import '../../../widgets/top_header.dart';
 
-import 'hotel_category_card.dart'; // Import the new card
+import 'hotel_category_card.dart';
 
 class HotelScreen extends StatelessWidget {
   const HotelScreen({super.key});
@@ -26,24 +26,26 @@ class HotelScreen extends StatelessWidget {
 
           /// 🔙 BACK BUTTON + TITLE
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 InkWell(
-                  borderRadius: BorderRadius.circular(30),
                   onTap: () => Navigator.pop(context),
-                  child: const Padding(
-                    padding: EdgeInsets.all(6),
-                    child: Icon(Icons.arrow_back, size: 18),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                // 🔑 Changed "Back" to "Hotels & Restaurants" for better context
-                const Text(
-                  "Hotels & Restaurants",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.arrow_back, color: Colors.black),
+                      SizedBox(width: w * 0.02),
+                      Text(
+                        "Back",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: w * 0.045,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
