@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/screen/support/support_page.dart';
-import '../screen/cart/cart_page.dart';
 import '../screen/categories/categories_page.dart';
 import '../screen/home/home_screen.dart';
 import '../screen/orders/orders_page.dart';
+import '../screen/support/support_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,24 +23,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final w = size.width;
-    final h = size.height;
+    final media = MediaQuery.of(context);
+    final w = media.size.width;
+    final h = media.size.height;
+    final bottomPadding = media.padding.bottom;
+
+    /// 🔹 RESPONSIVE SIZES
+    final navHeight = h * 0.085 + bottomPadding;
+    final iconSize = w * 0.065;
+    final textSize = w * 0.030;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
 
-      /// ✅ SAFE BODY
+      /// ✅ SAFE BODY (NOTCH SAFE)
       body: SafeArea(
+        bottom: false,
         child: IndexedStack(
           index: currentIndex,
           children: pages,
         ),
       ),
 
-      /// ✅ RESPONSIVE BOTTOM NAV BAR
+      /// ✅ RESPONSIVE BOTTOM NAV
       bottomNavigationBar: Container(
-        height: h * 0.085, // responsive height
+        height: navHeight,
+        padding: EdgeInsets.only(bottom: bottomPadding),
         decoration: BoxDecoration(
           color: const Color(0xFF3670A3),
           borderRadius: BorderRadius.only(
@@ -52,44 +59,46 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _navItem(Icons.home, "Home", 0, w, h),
-            _navItem(Icons.list, "Categories", 1, w, h),
-            _navItem(Icons.inventory, "Orders", 2, w, h),
-            _navItem(Icons.headset_mic, "Support", 3, w, h),
+            _navItem(Icons.home, "Home", 0, iconSize, textSize),
+            _navItem(Icons.list_alt, "Categories", 1, iconSize, textSize),
+            _navItem(Icons.inventory_2, "Orders", 2, iconSize, textSize),
+            _navItem(Icons.headset_mic, "Support", 3, iconSize, textSize),
           ],
         ),
       ),
     );
   }
 
-  /// 🔹 RESPONSIVE NAV ITEM
+  /// 🔹 NAV ITEM (RESPONSIVE)
   Widget _navItem(
       IconData icon,
       String label,
       int index,
-      double w,
-      double h,
+      double iconSize,
+      double textSize,
       ) {
-    final bool isSelected = currentIndex == index;
+    final isSelected = currentIndex == index;
 
     return GestureDetector(
-      onTap: () {
-        setState(() => currentIndex = index);
-      },
       behavior: HitTestBehavior.opaque,
+      onTap: () => setState(() => currentIndex = index),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: w * 0.065, // responsive icon
-            color: isSelected ? Colors.white : Colors.white70,
+          AnimatedScale(
+            scale: isSelected ? 1.15 : 1.0,
+            duration: const Duration(milliseconds: 200),
+            child: Icon(
+              icon,
+              size: iconSize,
+              color: isSelected ? Colors.white : Colors.white70,
+            ),
           ),
-          SizedBox(height: h * 0.004),
+          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
-              fontSize: w * 0.030, // responsive text
+              fontSize: textSize,
               fontWeight: FontWeight.w600,
               color: isSelected ? Colors.white : Colors.white70,
             ),

@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/screen/All%20Categories/Grocery/product_list_screen.dart';
 import 'package:provider/provider.dart';
+
 import '../../../Model/grocery_model.dart';
 import '../../../provider/grocery_provider.dart';
 import '../../../widgets/top_header.dart';
+import 'product_list_screen.dart';
 
-
-
-// Change to StatelessWidget as state is now managed by Provider
 class GroceryScreen extends StatelessWidget {
   const GroceryScreen({super.key});
 
-  // 🟢 GROCERY CARD - Updated to include navigation logic
+  /// 🟢 GROCERY CARD
   Widget _groceryCard(BuildContext context, GroceryItem item, double w) {
     return InkWell(
       borderRadius: BorderRadius.circular(14),
       onTap: () {
-        // 🔑 NAVIGATION LOGIC ADDED
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => ProductListScreen(
-              categoryTitle: item.title, // Pass the category title to the next screen
+              categoryTitle: item.title,
             ),
           ),
         );
@@ -83,43 +80,50 @@ class GroceryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final groceryProvider = context.watch<GroceryProvider>();
-    final List<GroceryItem> groceryItems = groceryProvider.groceryItems;
-    final bool isLoading = groceryProvider.isLoading;
+    final groceryItems = groceryProvider.groceryItems;
+    final isLoading = groceryProvider.isLoading;
 
-    final w = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Column(
         children: [
-
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          /// 🔙 BACK BUTTON + TITLE
+          SizedBox(height: h * 0.02),
+
+          /// 🔙 BACK BUTTON (Arrow + Text both clickable)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start, // 👈 LEFT SIDE
               children: [
                 InkWell(
-                  borderRadius: BorderRadius.circular(30),
                   onTap: () => Navigator.pop(context),
-                  child: const Padding(
-                    padding: EdgeInsets.all(6),
-                    child: Icon(Icons.arrow_back, size: 18),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Text(
-                  "Grocery",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.arrow_back, color: Colors.black),
+                      SizedBox(width: w * 0.02),
+                      Text(
+                        "Back",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: w * 0.045,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
+          // SizedBox(height: h * 0.004),
 
           /// 🧺 GROCERY GRID
           Expanded(
@@ -129,15 +133,19 @@ class GroceryScreen extends StatelessWidget {
                   ? const Center(child: CircularProgressIndicator())
                   : GridView.builder(
                 itemCount: groceryItems.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: w * 0.04,
                   mainAxisSpacing: w * 0.04,
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (context, index) {
-                  // 🔑 Pass context to the card builder for navigation
-                  return _groceryCard(context, groceryItems[index], w);
+                  return _groceryCard(
+                    context,
+                    groceryItems[index],
+                    w,
+                  );
                 },
               ),
             ),

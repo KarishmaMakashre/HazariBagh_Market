@@ -28,30 +28,30 @@ class PropertyEnquiryScreen extends StatelessWidget {
 
           // 🔑 Custom Header for Back Button and Title (Replaces AppBar)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.05, vertical: 12),
-            child: Row(
-              children: [
-                // 🔙 BACK BUTTON
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: AppColors.propertyAccent),
-                  onPressed: () => Navigator.pop(context),
-                  // Reduce padding to match the image's tight alignment
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                SizedBox(width: w * 0.02),
-                // 💬 TITLE
-                const Text(
-                  "Enquiry Now",
-                  style: TextStyle(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () => Navigator.pop(context),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.arrow_back,
                     color: AppColors.propertyAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18, // Adjust size to look like a title
                   ),
-                ),
-              ],
+                  SizedBox(width: w * 0.02),
+                  const Text(
+                    "Back",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.propertyAccent,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+
 
           // 🔑 Form Content now in an Expanded SingleChildScrollView
           Expanded(

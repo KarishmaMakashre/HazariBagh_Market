@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/screen/All%20Categories/fashion/service_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hazari_bagh_market/widgets/top_header.dart';
 import '../../../provider/fashion_provider.dart';
-import '../../../colors/AppColors.dart';
-import 'service_detail_screen.dart';
 
 class FashionScreen extends StatefulWidget {
   const FashionScreen({super.key});
@@ -14,6 +13,13 @@ class FashionScreen extends StatefulWidget {
 
 class _FashionScreenState extends State<FashionScreen>
     with SingleTickerProviderStateMixin {
+
+  /// 🌸 PRIMARY THEME COLOR
+  static const Color themeColor = Color(0xFF9C89B8);
+
+  /// ✅ SELECTED CATEGORY
+  String selectedCategoryId = "mens";
+
   late AnimationController _controller;
   late Animation<double> _fade;
   late Animation<Offset> _slide;
@@ -53,244 +59,258 @@ class _FashionScreenState extends State<FashionScreen>
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
+    /// ✅ FILTERED SERVICES
+    final services =
+    provider.getServicesByCategory(selectedCategoryId);
+
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
-      body: FadeTransition(
-        opacity: _fade,
-        child: SlideTransition(
-          position: _slide,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const TopHeader(),
-                SizedBox(height: h * 0.01),
+      backgroundColor: Colors.grey.shade100,
+      body: SafeArea(
+        child: Column(
+          children: [
 
-                /// 🔙 BACK
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: w * 0.04, vertical: h * 0.01),
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Row(
-                      children: [
-                        Icon(Icons.arrow_back,
-                            color: AppColors.primary, size: w * 0.06),
-                        SizedBox(width: w * 0.02),
-                        Text(
-                          "Back",
-                          style: TextStyle(
-                            fontSize: w * 0.045,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            /// 🔝 FIXED TOP HEADER
+            const TopHeader(),
 
-                /// 🔵 BANNER
-                Padding(
-                  padding: EdgeInsets.all(w * 0.02),
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: w * 0.05, vertical: h * 0.025),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
+            /// 🔽 SCROLLABLE CONTENT
+            Expanded(
+              child: FadeTransition(
+                opacity: _fade,
+                child: SlideTransition(
+                  position: _slide,
+                  child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Fashion Store",
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: w * 0.055,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: h * 0.008),
-                        Text(
-                          "Explore latest fashion & trends",
-                          style: TextStyle(
-                            color: AppColors.textGrey,
-                            fontSize: w * 0.035,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
 
-                SizedBox(height: h * 0.03),
+                        SizedBox(height: h * 0.01),
 
-                /// 📂 CATEGORIES (Fade-in images)
-                _sectionTitle("Categories", w),
-                SizedBox(height: h * 0.015),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                  child: Row(
-                    children: provider.categories.map((cat) {
-                      return Expanded(
-                        child: AnimatedOpacity(
-                          opacity: 1,
-                          duration: const Duration(milliseconds: 800),
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 10),
-                            height: h * 0.14,
-                            child: Stack(
+                        /// 🔙 BACK
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                          child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(14),
-                                  child: Image.asset(
-                                    cat.image,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
+                                Icon(Icons.arrow_back,
+                                    color: themeColor, size: w * 0.06),
+                                SizedBox(width: w * 0.02),
+                                Text(
+                                  "Back",
+                                  style: TextStyle(
+                                    fontSize: w * 0.045,
+                                    fontWeight: FontWeight.w600,
+                                    color: themeColor,
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        AppColors.black.withOpacity(0.6),
-                                        Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        /// 🔵 BANNER
+                        Padding(
+                          padding: EdgeInsets.all(w * 0.03),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: w * 0.05, vertical: h * 0.025),
+                            decoration: BoxDecoration(
+                              color: themeColor,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Fashion Store",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: w * 0.055,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: h * 0.008),
+                                Text(
+                                  "Explore latest fashion & trends",
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: w * 0.035,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        /// 📂 CATEGORIES
+                        _sectionTitle("Categories", w),
+                        SizedBox(height: h * 0.015),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                          child: Row(
+                            children: provider.categories.map((cat) {
+                              final isSelected =
+                                  selectedCategoryId == cat.id;
+
+                              return Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedCategoryId = cat.id;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    height: h * 0.14,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? themeColor
+                                            : Colors.transparent,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            cat.image,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                Colors.black.withOpacity(0.6),
+                                                Colors.transparent,
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 12,
+                                          bottom: 12,
+                                          child: Text(
+                                            cat.title,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: w * 0.04,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                  left: 12,
-                                  bottom: 12,
-                                  child: Text(
-                                    cat.title,
-                                    style: TextStyle(
-                                      color: AppColors.white,
-                                      fontSize: w * 0.04,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              );
+                            }).toList(),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                ),
 
-                SizedBox(height: h * 0.03),
+                        SizedBox(height: h * 0.03),
 
-                /// 🛍 SERVICES (Tap scale animation)
-                _sectionTitle("Services", w),
-                SizedBox(height: h * 0.015),
+                        /// 🛍 SERVICES
+                        _sectionTitle("Services", w),
+                        SizedBox(height: h * 0.015),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: provider.services.length,
-                    gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: w * 0.03,
-                      mainAxisSpacing: w * 0.03,
-                      childAspectRatio: 0.75,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: services.length,
+                            gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 0.75,
+                            ),
+                            itemBuilder: (context, index) {
+                              final service = services[index];
+
+                              return InkWell(
+                                borderRadius: BorderRadius.circular(14),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          ServiceListScreen(service: service),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(14),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          color: Colors.black12, blurRadius: 5),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        flex: 7,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          const BorderRadius.vertical(
+                                              top: Radius.circular(14)),
+                                          child: Image.asset(
+                                            service.image,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              service.title.toUpperCase(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: w * 0.028,
+                                                fontWeight: FontWeight.w600,
+                                                color: themeColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: h * 0.04),
+                      ],
                     ),
-                    itemBuilder: (context, index) {
-                      final service = provider.services[index];
-
-                      return TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 1, end: 1),
-                        duration: const Duration(milliseconds: 200),
-                        builder: (_, scale, child) {
-                          return Transform.scale(
-                            scale: scale,
-                            child: child,
-                          );
-                        },
-                        child: InkWell(
-                          borderRadius:
-                          BorderRadius.circular(w * 0.035),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ServiceListScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius:
-                              BorderRadius.circular(w * 0.035),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.shadow,
-                                  blurRadius: 5,
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 7,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(w * 0.035),
-                                    ),
-                                    child: Hero(
-                                      tag: service.image,
-                                      child: Image.asset(
-                                        service.image,
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Center(
-                                    child: Text(
-                                      service.title.toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: w * 0.028,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.textDark,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                   ),
                 ),
-
-                SizedBox(height: h * 0.04),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
+
   }
 
   Widget _sectionTitle(String title, double w) {
@@ -299,7 +319,7 @@ class _FashionScreenState extends State<FashionScreen>
       child: Text(
         title,
         style: TextStyle(
-          color: AppColors.primary,
+          color: themeColor,
           fontSize: w * 0.045,
           fontWeight: FontWeight.bold,
         ),

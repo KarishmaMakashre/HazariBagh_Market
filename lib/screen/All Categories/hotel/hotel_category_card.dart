@@ -1,5 +1,3 @@
-// File: ../widgets/hotel_category_card.dart
-
 import 'package:flutter/material.dart';
 
 import '../../../Model/hotel_category_model.dart';

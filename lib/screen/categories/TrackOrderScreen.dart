@@ -1,41 +1,47 @@
 import 'package:flutter/material.dart';
-
 import '../../widgets/top_header.dart';
 
 class TrackOrderScreen extends StatelessWidget {
   const TrackOrderScreen({super.key});
 
+  static const Color primaryColor = Color(0xFF3670A3);
+
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-
-
-
       body: SingleChildScrollView(
         child: Column(
           children: [
             const TopHeader(),
 
-            const SizedBox(height: 2),
+            SizedBox(height: h * 0.005),
 
-            // ✅ BACK TITLE
+            /// 🔙 BACK + TITLE
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.04,
+                vertical: h * 0.01,
+              ),
               child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                onTap: () => Navigator.pop(context),
                 child: Row(
-                  children: const [
-                    Icon(Icons.arrow_back,color: Color(0xFF3670A3),),
-                    SizedBox(width: 6),
+                  children: [
+                    Icon(
+                      Icons.arrow_back,
+                      color: primaryColor,
+                      size: w * 0.055,
+                    ),
+                    SizedBox(width: w * 0.02),
                     Text(
                       "Live Track Order",
                       style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF3670A3)
+                        fontSize: w * 0.045,
+                        fontWeight: FontWeight.w600,
+                        color: primaryColor,
                       ),
                     ),
                   ],
@@ -43,131 +49,169 @@ class TrackOrderScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: h * 0.02),
 
-            // ✅ MAP IMAGE PLACEHOLDER
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.shade300,
-                image: const DecorationImage(
-                  image: AssetImage("assets/Images/map_demo.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: const Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Live Tracking",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+            /// 🗺 MAP PREVIEW
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Container(
+                height: h * 0.25,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(w * 0.04),
+                  color: Colors.grey.shade300,
+                  image: const DecorationImage(
+                    image: AssetImage("assets/Images/map_demo.png"),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // ✅ DELIVERY BOY INFO
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, color: Colors.white),
-                  ),
-                  const SizedBox(width: 10),
-
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Ankit Sharma",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text("Delivery Boy",
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey)),
-                      ],
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: EdgeInsets.all(w * 0.03),
+                    child: Text(
+                      "Live Tracking",
+                      style: TextStyle(
+                        fontSize: w * 0.04,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-
-                  IconButton(
-                    icon: const Icon(Icons.message),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.call),
-                    onPressed: () {},
-                  ),
-                ],
+                ),
               ),
             ),
 
-            const SizedBox(height: 14),
+            SizedBox(height: h * 0.02),
 
-            // ✅ ORDER STATUS TIMELINE
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+            /// 🚴 DELIVERY BOY INFO
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Container(
+                padding: EdgeInsets.all(w * 0.035),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(w * 0.04),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: w * 0.06,
+                      backgroundColor: Colors.grey,
+                      child: Icon(Icons.person,
+                          color: Colors.white, size: w * 0.06),
+                    ),
+                    SizedBox(width: w * 0.03),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Ankit Sharma",
+                            style: TextStyle(
+                              fontSize: w * 0.04,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: h * 0.003),
+                          Text(
+                            "Delivery Boy",
+                            style: TextStyle(
+                              fontSize: w * 0.032,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    IconButton(
+                      icon: Icon(Icons.message,
+                          size: w * 0.06, color: primaryColor),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.call,
+                          size: w * 0.06, color: primaryColor),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
               ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatusRow(
+            ),
+
+            SizedBox(height: h * 0.025),
+
+            /// 📦 ORDER STATUS
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Container(
+                padding: EdgeInsets.all(w * 0.035),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(w * 0.04),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StatusRow(
                       icon: Icons.check_circle,
                       title: "Order Completed",
                       subtitle: "Confirmed on 22 Aug 2023",
-                      active: true),
-
-                  StatusRow(
+                      active: true,
+                    ),
+                    StatusRow(
                       icon: Icons.local_shipping,
                       title: "Being sent by Courier",
                       subtitle: "Estimated time 15-20 mins",
-                      active: true),
-
-                  StatusRow(
+                      active: true,
+                    ),
+                    StatusRow(
                       icon: Icons.watch_later,
                       title: "Waiting for pickup",
                       subtitle: "Driver on the way",
-                      active: false),
-
-                  StatusRow(
+                      active: false,
+                    ),
+                    StatusRow(
                       icon: Icons.verified,
                       title: "Payment has been verified",
                       subtitle: "Success",
-                      active: false),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 14),
-
-            // ✅ ORDER CANCELLED BUTTON
-            SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                      active: false,
+                    ),
+                  ],
                 ),
-                onPressed: () {},
-                child: const Text("Order Cancelled"),
               ),
             ),
 
-            const SizedBox(height: 80),
+            SizedBox(height: h * 0.025),
+
+            /// ❌ CANCEL BUTTON
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: SizedBox(
+                width: double.infinity,
+                height: h * 0.065,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(w * 0.03),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Order Cancelled",
+                    style: TextStyle(
+                      fontSize: w * 0.04,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: h * 0.1),
           ],
         ),
       ),
@@ -175,7 +219,7 @@ class TrackOrderScreen extends StatelessWidget {
   }
 }
 
-// ✅ STATUS ROW WIDGET
+/// ✅ STATUS ROW
 class StatusRow extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -192,29 +236,42 @@ class StatusRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: h * 0.012),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             icon,
             color: active ? Colors.green : Colors.grey,
-            size: 22,
+            size: w * 0.06,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: w * 0.03),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 2),
-                Text(subtitle,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: w * 0.038,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: h * 0.003),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: w * 0.032,
+                    color: Colors.grey,
+                  ),
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

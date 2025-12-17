@@ -33,29 +33,25 @@ class PropertyListingScreen extends StatelessWidget {
         children: [
           const TopHeader(),
 
-          SizedBox(height: height * 0.02),
-
           /// 🔙 BACK BUTTON
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: w * 0.04, vertical: height * 0.01),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
             child: InkWell(
+              borderRadius: BorderRadius.circular(8),
               onTap: () => Navigator.pop(context),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                      Icons.arrow_back,
-                      // 🎨 USING AppColors.primary
-                      color: AppColors.propertyAccent,
-                      size: w * 0.06),
+                  const Icon(
+                    Icons.arrow_back,
+                    color: AppColors.propertyAccent,
+                  ),
                   SizedBox(width: w * 0.02),
-                  Text(
+                  const Text(
                     "Back",
                     style: TextStyle(
-                      fontSize: w * 0.045,
-                      fontWeight: FontWeight.w600,
-                      // 🎨 USING AppColors.primary
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.propertyAccent,
                     ),
                   ),
@@ -63,6 +59,7 @@ class PropertyListingScreen extends StatelessWidget {
               ),
             ),
           ),
+
 
           Expanded(
             child: SingleChildScrollView(
@@ -222,141 +219,157 @@ class PropertyListingScreen extends StatelessWidget {
   /// ================= PROPERTY CARD =================
   Widget _propertyCard(
       BuildContext context,
-      PropertyModel property,
-      {required Color buttonColor}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6),
-        ],
-      ),
-      child: Column(
-        children: [
+      PropertyModel property, {
+        required Color buttonColor,
+      }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: () {
+        // ✅ SET SELECTED PROPERTY
+        context.read<PropertyProvider>().setSelectedProperty(property);
 
-          /// IMAGE
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.asset(
-                  property.image,
-                  height: 110,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              Positioned(
-                top: 8,
-                left: 6,
-                child: _tag(
-                  property.type,
-                  // Using Colors.blue for rent, AppColors.success for sale
-                  property.type == "For Rent"
-                      ? Colors.blue
-                      : AppColors.success,
-                ),
-              ),
-
-              Positioned(
-                top: 8,
-                right: 8,
-                child: _tag("Verified", AppColors.success),
-              ),
-            ],
+        // ✅ NAVIGATE TO DETAILS
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const PropertyDetailsScreen(),
           ),
-
-          /// CONTENT
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// TITLE
-                      Text(
-                        property.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 13),
-                      ),
-                      const SizedBox(height: 6),
-                      _infoRow(Icons.location_on, property.location),
-                      _infoRow(Icons.square_foot, property.area),
-                      _infoRow(Icons.bed, property.bedInfo),
-                      const SizedBox(height: 6),
-                    ],
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 6),
+          ],
+        ),
+        child: Column(
+          children: [
+            /// IMAGE
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: Image.asset(
+                    property.image,
+                    height: 110,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
+                ),
 
-                  // PRICE + OWNER + BUTTON (Kept at the bottom)
-                  Column(
-                    children: [
-                      /// PRICE + OWNER
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              property.price,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                // 🎨 USING AppColors.success
-                                color: AppColors.success,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          _ownerTag("Owner"),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
+                Positioned(
+                  top: 8,
+                  left: 6,
+                  child: _tag(
+                    property.type,
+                    property.type == "For Rent"
+                        ? Colors.blue
+                        : AppColors.success,
+                  ),
+                ),
 
-                      /// BUTTON
-                      SizedBox(
-                        width: double.infinity,
-                        height: 32,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            // 🎨 USING buttonColor parameter
-                            backgroundColor: buttonColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                          onPressed: () {
-                            context
-                                .read<PropertyProvider>()
-                                .setSelectedProperty(property);
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: _tag("Verified", AppColors.success),
+                ),
+              ],
+            ),
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const PropertyDetailsScreen(),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "View Details",
-                            style: TextStyle(fontSize: 11,color: AppColors.white,),
+            /// CONTENT
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          property.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(height: 6),
+                        _infoRow(Icons.location_on, property.location),
+                        _infoRow(Icons.square_foot, property.area),
+                        _infoRow(Icons.bed, property.bedInfo),
+                        const SizedBox(height: 6),
+                      ],
+                    ),
+
+                    /// PRICE + OWNER + BUTTON
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                property.price,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: AppColors.success,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            _ownerTag("Owner"),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        /// BUTTON (OPTIONAL – same navigation)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 32,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: buttonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<PropertyProvider>()
+                                  .setSelectedProperty(property);
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                  const PropertyDetailsScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "View Details",
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

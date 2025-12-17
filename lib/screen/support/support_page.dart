@@ -1,60 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/screen/support/raise_complaint_screen.dart';
 import 'package:hazari_bagh_market/widgets/top_header.dart';
 import 'contact_us_screen.dart';
 import 'faq_screen.dart';
 import 'live_chat_screen.dart';
+import 'raise_complaint_screen.dart';
 
 class SupportPage extends StatefulWidget {
+  const SupportPage({super.key});
+
   @override
   State<SupportPage> createState() => _SupportPageState();
 }
 
 class _SupportPageState extends State<SupportPage> {
-  int selectedIndex = 0; 
+  int selectedIndex = 0;
+
+  static const Color primaryColor = Color(0xFF3670A3);
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
-    final w = mq.width;
-    final h = mq.height;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TopHeader(),
+
           SizedBox(height: h * 0.015),
 
-          /// ---------- TABS (SCROLLABLE) ----------
+          /// 🔵 SUPPORT TABS
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
             child: Row(
               children: [
-                SizedBox(width: 10),
-                tabButton("Contact Us", 0, w, h),
-                SizedBox(width: 10),
-                tabButton("Live Chat", 1, w, h),
-                SizedBox(width: 10),
-                tabButton("FAQs", 2, w, h),
-                SizedBox(width: 10),
-                tabButton("Raise Complaint", 3, w, h),
-                SizedBox(width: 10),
+                _tabButton("Contact Us", 0, w, h),
+                SizedBox(width: w * 0.025),
+                _tabButton("Live Chat", 1, w, h),
+                SizedBox(width: w * 0.025),
+                _tabButton("FAQs", 2, w, h),
+                SizedBox(width: w * 0.025),
+                _tabButton("Raise Complaint", 3, w, h),
               ],
             ),
           ),
 
-          SizedBox(height: h * 0.020),
+          SizedBox(height: h * 0.02),
 
-          /// ---------- MAIN PAGE CONTENT ----------
+          /// 🔽 TAB CONTENT
           Expanded(
             child: IndexedStack(
               index: selectedIndex,
               children: [
-                ContactUsScreen(),
+                const ContactUsScreen(),
                 LiveChatScreen(),
                 FaqScreenUpdated(),
-                RaiseComplaintScreen(),
+                const RaiseComplaintScreen(),
               ],
             ),
           ),
@@ -63,42 +67,40 @@ class _SupportPageState extends State<SupportPage> {
     );
   }
 
-  /// ---------- TAB BUTTON ----------
-  Widget tabButton(String title, int index, double w, double h) {
-    bool isSelected = selectedIndex == index;
+  /// 🟦 TAB BUTTON
+  Widget _tabButton(String title, int index, double w, double h) {
+    final bool isSelected = selectedIndex == index;
 
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(w * 0.03),
       onTap: () {
-        setState(() {
-          selectedIndex = index;
-        });
+        setState(() => selectedIndex = index);
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
         padding: EdgeInsets.symmetric(
-          horizontal: w * 0.04,
+          horizontal: w * 0.045,
           vertical: h * 0.012,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.white,
-          borderRadius: BorderRadius.circular(w * 0.02),
-
-          /// Shadow only for unselected button
+          color: isSelected ? primaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(w * 0.03),
           boxShadow: isSelected
               ? []
               : [
             BoxShadow(
-              color: Colors.black12,
-              blurRadius: w * 0.02,
-              offset: Offset(0, h * 0.003),
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: w * 0.03,
+              offset: Offset(0, h * 0.004),
             ),
           ],
         ),
         child: Text(
           title,
           style: TextStyle(
-            fontSize: w * 0.035,
-            color: isSelected ? Colors.white : Colors.black,
+            fontSize: w * 0.036,
             fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : Colors.black87,
           ),
         ),
       ),

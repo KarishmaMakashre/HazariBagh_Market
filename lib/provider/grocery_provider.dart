@@ -1,5 +1,3 @@
-// File: ../provider/grocery_provider.dart
-
 import 'package:flutter/material.dart';
 import '../Model/grocery_model.dart';
 import '../Model/product_model.dart';
@@ -39,48 +37,78 @@ class GroceryProvider extends ChangeNotifier {
 
   /// 🥦 DUMMY PRODUCT DATA (Simulating API fetch for actual items)
   final List<ProductModel> _dummyProducts = [
+
     // ------------------- VEGETABLES -------------------
-    ProductModel(name: "Fresh Tomatoes", image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg", price: "₹40/kg", category: "Vegetables"),
-    ProductModel(name: "Onions (Local)", image: "assets/images/vivek-sharma-rDDICrot22U-unsplash.jpg", price: "₹25/kg", category: "Vegetables"),
-    ProductModel(name: "Potatoes (New)", image: "assets/images/eric-prouzet-52DMHPBAvXY-unsplash.jpg", price: "₹30/kg", category: "Vegetables"),
-    ProductModel(name: "Green Chillies", image: "assets/images/steve-johnson-L2xhGmPmMNs-unsplash.jpg", price: "₹80/kg", category: "Vegetables"),
+    ProductModel(
+      name: "Fresh Tomatoes",
+      image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg",
+      price: "₹40/kg",
+      category: "Vegetables",
+      storeName: "Sharma Grocery Store",
+    ),
+    ProductModel(
+      name: "Onions (Local)",
+      image: "assets/images/vivek-sharma-rDDICrot22U-unsplash.jpg",
+      price: "₹25/kg",
+      category: "Vegetables",
+      storeName: "Sharma Grocery Store",
+    ),
 
     // --------------------- FRUITS ---------------------
-    ProductModel(name: "Apples (Shimla)", image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg", price: "₹150/kg", category: "Fruits"),
-    ProductModel(name: "Bananas (Dozen)", image: "assets/images/giorgio-trovato-fczCr7MdE7U-unsplash.jpg", price: "₹50/dozen", category: "Fruits"),
+    ProductModel(
+      name: "Apples (Shimla)",
+      image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg",
+      price: "₹150/kg",
+      category: "Fruits",
+      storeName: "Sharma Grocery Store",
+    ),
 
     // --------------------- RICE ---------------------
-    // 🔑 Category must match "Rice"
-    ProductModel(name: "Basmati Rice", image: "assets/images/rice.jpg", price: "₹120/kg", category: "Rice"),
-
-    // --------------------- WHEAT ---------------------
-    // 🔑 Category must match "Wheat"
-    ProductModel(name: "Whole Wheat", image: "assets/images/whete.jpg", price: "₹45/kg", category: "Wheat"),
-
-    // --------------------- OIL ---------------------
-    // 🔑 Category must match "Oil"
-    ProductModel(name: "Mustard Oil", image: "assets/images/oil.jpg", price: "₹150/L", category: "Oil"),
-
-    // --------------------- MILK ---------------------
-    // 🔑 Category must match "Milk"
-    ProductModel(name: "Dairy Milk", image: "assets/images/milk.jpg", price: "₹60/L", category: "Milk"),
+    ProductModel(
+      name: "Basmati Rice",
+      image: "assets/images/rice.jpg",
+      price: "₹120/kg",
+      category: "Rice",
+      storeName: "Sharma Grocery Store",
+    ),
 
     // --------------------- SNACKS ---------------------
-    // 🔑 Category must match "Snacks"
-    ProductModel(name: "Potato Chips", image: "assets/images/snacks.jpg", price: "₹30", category: "Snacks"),
+    ProductModel(
+      name: "Potato Chips",
+      image: "assets/images/snacks.jpg",
+      price: "₹30",
+      category: "Snacks",
+      storeName: "Delicious Food Point",
+    ),
 
     // --------------------- BEVERAGES ---------------------
-    // 🔑 Category must match "Beverages"
-    ProductModel(name: "Soda Pack", image: "assets/images/Beverages.jpg", price: "₹200", category: "Beverages"),
+    ProductModel(
+      name: "Soda Pack",
+      image: "assets/images/Beverages.jpg",
+      price: "₹200",
+      category: "Beverages",
+      storeName: "Delicious Food Point",
+    ),
 
     // --------------------- SPICES ---------------------
-    // 🔑 Category must match "Spices"
-    ProductModel(name: "Turmeric Powder", image: "assets/images/spices.jpg", price: "₹120/100g", category: "Spices"),
+    ProductModel(
+      name: "Turmeric Powder",
+      image: "assets/images/spices.jpg",
+      price: "₹120/100g",
+      category: "Spices",
+      storeName: "Sharma Grocery Store",
+    ),
 
     // --------------------- PULSES ---------------------
-    // 🔑 Category must match "Pulses"
-    ProductModel(name: "Arhar Dal", image: "assets/images/pules.jpg", price: "₹110/kg", category: "Pulses"),
+    ProductModel(
+      name: "Arhar Dal",
+      image: "assets/images/pules.jpg",
+      price: "₹110/kg",
+      category: "Pulses",
+      storeName: "Sharma Grocery Store",
+    ),
   ];
+
 
 
   // Asynchronous data load for categories

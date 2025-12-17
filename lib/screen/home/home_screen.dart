@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../../Model/home_model.dart';
 import '../../Model/store_model.dart';
 import '../../all_categories_screen.dart';
+import '../../colors/AppColors.dart';
 import '../../widgets/top_header.dart';
 import '../../provider/home_provider.dart';
 import '../all_store_screen.dart';
@@ -38,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen>
       duration: const Duration(milliseconds: 900),
     )..forward();
 
-    /// 🔁 AUTO SLIDER
     timer = Timer.periodic(const Duration(seconds: 3), (_) {
       final provider = context.read<HomeProvider>();
       int next = provider.bannerIndex + 1;
@@ -100,29 +100,46 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
 
                     /// 🔵 WELCOME CARD
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(w * 0.06),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF3670A3),
-                        borderRadius: BorderRadius.circular(14),
+                    Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Welcome, User!",
-                            style: TextStyle(
-                                color: Colors.white,
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(w * 0.06),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.primaryDark,
+                              AppColors.primary,
+                              AppColors.primaryLight,
+                            ],
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Welcome, User!",
+                              style: GoogleFonts.inter(
                                 fontSize: 26,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 6),
-                          Text(
-                            "Discover local stores & amazing deals",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ],
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "Discover local stores & amazing deals",
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
@@ -135,17 +152,87 @@ class _HomeScreenState extends State<HomeScreen>
                         borderRadius: BorderRadius.circular(16),
                         child: SizedBox(
                           height: h * 0.24,
-                          child: PageView.builder(
-                            controller: _pageController,
-                            itemCount: sliderImages.length,
-                            onPageChanged: provider.changeBanner,
-                            itemBuilder: (_, index) {
-                              return Image.asset(
-                                sliderImages[index],
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              );
-                            },
+                          child: Stack(
+                            children: [
+                              /// 🔹 IMAGE SLIDER
+                              PageView.builder(
+                                controller: _pageController,
+                                itemCount: sliderImages.length,
+                                onPageChanged: provider.changeBanner,
+                                itemBuilder: (_, index) {
+                                  return Image.asset(
+                                    sliderImages[index],
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  );
+                                },
+                              ),
+
+                              /// 🔹 DARK OVERLAY (for text readability)
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.black.withOpacity(0.55),
+                                      Colors.transparent,
+                                    ],
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                  ),
+                                ),
+                              ),
+
+                              /// 🔹 TEXT + BUTTON
+                              Positioned(
+                                left: 16,
+                                bottom: 16,
+                                right: 16,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// 🟡 50% OFF BUTTON
+                                    Container(
+                                      padding:
+                                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.yellow.shade700,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        "50% OFF",
+                                        style: GoogleFonts.inter(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    /// 🧾 TITLE
+                                    Text(
+                                      "Big Sale this Week!",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 30,
+                                        // fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    /// 🧾 SUBTITLE
+                                    Text(
+                                      "On all grocery items",
+                                      style: GoogleFonts.inter(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -156,50 +243,85 @@ class _HomeScreenState extends State<HomeScreen>
                     /// 🟦 CATEGORIES
                     _sectionHeader(
                       title: "Categories",
-                      onViewAll: () =>
-                          _openPage(const AllCategoriesScreen()),
+                      onViewAll: () => _openPage(const AllCategoriesScreen()),
                     ),
+                    SizedBox(height: h * 0.01),
 
                     GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount:
-                      homeCategories.length > 6 ? 6 : homeCategories.length,
-                      gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                      itemCount: homeCategories.length > 6 ? 6 : homeCategories.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 0.75,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 0.74,
                       ),
                       itemBuilder: (_, index) {
                         final item = homeCategories[index];
-                        return GestureDetector(
+
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(18),
                           onTap: () => _openPage(item.screen),
                           child: Container(
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(18),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  blurRadius: 10,
-                                )
+                                  color: Colors.black.withOpacity(0.08),
+                                  blurRadius: 14,
+                                  offset: const Offset(0, 8),
+                                ),
                               ],
                             ),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset(item.image, height: w * 0.12),
-                                const SizedBox(height: 6),
-                                Text(item.title,
-                                    textAlign: TextAlign.center),
+
+                                /// 🖼 IMAGE (controlled height)
+                                Expanded(
+                                  flex: 6,
+                                  child: Transform(
+                                    alignment: Alignment.center,
+                                    transform: Matrix4.identity()
+                                      ..setEntry(3, 2, 0.001)
+                                      ..rotateX(-0.06)
+                                      ..rotateY(0.06),
+                                    child: Image.asset(
+                                      item.image,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 8),
+
+                                /// 📝 TEXT (properly visible)
+                                Expanded(
+                                  flex: 3,
+                                  child: Center(
+                                    child: Text(
+                                      item.title,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         );
                       },
                     ),
+
 
                     SizedBox(height: h * 0.03),
 
@@ -210,16 +332,16 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     SizedBox(height: h * 0.01),
 
-
                     SizedBox(
-                      height: 210,
+                      height: 170,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: nearbyStores.length,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (_, index) {
                           final store = nearbyStores[index];
 
-                          return GestureDetector(
+                          return InkWell(
+                            borderRadius: BorderRadius.circular(14),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -264,15 +386,16 @@ class _HomeScreenState extends State<HomeScreen>
                                           store.name,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                          style: GoogleFonts.inter(
                                             fontSize: 13,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         Text(
                                           store.category,
-                                          style: const TextStyle(
+                                          style: GoogleFonts.inter(
                                             fontSize: 11,
+                                            fontWeight: FontWeight.w600,
                                             color: Colors.grey,
                                           ),
                                         ),
@@ -287,57 +410,59 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
 
+                    SizedBox(height: h * 0.03),
 
-                    SizedBox(height: h * 0.04),
-
-                    /// 🎁 SPECIAL WEEKEND OFFER (✅ CORRECT PLACE)
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * 0.06,
-                        vertical: h * 0.035,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 28,
                       ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(20),
                         gradient: const LinearGradient(
                           colors: [
-                            Color(0xFFFF9800),
-                            Color(0xFFFFB300),
+                            Color(0xFFFF9800), // orange
+                            Color(0xFFFFB300), // yellow-orange
                           ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.orange.withOpacity(0.35),
-                            blurRadius: 12,
-                            offset: const Offset(0, 6),
+                            color: Colors.orange.withOpacity(0.4),
+                            blurRadius: 14,
+                            offset: Offset(0, 8),
                           ),
                         ],
                       ),
-                      child: const Column(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             "Special Weekend\nOffer!",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
+                            style: GoogleFonts.inter(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              height: 1.3,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           Text(
                             "Get flat 30% off on all orders\nabove ₹999",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white70,
+                            style: GoogleFonts.inter(
                               fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white70,
+                              height: 1.4,
                             ),
                           ),
                         ],
                       ),
                     ),
-
-                    SizedBox(height: h * 0.04),
                   ],
                 ),
               ),
@@ -348,20 +473,28 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _sectionHeader(
-      {required String title, required VoidCallback onViewAll}) {
+  Widget _sectionHeader({
+    required String title,
+    required VoidCallback onViewAll,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title,
-            style:
-            const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(
+          title,
+          style: GoogleFonts.inter(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         GestureDetector(
           onTap: onViewAll,
-          child: const Text(
+          child: Text(
             "View All",
-            style: TextStyle(
-                color: Color(0xFF3670A3), fontWeight: FontWeight.bold),
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF3670A3),
+            ),
           ),
         ),
       ],

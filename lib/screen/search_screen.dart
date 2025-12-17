@@ -6,39 +6,37 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
-      
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-      
-            const SizedBox(height: 20),
-      
-      
-            /// 🔍 BEAUTIFUL SEARCH BAR
+            SizedBox(height: h * 0.02),
+
+            /// 🔍 SEARCH BAR
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: width * 0.04,
-                vertical: width * 0.02,
+                horizontal: w * 0.04,
+                vertical: h * 0.01,
               ),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.04,
-                  vertical: width * 0.018,
+                  horizontal: w * 0.04,
+                  vertical: h * 0.015,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(w * 0.06),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.08),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
-                    )
+                    ),
                   ],
                 ),
                 child: Row(
@@ -46,85 +44,91 @@ class SearchScreen extends StatelessWidget {
                     Icon(
                       Icons.search_rounded,
                       color: Colors.grey.shade600,
-                      size: 26,
+                      size: w * 0.065,
                     ),
-                    const SizedBox(width: 10),
-      
+
+                    SizedBox(width: w * 0.03),
+
+                    /// 🔤 SEARCH INPUT
                     Expanded(
                       child: TextField(
-                        cursorColor: Colors.blue,
+                        cursorColor: const Color(0xFF3670A3),
                         decoration: InputDecoration(
                           hintText: "Search stores, products...",
                           hintStyle: TextStyle(
-                            fontSize: 15,
+                            fontSize: w * 0.04,
+                            color: Colors.grey,
                           ),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-      
+
                     Icon(
                       Icons.mic_none_rounded,
                       color: Colors.grey.shade600,
-                      size: 22,
+                      size: w * 0.055,
                     ),
                   ],
                 ),
               ),
             ),
-      
-            const SizedBox(height: 20),
-      
+
+            SizedBox(height: h * 0.025),
+
+            /// 🔙 BACK BUTTON
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    MaterialPageRoute(
+                        builder: (_) => const HomeScreen()),
                   );
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.arrow_back, size: 20),
-                    const SizedBox(width: 6),
-                    const Text(
+                    Icon(Icons.arrow_back, size: w * 0.05),
+                    SizedBox(width: w * 0.015),
+                    Text(
                       "Back",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: w * 0.04,
                         fontWeight: FontWeight.w600,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-      
-            /// ---------------- Recent Searches ----------------
+
+            SizedBox(height: h * 0.03),
+
+            /// 🕘 RECENT SEARCHES
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-              child: const Text(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Text(
                 "Recent Searches",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: w * 0.045,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-      
-            const SizedBox(height: 12),
-      
+
+            SizedBox(height: h * 0.015),
+
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: w * 0.025,
+                runSpacing: h * 0.015,
                 children: [
-                  _recentChip("Grocery"),
-                  _recentChip("Mobile Shop"),
-                  _recentChip("Milk Store"),
-                  _recentChip("Fashion Store"),
+                  _recentChip("Grocery", w),
+                  _recentChip("Mobile Shop", w),
+                  _recentChip("Milk Store", w),
+                  _recentChip("Fashion Store", w),
                 ],
               ),
             ),
@@ -134,15 +138,21 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  /// 🔵 Recent Search Chip
-  Widget _recentChip(String label) {
+  /// 🔵 RECENT SEARCH CHIP
+  Widget _recentChip(String label, double w) {
     return Chip(
-      label: Text(label),
+      label: Text(
+        label,
+        style: TextStyle(fontSize: w * 0.035),
+      ),
       backgroundColor: Colors.white,
       elevation: 2,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: w * 0.03,
+        vertical: w * 0.012,
+      ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(w * 0.04),
       ),
     );
   }

@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(
-        fontFamily: 'Cambria',
+        fontFamily: 'Merriweather_48pt-MediumItalic',
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),

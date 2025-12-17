@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/top_header.dart';
-import '../../categories/add_to_cart_screen.dart';
 import '../../../provider/cart_provider.dart';
 
 class RestaurantDetailsScreen extends StatelessWidget {
@@ -22,6 +21,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
     required this.distance,
   });
 
+  static const Color themeColor = Color(0xFFD0B5B5);
+
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
@@ -40,22 +41,24 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                   SizedBox(height: mq.height * 0.02),
 
-                  /// Back Button
+                  /// 🔙 BACK BUTTON (arrow + text both clickable)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
+                      borderRadius: BorderRadius.circular(8),
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.arrow_back,
-                              color: const Color(0xFF3670A3),
+                              color: themeColor,
                               size: mq.width * 0.06),
                           SizedBox(width: mq.width * 0.02),
                           Text(
-                            "Back To Restaurants",
+                            "Back",
                             style: TextStyle(
                               fontSize: mq.width * 0.045,
-                              color: const Color(0xFF3670A3),
+                              color: themeColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -66,18 +69,18 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                   SizedBox(height: mq.height * 0.015),
 
-                  /// RESTAURANT DETAILS CARD
+                  /// 🏪 RESTAURANT DETAILS
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black12,
                             blurRadius: 8,
-                            offset: const Offset(0, 3),
+                            offset: Offset(0, 3),
                           ),
                         ],
                       ),
@@ -86,7 +89,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         children: [
 
                           ClipRRect(
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(14)),
                             child: Image.asset(
                               img,
                               height: mq.height * 0.25,
@@ -100,44 +104,45 @@ class RestaurantDetailsScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text(
+                                  name,
                                   style: TextStyle(
                                     fontSize: mq.width * 0.055,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
 
-                                SizedBox(height: 6),
+                                const SizedBox(height: 6),
 
-                                Text(type,
+                                Text(
+                                  type,
                                   style: TextStyle(
                                     fontSize: mq.width * 0.035,
                                     color: Colors.grey,
                                   ),
                                 ),
 
-                                SizedBox(height: 12),
+                                const SizedBox(height: 12),
 
                                 Row(
                                   children: [
-                                    Icon(Icons.star, color: Colors.orange, size: mq.width * 0.045),
-                                    SizedBox(width: 5),
-                                    Text(rating, style: TextStyle(fontSize: mq.width * 0.037)),
+                                    const Icon(Icons.star,
+                                        color: Colors.orange),
+                                    const SizedBox(width: 5),
+                                    Text(rating),
 
-                                    SizedBox(width: 20),
+                                    const SizedBox(width: 20),
 
-                                    Icon(Icons.timer,
-                                        color: Colors.grey, size: mq.width * 0.045),
-                                    SizedBox(width: 5),
-                                    Text(time, style: TextStyle(fontSize: mq.width * 0.037)),
+                                    const Icon(Icons.timer, color: Colors.grey),
+                                    const SizedBox(width: 5),
+                                    Text(time),
 
-                                    SizedBox(width: 20),
+                                    const SizedBox(width: 20),
 
-                                    Icon(Icons.location_on,
-                                        color: Colors.red, size: mq.width * 0.045),
-                                    SizedBox(width: 5),
-                                    Text(distance,
-                                        style: TextStyle(fontSize: mq.width * 0.037)),
+                                    const Icon(Icons.location_on,
+                                        color: Colors.red),
+                                    const SizedBox(width: 5),
+                                    Text(distance),
                                   ],
                                 )
                               ],
@@ -150,7 +155,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                   SizedBox(height: mq.height * 0.03),
 
-                  /// MENU TITLE
+                  /// 📋 MENU TITLE
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
                     child: Text(
@@ -162,15 +167,15 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                  /// MENU ITEMS
-                  _menuItem(context, mq, "Chicken Biryani", "220", img),
-                  _menuItem(context, mq, "Veg Biryani", "180", img),
-                  _menuItem(context, mq, "Butter Chicken", "280", img),
-                  _menuItem(context, mq, "Paneer Tikka", "240", img),
+                  /// 🍽 MENU ITEMS
+                  _menuItem(context, mq, "Chicken Biryani", "220"),
+                  _menuItem(context, mq, "Veg Biryani", "180"),
+                  _menuItem(context, mq, "Butter Chicken", "280"),
+                  _menuItem(context, mq, "Paneer Tikka", "240"),
 
-                  SizedBox(height: mq.height * 0.07),
+                  SizedBox(height: mq.height * 0.08),
                 ],
               ),
             ),
@@ -180,8 +185,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// MENU ITEM WIDGET
-  Widget _menuItem(BuildContext context, Size mq, String title, String price, String img) {
+  /// 🍽 MENU ITEM CARD
+  Widget _menuItem(
+      BuildContext context, Size mq, String title, String price) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04, vertical: 6),
       child: Container(
@@ -200,6 +206,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
         child: Row(
           children: [
 
+            /// 🖼 PRODUCT IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
@@ -210,40 +217,46 @@ class RestaurantDetailsScreen extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
+            /// 📝 DETAILS
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: mq.width * 0.045,
-                      )),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: mq.width * 0.045,
+                    ),
+                  ),
 
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
 
-                  Text("Authentic & delicious",
-                      style: TextStyle(
-                        fontSize: mq.width * 0.033,
-                        color: Colors.grey,
-                      )),
+                  Text(
+                    "Authentic & delicious",
+                    style: TextStyle(
+                      fontSize: mq.width * 0.033,
+                      color: Colors.grey,
+                    ),
+                  ),
 
-                  SizedBox(height: 5),
+                  const SizedBox(height: 6),
 
-                  Text("₹$price",
+                  Text(
+                    "₹$price",
                     style: TextStyle(
                       fontSize: mq.width * 0.045,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: themeColor,
                     ),
                   ),
                 ],
               ),
             ),
 
-            /// ⭐ UPDATED ADD CART BUTTON ⭐
+            /// 🛒 ADD TO CART
             InkWell(
               onTap: () {
                 Provider.of<CartProvider>(context, listen: false).addItem({
@@ -251,6 +264,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                   "price": double.parse(price),
                   "qty": 1,
                   "image": img,
+                  "store": name, // ✅ restaurant wise cart
                 });
 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -258,15 +272,16 @@ class RestaurantDetailsScreen extends StatelessWidget {
                 );
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
+                  color: themeColor.withOpacity(0.25),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  "Add Cart",
+                  "Add",
                   style: TextStyle(
-                    color: Colors.red,
+                    color: themeColor,
                     fontWeight: FontWeight.bold,
                     fontSize: mq.width * 0.035,
                   ),
