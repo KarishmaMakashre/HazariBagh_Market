@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../colors/AppColors.dart';
 import '../../../provider/property_provider.dart';
 import '../../../Model/property_model.dart';
 import '../../../widgets/top_header.dart';
+import '../../../l10n/app_localizations.dart';
 import 'property_view_details_screen.dart';
 
 class PropertyListingScreen extends StatelessWidget {
   const PropertyListingScreen({super.key});
 
-  // --- Breakpoints and Ratios Defined ---
   static const double mobileBreakpoint = 600.0;
   static const double mobileAspectRatio = 0.62;
   static const double desktopAspectRatio = 0.55;
@@ -17,42 +16,41 @@ class PropertyListingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PropertyProvider>();
+    final loc = AppLocalizations.of(context);
     final size = MediaQuery.of(context).size;
     final w = size.width;
-    final height = size.height;
 
-    // 🔑 RESPONSIVE LOGIC
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final bool isMobile = w < mobileBreakpoint;
     final int crossAxisCount = isMobile ? 2 : 3;
-    final double childRatio = isMobile ? mobileAspectRatio : desktopAspectRatio;
+    final double childRatio =
+    isMobile ? mobileAspectRatio : desktopAspectRatio;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100, // Kept this specific shade of grey
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TopHeader(),
 
-          /// 🔙 BACK BUTTON
+          /// 🔙 BACK BAR
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 12),
             child: InkWell(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               onTap: () => Navigator.pop(context),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.arrow_back,
-                    color: AppColors.propertyAccent,
-                  ),
-                  SizedBox(width: w * 0.02),
-                  const Text(
-                    "Back",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.propertyAccent,
+                  Icon(Icons.arrow_back,
+                      color: theme.colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Text(
+                    loc.getByKey('back'),
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ],
@@ -60,107 +58,115 @@ class PropertyListingScreen extends StatelessWidget {
             ),
           ),
 
-
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(w * 0.035),
+              padding: EdgeInsets.symmetric(
+                horizontal: w * 0.04,
+                vertical: 10,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  /// HEADER
+                  /// 🔷 PAGE HEADER
                   Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      // 🎨 USING AppColors.propertyAccent
-                      color: AppColors.propertyAccent,
-                      borderRadius: BorderRadius.circular(14),
+                      gradient: LinearGradient(
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.primary.withOpacity(0.85),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Property Listing",
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                          loc.getByKey('propertyListingTitle'),
+                          style: theme.textTheme.titleLarge!.copyWith(
+                            color: theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Text(
-                          "Find your perfect home, flat, PG or land in Hazaribagh",
-                          style: TextStyle(
-                              color: Colors.white70, fontSize: 12),
+                          loc.getByKey('propertyListingSubtitle'),
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            color: theme.colorScheme.onPrimary.withOpacity(0.75),
+                          ),
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 18),
 
-                  /// ================= FILTER BOX =================
+                  /// 🧰 FILTER CARD
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 6),
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: isDark
+                          ? []
+                          : const [
+                        BoxShadow(
+                            color: Colors.black12, blurRadius: 8),
                       ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          children: const [
-                            Icon(Icons.tune, size: 18),
-                            SizedBox(width: 6),
+                          children: [
+                            Icon(Icons.tune,
+                                size: 18,
+                                color: theme.iconTheme.color),
+                            const SizedBox(width: 8),
                             Text(
-                              "Filter",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              loc.getByKey('filter'),
+                              style: theme.textTheme.titleSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
 
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 14),
 
-                        const Text(
-                          "Property Type",
-                          style: TextStyle(fontSize: 12, color: AppColors.textGrey),
-                        ),
-                        const SizedBox(height: 6),
+                        _sectionTitle(context, loc.getByKey('propertyType')),
+                        const SizedBox(height: 8),
+
                         Wrap(
                           spacing: 10,
-                          children: ["All", "For Rent", "For Sale"].map((type) {
+                          runSpacing: 8,
+                          children: ['all', 'For Rent', 'For Sale'].map((type) {
                             return _filterChip(
-                              title: type,
+                              context: context,
+                              title: loc.getByKey(type),
                               selected: provider.selectedType == type,
                               onTap: () => provider.setType(type),
-                              // Passing propertyAccent
-                              selectedColor: AppColors.propertyAccent,
                             );
                           }).toList(),
                         ),
 
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 16),
 
-                        const Text(
-                          "Category",
-                          style: TextStyle(fontSize: 12, color: AppColors.textGrey),
-                        ),
-                        const SizedBox(height: 6),
+                        _sectionTitle(context, loc.getByKey('category')),
+                        const SizedBox(height: 8),
+
                         Wrap(
                           spacing: 10,
                           runSpacing: 8,
                           children:
-                          ["All", "Flats", "Home", "PG", "Land"].map((cat) {
+                          ['all', 'Flats', 'Home', 'PG', 'Land'].map((cat) {
                             return _filterChip(
-                              title: cat,
-                              selected: provider.selectedCategory == cat,
+                              context: context,
+                              title: loc.getByKey(cat),
+                              selected:
+                              provider.selectedCategory == cat,
                               onTap: () => provider.setCategory(cat),
-                              // Passing propertyAccent
-                              selectedColor: AppColors.propertyAccent,
                             );
                           }).toList(),
                         ),
@@ -168,42 +174,25 @@ class PropertyListingScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
-                  /// IMPORTANT INFO
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      // 🎨 USING AppColors.yellowNote
-                      color: AppColors.yellowNote,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      "Important: Please verify property details and owner credentials before making any payment. Visit the property in person and check all documents carefully.",
-                      style: TextStyle(fontSize: 11),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// ================= PROPERTY GRID (Responsive) =================
+                  /// 🏘️ PROPERTY GRID
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: provider.filteredProperties.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 14,
-                      mainAxisSpacing: 14,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
                       childAspectRatio: childRatio,
                     ),
-
                     itemBuilder: (context, index) {
                       return _propertyCard(
                         context,
                         provider.filteredProperties[index],
-                        // Passing propertyAccent
-                        buttonColor: AppColors.propertyAccent,
+                        loc,
                       );
                     },
                   ),
@@ -216,19 +205,16 @@ class PropertyListingScreen extends StatelessWidget {
     );
   }
 
-  /// ================= PROPERTY CARD =================
+  /// 🏠 PROPERTY CARD
   Widget _propertyCard(
-      BuildContext context,
-      PropertyModel property, {
-        required Color buttonColor,
-      }) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: () {
-        // ✅ SET SELECTED PROPERTY
-        context.read<PropertyProvider>().setSelectedProperty(property);
+      BuildContext context, PropertyModel property, AppLocalizations loc) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
-        // ✅ NAVIGATE TO DETAILS
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        context.read<PropertyProvider>().setSelectedProperty(property);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -238,54 +224,34 @@ class PropertyListingScreen extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 6),
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: isDark
+              ? []
+              : const [
+            BoxShadow(color: Colors.black12, blurRadius: 8),
           ],
         ),
         child: Column(
           children: [
             /// IMAGE
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.asset(
-                    property.image,
-                    height: 110,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                Positioned(
-                  top: 8,
-                  left: 6,
-                  child: _tag(
-                    property.type,
-                    property.type == "For Rent"
-                        ? Colors.blue
-                        : AppColors.success,
-                  ),
-                ),
-
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: _tag("Verified", AppColors.success),
-                ),
-              ],
+            ClipRRect(
+              borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.asset(
+                property.image,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
 
-            /// CONTENT
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+                padding: const EdgeInsets.all(12),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,75 +260,45 @@ class PropertyListingScreen extends StatelessWidget {
                           property.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
+                          style: theme.textTheme.bodyMedium!
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 6),
-                        _infoRow(Icons.location_on, property.location),
-                        _infoRow(Icons.square_foot, property.area),
-                        _infoRow(Icons.bed, property.bedInfo),
-                        const SizedBox(height: 6),
+                        _infoRow(context, Icons.location_on,
+                            property.location),
+                        _infoRow(context, Icons.square_foot,
+                            property.area),
+                        _infoRow(context, Icons.bed,
+                            property.bedInfo),
                       ],
                     ),
 
-                    /// PRICE + OWNER + BUTTON
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                property.price,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: AppColors.success,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            _ownerTag("Owner"),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-
-                        /// BUTTON (OPTIONAL – same navigation)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 32,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: buttonColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                            ),
-                            onPressed: () {
-                              context
-                                  .read<PropertyProvider>()
-                                  .setSelectedProperty(property);
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                  const PropertyDetailsScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              "View Details",
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: AppColors.white,
-                              ),
-                            ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 34,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                      ],
+                        onPressed: () {
+                          context
+                              .read<PropertyProvider>()
+                              .setSelectedProperty(property);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                              const PropertyDetailsScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          loc.getByKey('viewDetails'),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -374,62 +310,56 @@ class PropertyListingScreen extends StatelessWidget {
     );
   }
 
-  /// ================= SMALL WIDGETS =================
+  /// 🔘 FILTER CHIP
   Widget _filterChip({
+    required BuildContext context,
     required String title,
     required bool selected,
     required VoidCallback onTap,
-    required Color selectedColor, // Added parameter
   }) {
+    final theme = Theme.of(context);
+
     return InkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding:
+        const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
         decoration: BoxDecoration(
-          // 🎨 USING selectedColor parameter
-          color: selected ? selectedColor : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(18),
+          color: selected
+              ? theme.colorScheme.primary
+              : theme.dividerColor.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: 12,
-            color: selected ? AppColors.white : AppColors.black,
+          style: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.w500,
+            color: selected
+                ? theme.colorScheme.onPrimary
+                : theme.textTheme.bodyMedium!.color,
           ),
         ),
       ),
     );
   }
 
-  Widget _tag(String text, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-            fontSize: 10, color: color, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-
-  Widget _infoRow(IconData icon, String text) {
+  Widget _infoRow(
+      BuildContext context, IconData icon, String text) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 3),
       child: Row(
         children: [
-          Icon(icon, size: 13, color: AppColors.textGrey),
-          const SizedBox(width: 4),
+          Icon(icon, size: 14, color: theme.iconTheme.color),
+          const SizedBox(width: 6),
           Expanded(
             child: Text(
               text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10.5),
+              style: theme.textTheme.bodySmall,
             ),
           ),
         ],
@@ -437,22 +367,13 @@ class PropertyListingScreen extends StatelessWidget {
     );
   }
 
-  Widget _ownerTag(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      decoration: BoxDecoration(
-        // 🎨 USING AppColors.success
-        color: AppColors.success.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: const Text(
-        "Owner",
-        style: TextStyle(
-            fontSize: 10,
-            // 🎨 USING AppColors.success
-            color: AppColors.success,
-            fontWeight: FontWeight.w600),
-      ),
+  Widget _sectionTitle(BuildContext context, String text) {
+    return Text(
+      text,
+      style: Theme.of(context)
+          .textTheme
+          .bodySmall!
+          .copyWith(fontWeight: FontWeight.w600),
     );
   }
 }

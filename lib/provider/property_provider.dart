@@ -22,8 +22,11 @@ class PropertyProvider extends ChangeNotifier {
       location: "Civil Lines, Hazaribagh",
       area: "600 sq.ft",
       bedInfo: "2 Beds • 2 Bath",
-      // 🔑 ADDED contactName FIELD
+      description:
+      "Spacious 2 BHK flat located in a prime area, suitable for families.",
       contactName: "Mr. Raj Singh",
+      contactEmail: "raj.singh@gmail.com",
+      contactPhone: "+91 9876543210",
     ),
     PropertyModel(
       title: "Independent Home",
@@ -34,8 +37,11 @@ class PropertyProvider extends ChangeNotifier {
       location: "Matwari, Hazaribagh",
       area: "1200 sq.ft",
       bedInfo: "3 Beds • 3 Bath",
-      // 🔑 ADDED contactName FIELD
+      description:
+      "Independent house with parking and garden, ideal for large families.",
       contactName: "City Brokers",
+      contactEmail: "citybrokers@gmail.com",
+      contactPhone: "+91 9123456789",
     ),
     PropertyModel(
       title: "PG for Girls",
@@ -46,8 +52,11 @@ class PropertyProvider extends ChangeNotifier {
       location: "Canary Hill Road",
       area: "Single Room",
       bedInfo: "1 Bed",
-      // 🔑 ADDED contactName FIELD
+      description:
+      "Safe and affordable PG accommodation for girls near main road.",
       contactName: "Sushma Kumari (Owner)",
+      contactEmail: "sushma.pg@gmail.com",
+      contactPhone: "+91 9988776655",
     ),
   ];
 

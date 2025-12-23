@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/provider/language_provider.dart';
+import 'package:hazari_bagh_market/provider/payment_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hazari_bagh_market/provider/auth_provider.dart';
@@ -16,9 +17,7 @@ import 'package:hazari_bagh_market/provider/property_provider.dart';
 import 'package:hazari_bagh_market/provider/store_provider.dart';
 import 'package:hazari_bagh_market/provider/support_provider.dart';
 import 'package:hazari_bagh_market/provider/theme_provider.dart';
-
 import 'package:hazari_bagh_market/screen/splash_screen.dart';
-
 import 'Vendor/VendorProvider/dashboard_provider.dart';
 import 'Vendor/VendorProvider/vendor_bottom_nav_provider.dart';
 import 'l10n/app_localizations.dart';
@@ -44,6 +43,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => GroceryProvider()),
         ChangeNotifierProvider(create: (_) => FoodProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
       ],
       child: const MyApp(),
     ),

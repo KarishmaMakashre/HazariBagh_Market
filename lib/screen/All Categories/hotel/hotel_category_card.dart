@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../Model/hotel_category_model.dart';
+import '../../../l10n/app_localizations.dart';
 import 'hotel_product_list_screen.dart';
 
 class HotelCategoryCard extends StatelessWidget {
@@ -16,6 +17,8 @@ class HotelCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
+
     return InkWell(
       borderRadius: BorderRadius.circular(14),
       onTap: () {
@@ -23,6 +26,7 @@ class HotelCategoryCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => HotelProductListScreen(
+              /// 🔑 ALWAYS ENGLISH KEY
               categoryTitle: category.title,
             ),
           ),
@@ -42,7 +46,7 @@ class HotelCategoryCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            ///  IMAGE
+            /// 🖼 IMAGE
             Expanded(
               flex: 7,
               child: ClipRRect(
@@ -57,29 +61,22 @@ class HotelCategoryCard extends StatelessWidget {
               ),
             ),
 
-            /// 📛 TITLE
+            /// 📛 LOCALIZED TITLE
             Expanded(
               flex: 3,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    category.title,
+                    loc.getByKey(category.title),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-
-                    /// ✅ FONT FAMILY ADDED HERE
                     style: GoogleFonts.inter(
                       fontSize: width * 0.032,
                       fontWeight: FontWeight.w600,
                       color: Colors.black87,
                     ),
-
-                    // 👉 Try these if you want different looks:
-                    // GoogleFonts.poppins(...)
-                    // GoogleFonts.montserrat(...)
-                    // GoogleFonts.roboto(...)
                   ),
                 ),
               ),

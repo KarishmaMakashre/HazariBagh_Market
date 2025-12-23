@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../colors/AppColors.dart';
-// Assuming the TopHeader widget is located here:
 import '../../../widgets/top_header.dart';
+import '../../../l10n/app_localizations.dart';
 
 class PropertyEnquiryScreen extends StatelessWidget {
-
   final String propertyTitle;
   final String contactName;
 
@@ -17,16 +16,24 @@ class PropertyEnquiryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
+    final loc = AppLocalizations.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF0F172A) : AppColors.bgLight;
+    final cardColor = isDark ? const Color(0xFF1E293B) : AppColors.white;
+    final textColor = isDark ? Colors.white : AppColors.textDark;
+    final subTextColor =
+    isDark ? Colors.grey.shade400 : AppColors.textLight;
+    final borderColor =
+    isDark ? Colors.grey.shade600 : AppColors.border;
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
-      // Removed AppBar
+      backgroundColor: bgColor,
       body: Column(
         children: [
-          // 🔑 Added TopHeader here
           const TopHeader(),
 
-          // 🔑 Custom Header for Back Button and Title (Replaces AppBar)
+          /// 🔙 BACK HEADER
           Padding(
             padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
             child: InkWell(
@@ -39,9 +46,9 @@ class PropertyEnquiryScreen extends StatelessWidget {
                     color: AppColors.propertyAccent,
                   ),
                   SizedBox(width: w * 0.02),
-                  const Text(
-                    "Back",
-                    style: TextStyle(
+                  Text(
+                    loc.back,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: AppColors.propertyAccent,
@@ -52,46 +59,56 @@ class PropertyEnquiryScreen extends StatelessWidget {
             ),
           ),
 
-
-          // 🔑 Form Content now in an Expanded SingleChildScrollView
+          /// 📄 FORM
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05, bottom: w * 0.05),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // --- 👤 YOUR NAME FIELD ---
                   _buildInputField(
-                    title: "Your Name",
-                    hintText: "Enter your name..........",
+                    title: loc.getByKey('fullName'),
+                    hintText: loc.getByKey('fullNameHint'),
                     keyboardType: TextInputType.name,
                     maxLines: 1,
+                    cardColor: cardColor,
+                    textColor: textColor,
+                    borderColor: borderColor,
                   ),
                   SizedBox(height: w * 0.05),
 
-                  // --- 📞 PHONE NUMBER FIELD ---
                   _buildInputField(
-                    title: "Phone Number",
-                    hintText: "+91-1223445666",
+                    title: loc.getByKey('phoneNumber'),
+                    hintText: '+91-XXXXXXXXXX',
                     keyboardType: TextInputType.phone,
                     maxLines: 1,
+                    cardColor: cardColor,
+                    textColor: textColor,
+                    borderColor: borderColor,
                   ),
                   SizedBox(height: w * 0.05),
 
-                  // --- 💬 MESSAGE FIELD ---
                   _buildInputField(
-                    title: "Message",
-                    hintText: "I'm interested in this property..........",
+                    title: loc.description,
+                    hintText: loc.descriptionHint,
                     keyboardType: TextInputType.multiline,
-                    maxLines: 6, // Larger text area
+                    maxLines: 6,
+                    cardColor: cardColor,
+                    textColor: textColor,
+                    borderColor: borderColor,
                   ),
                   SizedBox(height: w * 0.05),
 
-                  // --- ℹ️ PROPERTY CONTEXT BOX ---
-                  _buildPropertyContextBox(w),
+                  _buildPropertyContextBox(
+                    context,
+                    w,
+                    cardColor,
+                    textColor,
+                    subTextColor,
+                  ),
                   SizedBox(height: w * 0.1),
 
-                  // --- 🚀 SEND ENQUIRE BUTTON ---
+                  /// 🚀 SEND BUTTON
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -103,12 +120,11 @@ class PropertyEnquiryScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // TODO: Implement submission logic (API call, validation)
-                        print("Enquiry Sent for $propertyTitle");
+                        debugPrint("Enquiry Sent for $propertyTitle");
                       },
-                      child: const Text(
-                        "Send Enquire",
-                        style: TextStyle(
+                      child: Text(
+                        loc.getByKey('enquireNow'),
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: AppColors.white,
@@ -125,48 +141,48 @@ class PropertyEnquiryScreen extends StatelessWidget {
     );
   }
 
-  /// Helper method for building text input fields
+  /// 🔹 INPUT FIELD
   Widget _buildInputField({
     required String title,
     required String hintText,
     required TextInputType keyboardType,
     required int maxLines,
+    required Color cardColor,
+    required Color textColor,
+    required Color borderColor,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
-            color: AppColors.textDark,
+            color: textColor,
           ),
         ),
         const SizedBox(height: 8),
         TextField(
           keyboardType: keyboardType,
           maxLines: maxLines,
+          style: TextStyle(color: textColor),
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: const TextStyle(color: AppColors.textGrey, fontStyle: FontStyle.italic),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 16,
+            hintStyle: TextStyle(
+              color: Colors.grey.shade400,
+              fontStyle: FontStyle.italic,
             ),
             filled: true,
-            fillColor: AppColors.white,
+            fillColor: cardColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.border, width: 1.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.border, width: 1.0),
+              borderSide: BorderSide(color: borderColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppColors.primary, width: 2.0),
+              borderSide:
+              const BorderSide(color: AppColors.primary, width: 2),
             ),
           ),
         ),
@@ -174,32 +190,40 @@ class PropertyEnquiryScreen extends StatelessWidget {
     );
   }
 
-  /// Helper method for the property context box
-  Widget _buildPropertyContextBox(double w) {
+  /// 🏠 PROPERTY INFO
+  Widget _buildPropertyContextBox(
+      BuildContext context,
+      double w,
+      Color cardColor,
+      Color textColor,
+      Color subTextColor,
+      ) {
+    final loc = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: cardColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Property: $propertyTitle",
+            "${loc.propertyListing}: $propertyTitle",
             style: TextStyle(
               fontSize: w * 0.04,
               fontWeight: FontWeight.w600,
-              color: AppColors.textDark,
+              color: textColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            "Contact: $contactName",
+            "${loc.contactInformation}: $contactName",
             style: TextStyle(
               fontSize: w * 0.035,
-              color: AppColors.textLight,
+              color: subTextColor,
             ),
           ),
         ],

@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../Model/restaurant_model.dart';
 import 'RestaurantDetailsScreen.dart';
 
 class RestaurantCard extends StatelessWidget {
-  final Size size;
-  final String img;
-  final String name;
-  final String type;
-  final String rating;
-  final String time;
-  final String distance;
+  final RestaurantModel restaurant;
 
   const RestaurantCard({
     super.key,
-    required this.size,
-    required this.img,
-    required this.name,
-    required this.type,
-    required this.rating,
-    required this.time,
-    required this.distance,
+    required this.restaurant,
   });
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final w = size.width;
     final h = size.height;
+    final loc = AppLocalizations.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final cardColor = isDark ? const Color(0xFF1E293B) : Colors.white;
+    final titleColor = isDark ? Colors.white : Colors.black;
+    final subTextColor =
+    isDark ? Colors.grey.shade300 : Colors.grey.shade600;
+    final iconGrey =
+    isDark ? Colors.grey.shade400 : Colors.grey.shade700;
 
     return InkWell(
       borderRadius: BorderRadius.circular(w * 0.035),
@@ -34,12 +34,12 @@ class RestaurantCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => RestaurantDetailsScreen(
-              img: img,
-              name: name,
-              type: type,
-              rating: rating,
-              time: time,
-              distance: distance,
+              img: restaurant.image,
+              name: loc.getByKey(restaurant.nameKey),
+              type: loc.getByKey(restaurant.typeKey),
+              rating: restaurant.rating,
+              time: restaurant.time,
+              distance: restaurant.distance,
             ),
           ),
         );
@@ -47,25 +47,24 @@ class RestaurantCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(w * 0.035),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cardColor,
           borderRadius: BorderRadius.circular(w * 0.035),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: isDark ? Colors.black54 : Colors.black12,
               blurRadius: 8,
-              offset: Offset(0, 4),
-            )
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            ///  IMAGE
+            /// 🖼 IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(w * 0.03),
               child: Image.asset(
-                img,
+                restaurant.image,
                 width: w * 0.23,
                 height: w * 0.23,
                 fit: BoxFit.cover,
@@ -79,16 +78,15 @@ class RestaurantCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   /// 🍴 NAME
                   Text(
-                    name,
+                    loc.getByKey(restaurant.nameKey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: w * 0.048,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                      color: titleColor,
                     ),
                   ),
 
@@ -96,12 +94,12 @@ class RestaurantCard extends StatelessWidget {
 
                   /// 🏷 TYPE
                   Text(
-                    type,
+                    loc.getByKey(restaurant.typeKey),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontSize: w * 0.035,
-                      color: Colors.grey.shade600,
+                      color: subTextColor,
                     ),
                   ),
 
@@ -112,25 +110,26 @@ class RestaurantCard extends StatelessWidget {
                     children: [
                       Icon(Icons.star,
                           color: Colors.amber, size: w * 0.045),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
-                        rating,
+                        restaurant.rating,
                         style: GoogleFonts.inter(
                           fontSize: w * 0.035,
                           fontWeight: FontWeight.w600,
+                          color: titleColor,
                         ),
                       ),
 
                       SizedBox(width: w * 0.04),
 
                       Icon(Icons.timer_outlined,
-                          size: w * 0.045,
-                          color: Colors.grey.shade700),
-                      SizedBox(width: 4),
+                          size: w * 0.045, color: iconGrey),
+                      const SizedBox(width: 4),
                       Text(
-                        time,
+                        restaurant.time,
                         style: GoogleFonts.inter(
                           fontSize: w * 0.035,
+                          color: titleColor,
                         ),
                       ),
                     ],
@@ -144,12 +143,12 @@ class RestaurantCard extends StatelessWidget {
                       Icon(Icons.location_on,
                           color: Colors.redAccent,
                           size: w * 0.045),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
-                        distance,
+                        restaurant.distance,
                         style: GoogleFonts.inter(
                           fontSize: w * 0.035,
-                          color: Colors.grey.shade700,
+                          color: subTextColor,
                         ),
                       ),
                     ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/widgets/top_header.dart';
 import '../../../colors/AppColors.dart';
 import '../../../Model/service_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ServiceListScreen extends StatelessWidget {
   final ServiceModel service;
@@ -12,6 +13,7 @@ class ServiceListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -21,7 +23,7 @@ class ServiceListScreen extends StatelessWidget {
 
             const TopHeader(),
 
-            ///  HEADER
+            /// 🔙 HEADER
             Padding(
               padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
               child: InkWell(
@@ -38,7 +40,7 @@ class ServiceListScreen extends StatelessWidget {
                     /// 🔤 SERVICE NAME
                     Expanded(
                       child: Text(
-                        service.title,
+                        loc.getByKey(service.title),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -70,7 +72,7 @@ class ServiceListScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      /// IMAGE
+                      /// 🖼 IMAGE
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image.asset(
@@ -83,9 +85,9 @@ class ServiceListScreen extends StatelessWidget {
 
                       const SizedBox(height: 12),
 
-                      /// DESCRIPTION
+                      /// 📝 DESCRIPTION
                       Text(
-                        service.description,
+                        loc.getByKey(service.description),
                         style: const TextStyle(
                           fontSize: 14,
                           color: AppColors.textDark,
@@ -94,7 +96,7 @@ class ServiceListScreen extends StatelessWidget {
 
                       const SizedBox(height: 14),
 
-                      /// PRICE
+                      /// 💰 PRICE
                       Text(
                         service.price,
                         style: const TextStyle(
@@ -106,16 +108,20 @@ class ServiceListScreen extends StatelessWidget {
 
                       const SizedBox(height: 16),
 
-                      /// ACTION BUTTONS
+                      /// ⚡ ACTION BUTTONS
                       Row(
                         children: [
 
-                          _actionBtn(Icons.call, "Call", Colors.green),
+                          _actionBtn(
+                            Icons.call,
+                            loc.getByKey('callNow'),
+                            Colors.green,
+                          ),
                           const SizedBox(width: 8),
 
                           _actionBtn(
                             Icons.chat,
-                            "WhatsApp",
+                            loc.getByKey('whatsapp'),
                             Colors.green.shade700,
                           ),
                           const SizedBox(width: 8),
@@ -129,9 +135,9 @@ class ServiceListScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {},
-                              child: const Text(
-                                "Send Enquiry",
-                                style: TextStyle(color: Colors.white),
+                              child: Text(
+                                loc.getByKey('enquiry'),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ),

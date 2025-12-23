@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../provider/hotel_provider.dart';
 import '../../../widgets/top_header.dart';
 
@@ -13,6 +14,7 @@ class HotelScreen extends StatelessWidget {
     // 🔑 Watch the HotelProvider
     final hotelProvider = context.watch<HotelProvider>();
     final w = MediaQuery.of(context).size.width;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,

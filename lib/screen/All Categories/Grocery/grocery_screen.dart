@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Model/grocery_model.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../provider/grocery_provider.dart';
 import '../../../widgets/top_header.dart';
 import 'product_list_screen.dart';
@@ -11,6 +12,8 @@ class GroceryScreen extends StatelessWidget {
 
   ///  GROCERY CARD
   Widget _groceryCard(BuildContext context, GroceryItem item, double w) {
+    final loc = AppLocalizations.of(context);
+
     return InkWell(
       borderRadius: BorderRadius.circular(14),
       onTap: () {
@@ -18,7 +21,7 @@ class GroceryScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (_) => ProductListScreen(
-              categoryTitle: item.title,
+              categoryKey: item.title, // 🔑 ENGLISH KEY ONLY
             ),
           ),
         );
@@ -28,21 +31,15 @@ class GroceryScreen extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
           boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5,
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 5),
           ],
         ),
         child: Column(
           children: [
-            /// 🖼 IMAGE
             Expanded(
               flex: 7,
               child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(14),
-                ),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
                 child: Image.asset(
                   item.image,
                   width: double.infinity,
@@ -51,14 +48,14 @@ class GroceryScreen extends StatelessWidget {
               ),
             ),
 
-            /// 📛 TITLE
+            /// 📛 LOCALIZED TITLE
             Expanded(
               flex: 3,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Text(
-                    item.title,
+                    loc.getByKey(item.title.toLowerCase()),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -77,11 +74,14 @@ class GroceryScreen extends StatelessWidget {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     final groceryProvider = context.watch<GroceryProvider>();
     final groceryItems = groceryProvider.groceryItems;
     final isLoading = groceryProvider.isLoading;
+    final loc = AppLocalizations.of(context);
+
 
     final size = MediaQuery.of(context).size;
     final w = size.width;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../Model/salon_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class SalonCard extends StatelessWidget {
   final SalonModel salon;
@@ -11,6 +12,7 @@ class SalonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    final loc = AppLocalizations.of(context);
 
     return Container(
       margin: EdgeInsets.only(bottom: h * 0.018),
@@ -46,7 +48,7 @@ class SalonCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      salon.name,
+                      loc.getByKey(salon.name),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -56,7 +58,7 @@ class SalonCard extends StatelessWidget {
                     ),
                     SizedBox(height: h * 0.006),
 
-                    /// RATING
+                    /// ⭐ RATING
                     Row(
                       children: [
                         Container(
@@ -107,7 +109,7 @@ class SalonCard extends StatelessWidget {
                         SizedBox(width: w * 0.01),
                         Expanded(
                           child: Text(
-                            salon.location,
+                            loc.getByKey(salon.location),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -132,9 +134,9 @@ class SalonCard extends StatelessWidget {
             runSpacing: h * 0.01,
             children: salon.services
                 .map(
-                  (e) => Chip(
+                  (serviceKey) => Chip(
                 label: Text(
-                  e,
+                  loc.getByKey(serviceKey),
                   style: TextStyle(
                     color: primaryColor,
                     fontSize: w * 0.03,
@@ -154,11 +156,12 @@ class SalonCard extends StatelessWidget {
           SizedBox(height: h * 0.015),
 
           /// ⚡ ACTION BUTTONS
+          /// ⚡ ACTION BUTTONS
           Row(
             children: [
               _btn(
                 icon: Icons.call,
-                text: "Call",
+                text: loc.getByKey('callNow'),
                 color: Colors.green,
                 w: w,
                 h: h,
@@ -166,7 +169,7 @@ class SalonCard extends StatelessWidget {
               SizedBox(width: w * 0.02),
               _btn(
                 icon: Icons.wallet_giftcard,
-                text: "WhatsApp",
+                text: loc.getByKey('whatsapp'),
                 color: Colors.green,
                 w: w,
                 h: h,
@@ -174,13 +177,14 @@ class SalonCard extends StatelessWidget {
               SizedBox(width: w * 0.02),
               _btn(
                 icon: Icons.chat,
-                text: "Enquiry",
+                text: loc.getByKey('enquiry'),
                 color: Colors.blue,
                 w: w,
                 h: h,
               ),
             ],
           ),
+
         ],
       ),
     );

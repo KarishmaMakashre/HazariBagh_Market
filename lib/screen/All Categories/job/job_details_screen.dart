@@ -16,7 +16,7 @@ class JobDetailsScreen extends StatelessWidget {
     final loc = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: const Color(0xFFF5F7FA),
       body: Column(
         children: [
           const TopHeader(),
@@ -31,13 +31,16 @@ class JobDetailsScreen extends StatelessWidget {
 
                   /// 🔙 BACK
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
                       child: Row(
                         children: [
-                          Icon(Icons.arrow_back,
-                              color: primaryColor, size: w * 0.055),
+                          Icon(
+                            Icons.arrow_back_ios_new,
+                            color: primaryColor,
+                            size: w * 0.05,
+                          ),
                           SizedBox(width: w * 0.02),
                           Text(
                             loc.back,
@@ -56,7 +59,7 @@ class JobDetailsScreen extends StatelessWidget {
 
                   /// 🏢 JOB INFO
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: _card(
                       w,
                       Column(
@@ -65,11 +68,14 @@ class JobDetailsScreen extends StatelessWidget {
                           Row(
                             children: [
                               CircleAvatar(
-                                radius: w * 0.08,
+                                radius: w * 0.075,
                                 backgroundColor:
-                                primaryColor.withOpacity(0.2),
-                                child: Icon(Icons.business,
-                                    color: primaryColor, size: w * 0.07),
+                                primaryColor.withOpacity(0.15),
+                                child: Icon(
+                                  Icons.business,
+                                  color: primaryColor,
+                                  size: w * 0.07,
+                                ),
                               ),
                               SizedBox(width: w * 0.03),
                               Expanded(
@@ -79,18 +85,26 @@ class JobDetailsScreen extends StatelessWidget {
                                     Text(
                                       loc.getByKey("techSolutions"),
                                       style: TextStyle(
-                                        fontSize: w * 0.042,
+                                        fontSize: w * 0.045,
                                         fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
                                       ),
                                     ),
-                                    SizedBox(height: h * 0.005),
-                                    Chip(
-                                      backgroundColor: primaryColor,
-                                      label: Text(
-                                        loc.itSoftware,
-                                        style: TextStyle(
+                                    SizedBox(height: h * 0.006),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius:
+                                        BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        loc.getByKey("itSoftware"),
+                                        style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: w * 0.032,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
@@ -100,23 +114,14 @@ class JobDetailsScreen extends StatelessWidget {
                             ],
                           ),
 
-                          SizedBox(height: h * 0.015),
+                          SizedBox(height: h * 0.018),
 
-                          _infoRow(
-                            Icons.location_on,
-                            loc.getByKey("jobLocation"),
-                            w,
-                          ),
-                          _infoRow(
-                            Icons.currency_rupee,
-                            loc.getByKey("jobSalary"),
-                            w,
-                          ),
-                          _infoRow(
-                            Icons.work,
-                            loc.getByKey("jobExperience"),
-                            w,
-                          ),
+                          _infoRow(Icons.location_on,
+                              loc.getByKey("jobLocation"), w),
+                          _infoRow(Icons.currency_rupee,
+                              loc.getByKey("jobSalary"), w),
+                          _infoRow(Icons.work,
+                              loc.getByKey("jobExperience"), w),
 
                           Align(
                             alignment: Alignment.centerRight,
@@ -124,7 +129,7 @@ class JobDetailsScreen extends StatelessWidget {
                               loc.getByKey("jobPosted"),
                               style: TextStyle(
                                 fontSize: w * 0.03,
-                                color: Colors.grey,
+                                color: Colors.grey.shade600,
                               ),
                             ),
                           ),
@@ -133,7 +138,7 @@ class JobDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: h * 0.02),
+                  SizedBox(height: h * 0.025),
 
                   /// 📄 DESCRIPTION
                   _section(
@@ -164,7 +169,7 @@ class JobDetailsScreen extends StatelessWidget {
 
                   /// 🎯 BUTTONS
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Row(
                       children: [
                         Expanded(
@@ -173,6 +178,9 @@ class JobDetailsScreen extends StatelessWidget {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
                               ),
                               onPressed: () {
                                 Navigator.push(
@@ -185,7 +193,10 @@ class JobDetailsScreen extends StatelessWidget {
                               },
                               child: Text(
                                 loc.getByKey("applyNow"),
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
@@ -195,8 +206,20 @@ class JobDetailsScreen extends StatelessWidget {
                           child: SizedBox(
                             height: h * 0.055,
                             child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                side:
+                                const BorderSide(color: primaryColor),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
                               onPressed: () {},
-                              child: Text(loc.getByKey("callEmployer")),
+                              child: Text(
+                                loc.getByKey("callEmployer"),
+                                style: const TextStyle(
+                                  color: primaryColor,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -214,44 +237,58 @@ class JobDetailsScreen extends StatelessWidget {
     );
   }
 
-  // 🔹 CARD
+  /// 🔹 CARD
   static Widget _card(double w, Widget child) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(w * 0.04),
+      padding: EdgeInsets.all(w * 0.045),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(w * 0.04),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 4),
+          BoxShadow(color: Colors.black12, blurRadius: 8),
         ],
       ),
       child: child,
     );
   }
 
-  // 🔹 SECTION
-  static Widget _section(double w,
-      {required String title, required String content}) {
+  /// 🔹 SECTION
+  static Widget _section(
+      double w, {
+        required String title,
+        required String content,
+      }) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+      padding: EdgeInsets.symmetric(horizontal: w * 0.04),
       child: _card(
         w,
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style: TextStyle(
-                    fontSize: w * 0.042, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: w * 0.042,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
             SizedBox(height: w * 0.02),
-            Text(content, style: TextStyle(fontSize: w * 0.034)),
+            Text(
+              content,
+              style: TextStyle(
+                fontSize: w * 0.034,
+                color: Colors.black87,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // 🔹 INFO ROW
+  /// 🔹 INFO ROW
   static Widget _infoRow(IconData icon, String text, double w) {
     return Padding(
       padding: EdgeInsets.only(bottom: w * 0.015),
@@ -260,7 +297,13 @@ class JobDetailsScreen extends StatelessWidget {
           Icon(icon, size: w * 0.045, color: primaryColor),
           SizedBox(width: w * 0.02),
           Expanded(
-            child: Text(text, style: TextStyle(fontSize: w * 0.034)),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: w * 0.034,
+                color: Colors.black87,
+              ),
+            ),
           ),
         ],
       ),

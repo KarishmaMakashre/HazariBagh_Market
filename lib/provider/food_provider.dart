@@ -5,13 +5,18 @@ import '../Model/restaurant_model.dart';
 class FoodProvider extends ChangeNotifier {
 
   bool _isLoading = false;
-  List<HotelCategoryModel> _categories = []; // The grid items (Hotel, Restaurant, Cafe, etc.)
+  List<HotelCategoryModel> _categories = [
+  ]; // The grid items (Hotel, Restaurant, Cafe, etc.)
 
-  List<RestaurantModel> _allRestaurants = []; // The comprehensive list of all restaurants/hotels
+  List<RestaurantModel> _allRestaurants = [
+  ]; // The comprehensive list of all restaurants/hotels
 
   bool get isLoading => _isLoading;
+
   List<HotelCategoryModel> get categories => _categories;
-  List<RestaurantModel> get allRestaurants => _allRestaurants; // Optional getter for all items
+
+  List<RestaurantModel> get allRestaurants =>
+      _allRestaurants; // Optional getter for all items
 
   FoodProvider() {
     _loadInitialData(); // Load categories
@@ -21,49 +26,56 @@ class FoodProvider extends ChangeNotifier {
   /// 🏨 HOTEL/RESTAURANT CATEGORY DATA
   final List<HotelCategoryModel> _initialCategoryData = [
     // Ensure the title here exactly matches the 'category' in RestaurantModel
-    HotelCategoryModel(title: "All", image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg"),
+    HotelCategoryModel(
+        title: "All", image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg"),
     HotelCategoryModel(title: "Hotel", image: "assets/images/bedroom.png"),
-    HotelCategoryModel(title: "Restaurant", image: "assets/images/Beverages.jpg"),
+    HotelCategoryModel(
+        title: "Restaurant", image: "assets/images/Beverages.jpg"),
     HotelCategoryModel(title: "Fast Food", image: "assets/images/clothe.jpg"),
     HotelCategoryModel(title: "Cafe", image: "assets/images/electronics.jpg"),
-    HotelCategoryModel(title: "Bakery", image: "assets/images/eric-prouzet-52DMHPBAvXY-unsplash.jpg"),
-    HotelCategoryModel(title: "Bar", image: "assets/images/giorgio-trovato-fczCr7MdE7U-unsplash.jpg"),
+    HotelCategoryModel(title: "Bakery",
+        image: "assets/images/eric-prouzet-52DMHPBAvXY-unsplash.jpg"),
+    HotelCategoryModel(title: "Bar",
+        image: "assets/images/giorgio-trovato-fczCr7MdE7U-unsplash.jpg"),
     HotelCategoryModel(title: "Sweets", image: "assets/images/grocery.jpg"),
   ];
 
   /// 🍽 DUMMY RESTAURANT/HOTEL DATA (Simulating API fetch)
   final List<RestaurantModel> _dummyRestaurantData = [
-    // ------------------- HOTEL -------------------
     RestaurantModel(
-      id: 'h1', name: "Hotel Grand Palace", type: "Luxury • Buffet", image: "assets/images/hotel.jpg", rating: "4.8", time: "5-10 min", distance: "2.1 km", category: "Hotel",
+      id: 'h1',
+      nameKey: 'hotelGrandPalace',
+      typeKey: 'luxuryBuffet',
+      image: "assets/images/hotel.jpg",
+      rating: "4.8",
+      time: "5-10 min",
+      distance: "2.1 km",
+      categoryKey: 'hotel',
     ),
-    // ------------------- RESTAURANT -------------------
+
     RestaurantModel(
-      id: 'r1', name: "Spice Paradise", type: "Indian • Mughlai • Biryani", image: "assets/images/kitchan.png", rating: "4.5", time: "20–30 min", distance: "0.8 km", category: "Restaurant",
+      id: 'r1',
+      nameKey: 'spiceParadise',
+      typeKey: 'indianMughlaiBiryani',
+      image: "assets/images/kitchan.png",
+      rating: "4.5",
+      time: "20–30 min",
+      distance: "0.8 km",
+      categoryKey: 'restaurant',
     ),
+
     RestaurantModel(
-      id: 'r2', name: "Chinese Wok", type: "Authentic Chinese", image: "assets/images/milk.jpg", rating: "4.2", time: "30–40 min", distance: "1.5 km", category: "Restaurant",
-    ),
-    // ------------------- FAST FOOD -------------------
-    RestaurantModel(
-      id: 'f1', name: "Pizza Corner", type: "Fast Food • Pizzas", image: "assets/images/oil.jpg", rating: "4.3", time: "25–35 min", distance: "1.2 km", category: "Fast Food",
-    ),
-    RestaurantModel(
-      id: 'f2', name: "Burger King", type: "Burgers • Sides", image: "assets/images/pules.jpg", rating: "4.0", time: "15–25 min", distance: "0.5 km", category: "Fast Food",
-    ),
-    // ------------------- CAFE -------------------
-    RestaurantModel(
-      id: 'c1', name: "The Coffee Shop", type: "Cafe • Snacks • Beverages", image: "assets/images/rental.png", rating: "4.6", time: "18–28 min", distance: "0.5 km", category: "Cafe",
-    ),
-    // ------------------- BAKERY -------------------
-    RestaurantModel(
-      id: 'b1', name: "Fresh Bakes", type: "Cakes • Pastries", image: "assets/images/rice.jpg", rating: "4.7", time: "10–20 min", distance: "1.0 km", category: "Bakery",
-    ),
-    // ------------------- SWEETS -------------------
-    RestaurantModel(
-      id: 's1', name: "Gupta Sweets", type: "Indian Sweets • Desserts", image: "assets/images/snacks.jpg", rating: "4.9", time: "10–20 min", distance: "0.4 km", category: "Sweets",
+      id: 'f1',
+      nameKey: 'pizzaCorner',
+      typeKey: 'fastFoodPizza',
+      image: "assets/images/oil.jpg",
+      rating: "4.3",
+      time: "25–35 min",
+      distance: "1.2 km",
+      categoryKey: 'fastFood',
     ),
   ];
+
 
 
   // Asynchronous data load for categories
@@ -91,12 +103,13 @@ class FoodProvider extends ChangeNotifier {
   }
 
   /// METHOD TO FILTER RESTAURANTS FOR RestaurantListScreen
-  List<RestaurantModel> getRestaurantsByCategory(String categoryTitle) {
-    if (categoryTitle.toLowerCase() == 'all') {
+  List<RestaurantModel> getRestaurantsByCategory(String categoryKey) {
+    if (categoryKey == 'all') {
       return _allRestaurants;
     }
 
-    // Filter the comprehensive list based on the category title
-    return _allRestaurants.where((r) => r.category.toLowerCase() == categoryTitle.toLowerCase()).toList();
+    return _allRestaurants
+        .where((r) => r.categoryKey == categoryKey)
+        .toList();
   }
 }

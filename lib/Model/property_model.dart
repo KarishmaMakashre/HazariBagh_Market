@@ -7,7 +7,11 @@ class PropertyModel {
   final String location;
   final String area;
   final String bedInfo;
+
+  final String description;
   final String contactName;
+  final String contactEmail;
+  final String contactPhone;
 
   PropertyModel({
     required this.title,
@@ -18,6 +22,9 @@ class PropertyModel {
     required this.location,
     required this.area,
     required this.bedInfo,
-    required this.contactName
+    required this.description,
+    required this.contactName,
+    required this.contactEmail,
+    required this.contactPhone,
   });
 }

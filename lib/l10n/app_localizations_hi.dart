@@ -2,12 +2,11 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for Hindi (`hi`).
 class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
+  // ===================== BASIC =====================
   @override
   String get welcomeUser => 'स्वागत है!';
 
@@ -22,12 +21,7 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get visitStore => 'स्टोर देखें';
 
-  @override
-  String get bigSale => 'इस हफ्ते बड़ी सेल!';
-
-  @override
-  String get groceryOffer => 'सभी किराने के सामान पर';
-
+  // ===================== HOME =====================
   @override
   String get categories => 'श्रेणियाँ';
 
@@ -38,26 +32,38 @@ class AppLocalizationsHi extends AppLocalizations {
   String get viewAll => 'सभी देखें';
 
   @override
-  String get specialWeekend => 'स्पेशल वीकेंड ऑफर!';
+  String get bigSale => 'इस हफ्ते बड़ी सेल!';
+
+  @override
+  String get groceryOffer =>
+      'सभी किराने के सामान पर';
+
+  @override
+  String get specialWeekend =>
+      'स्पेशल वीकेंड ऑफर!';
 
   @override
   String get flatOff =>
       '₹999 से ऊपर के ऑर्डर पर 30% की छूट';
 
+  // ===================== COMMON =====================
   @override
   String get back => 'वापस';
 
   @override
-  String get editProfile => 'प्रोफ़ाइल संपादित करें';
+  String get editProfile =>
+      'प्रोफ़ाइल संपादित करें';
 
   @override
-  String get generalSettings => 'सामान्य सेटिंग्स';
+  String get generalSettings =>
+      'सामान्य सेटिंग्स';
 
   @override
   String get mode => 'मोड';
 
   @override
-  String get darkLight => 'डार्क और लाइट';
+  String get darkLight =>
+      'डार्क और लाइट';
 
   @override
   String get language => 'भाषा';
@@ -69,31 +75,37 @@ class AppLocalizationsHi extends AppLocalizations {
   String get about => 'जानकारी';
 
   @override
-  String get terms => 'नियम और शर्तें';
+  String get terms =>
+      'नियम और शर्तें';
 
   @override
-  String get privacy => 'गोपनीयता नीति';
+  String get privacy =>
+      'गोपनीयता नीति';
 
   @override
-  String get rateApp => 'ऐप को रेट करें';
+  String get rateApp =>
+      'ऐप को रेट करें';
 
   @override
-  String get shareApp => 'ऐप शेयर करें';
+  String get shareApp =>
+      'ऐप शेयर करें';
 
   @override
   String get logout => 'लॉगआउट';
 
   @override
-  String get selectLanguage => 'भाषा चुनें';
+  String get selectLanguage =>
+      'भाषा चुनें';
 
-  // 🔥 ORDER
+  // ===================== ORDER =====================
   @override
-  String get placedOn => 'ऑर्डर किया गया';
+  String get placedOn =>
+      'ऑर्डर किया गया';
 
   @override
   String get qty => 'मात्रा';
 
-  // 🔥 STATUS
+  // ===================== STATUS =====================
   @override
   String get pending => 'लंबित';
 
@@ -103,20 +115,24 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get cancelled => 'रद्द';
 
-  // 🔥 SUPPORT
+  // ===================== SUPPORT =====================
   @override
-  String get contactUs => 'संपर्क करें';
+  String get contactUs =>
+      'संपर्क करें';
 
   @override
-  String get liveChat => 'लाइव चैट';
+  String get liveChat =>
+      'लाइव चैट';
 
   @override
-  String get faqs => 'सामान्य प्रश्न';
+  String get faqs =>
+      'सामान्य प्रश्न';
 
   @override
-  String get raiseComplaint => 'शिकायत दर्ज करें';
+  String get raiseComplaint =>
+      'शिकायत दर्ज करें';
 
-  // 🔥 RAISE COMPLAINT
+  // ===================== RAISE COMPLAINT =====================
   @override
   String get raiseComplaintTitle =>
       'शिकायत दर्ज करें / रिफंड अनुरोध';
@@ -144,24 +160,27 @@ class AppLocalizationsHi extends AppLocalizations {
       'अपनी समस्या का पूरा विवरण लिखें...';
 
   @override
-  String get submitComplaint => 'शिकायत सबमिट करें';
+  String get submitComplaint =>
+      'शिकायत सबमिट करें';
 
   @override
   String get complaintResponseNote =>
       'हमारी टीम 24 घंटे के भीतर जवाब देगी।';
 
-  // 🔥 LIVE CHAT
+  // ===================== LIVE CHAT =====================
   @override
-  String get liveChatTitle => 'लाइव चैट सहायता';
+  String get liveChatTitle =>
+      'लाइव चैट सहायता';
 
   @override
   String get liveChatSubtitle =>
       'आमतौर पर कुछ मिनटों में उत्तर मिलता है।';
 
   @override
-  String get chatHint => 'अपना संदेश लिखें...';
+  String get chatHint =>
+      'अपना संदेश लिखें...';
 
-  // 🔥 FAQ
+  // ===================== FAQ =====================
   @override
   String get faqTrackOrderQ =>
       'मैं अपना ऑर्डर कैसे ट्रैक कर सकता हूँ?';
@@ -210,72 +229,68 @@ class AppLocalizationsHi extends AppLocalizations {
   String get faqRefundA =>
       'स्वीकृति के बाद 5–7 कार्यदिवसों में रिफंड किया जाता है।';
 
-  // 🔥 CONTACT US
+  // ===================== CONTACT =====================
   @override
-  String get contactCallTitle => 'हमें कॉल करें';
+  String get contactCallTitle =>
+      'हमें कॉल करें';
 
   @override
   String get contactCallSubtitle =>
       'सोम - रवि (9:00 AM - 9:00 PM)';
 
   @override
-  String get contactWhatsappTitle => 'व्हाट्सएप';
+  String get contactWhatsappTitle =>
+      'व्हाट्सएप';
 
   @override
   String get contactWhatsappSubtitle =>
       'व्हाट्सएप पर त्वरित सहायता';
 
   @override
-  String get contactWhatsappAction => 'चैट करें';
+  String get contactWhatsappAction =>
+      'चैट करें';
 
   @override
-  String get contactEmailTitle => 'ईमेल करें';
+  String get contactEmailTitle =>
+      'ईमेल करें';
 
   @override
   String get contactEmailSubtitle =>
       'हम 24 घंटे में उत्तर देते हैं';
 
-  // 🔥 SUPPORT
-  @override
-  String get supportContactUs => 'संपर्क करें';
-
-  @override
-  String get supportLiveChat => 'लाइव चैट';
-
-  @override
-  String get supportFaqs => 'सामान्य प्रश्न';
-
-  @override
-  String get supportRaiseComplaint =>
-      'शिकायत दर्ज करें';
-
-  // 🔥 BOTTOM NAV
+  // ===================== BOTTOM NAV =====================
   @override
   String get navHome => 'होम';
 
   @override
-  String get navCategories => 'श्रेणियाँ';
+  String get navCategories =>
+      'श्रेणियाँ';
 
   @override
-  String get navOrders => 'ऑर्डर';
+  String get navOrders =>
+      'ऑर्डर';
 
   @override
-  String get navSupport => 'सहायता';
+  String get navSupport =>
+      'सहायता';
 
-  // 🔥 STORE DETAILS
+  // ===================== STORE =====================
   @override
-  String get aboutStore => 'स्टोर के बारे में';
+  String get aboutStore =>
+      'स्टोर के बारे में';
 
   @override
   String get aboutStoreDesc =>
       'यह स्टोर किफायती दामों पर गुणवत्तापूर्ण उत्पाद प्रदान करता है। ग्राहक संतुष्टि हमारी प्राथमिकता है।';
 
   @override
-  String get noDataFound => 'कोई डेटा नहीं मिला';
+  String get noDataFound =>
+      'कोई डेटा नहीं मिला';
 
-  // 🔥 JOBS & SERVICES
+  // ===================== JOBS & SERVICES =====================
   @override
-  String get jobsAndServices => 'नौकरियाँ और सेवाएँ';
+  String get jobsAndServices =>
+      'नौकरियाँ और सेवाएँ';
 
   @override
   String get jobsServicesDesc =>
@@ -292,5 +307,65 @@ class AppLocalizationsHi extends AppLocalizations {
       'श्रेणी के अनुसार फ़िल्टर करें';
 
   @override
-  String get viewDetails => 'विवरण देखें';
+  String get viewDetails =>
+      'विवरण देखें';
+
+  // ===================== PROPERTY =====================
+  @override
+  String get propertyListing =>
+      'प्रॉपर्टी लिस्टिंग';
+
+  @override
+  String get propertySubtitle =>
+      'आपके पास की सत्यापित प्रॉपर्टी खोजें';
+
+  @override
+  String get filter => 'फ़िल्टर';
+
+  @override
+  String get propertyType =>
+      'प्रॉपर्टी प्रकार';
+
+  @override
+  String get category => 'श्रेणी';
+
+  @override
+  String get verified =>
+      'सत्यापित';
+
+  @override
+  String get owner => 'मालिक';
+
+  @override
+  String get propertyWarning =>
+      'भुगतान से पहले दस्तावेज़ सत्यापित करें और प्रॉपर्टी अवश्य देखें।';
+
+  // ===================== PROPERTY ENQUIRY =====================
+  @override
+  String get contactName =>
+      'आपका नाम';
+
+  @override
+  String get contactNameHint =>
+      'अपना पूरा नाम दर्ज करें';
+
+  @override
+  String get phoneNumber =>
+      'फोन नंबर';
+
+  @override
+  String get phoneNumberHint =>
+      '+91 9876543210';
+
+  @override
+  String get message =>
+      'संदेश';
+
+  @override
+  String get messageHint =>
+      'मैं इस प्रॉपर्टी में रुचि रखता/रखती हूँ...';
+
+  @override
+  String get contactInformation => 'संपर्क जानकारी';
+
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/screen/home/home_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -8,6 +9,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    final loc = AppLocalizations.of(context);
 
     return SafeArea(
       child: Scaffold(
@@ -46,7 +48,6 @@ class SearchScreen extends StatelessWidget {
                       color: Colors.grey.shade600,
                       size: w * 0.065,
                     ),
-
                     SizedBox(width: w * 0.03),
 
                     /// 🔤 SEARCH INPUT
@@ -54,7 +55,7 @@ class SearchScreen extends StatelessWidget {
                       child: TextField(
                         cursorColor: const Color(0xFF3670A3),
                         decoration: InputDecoration(
-                          hintText: "Search stores, products...",
+                          hintText: loc.getByKey('search_hint'),
                           hintStyle: TextStyle(
                             fontSize: w * 0.04,
                             color: Colors.grey,
@@ -84,7 +85,8 @@ class SearchScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const HomeScreen()),
+                      builder: (_) => const HomeScreen(),
+                    ),
                   );
                 },
                 child: Row(
@@ -92,7 +94,7 @@ class SearchScreen extends StatelessWidget {
                     Icon(Icons.arrow_back, size: w * 0.05),
                     SizedBox(width: w * 0.015),
                     Text(
-                      "Back",
+                      loc.getByKey('back'),
                       style: TextStyle(
                         fontSize: w * 0.04,
                         fontWeight: FontWeight.w600,
@@ -109,7 +111,7 @@ class SearchScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Text(
-                "Recent Searches",
+                loc.getByKey('recent_searches'),
                 style: TextStyle(
                   fontSize: w * 0.045,
                   fontWeight: FontWeight.bold,
@@ -125,10 +127,10 @@ class SearchScreen extends StatelessWidget {
                 spacing: w * 0.025,
                 runSpacing: h * 0.015,
                 children: [
-                  _recentChip("Grocery", w),
-                  _recentChip("Mobile Shop", w),
-                  _recentChip("Milk Store", w),
-                  _recentChip("Fashion Store", w),
+                  _recentChip(loc.getByKey('groceryStore'), w),
+                  _recentChip(loc.getByKey('electronicsStore'), w),
+                  _recentChip(loc.getByKey('milkStore'), w),
+                  _recentChip(loc.getByKey('fashionStore'), w),
                 ],
               ),
             ),

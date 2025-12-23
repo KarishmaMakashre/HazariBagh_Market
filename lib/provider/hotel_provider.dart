@@ -1,5 +1,3 @@
-// File: ../provider/hotel_provider.dart
-
 import 'package:flutter/material.dart';
 import '../Model/hotel_category_model.dart';
 import '../Model/product_model.dart'; // Reusing ProductModel for hotel/restaurant items
@@ -31,76 +29,71 @@ class HotelProvider extends ChangeNotifier {
   /// 🍽 DUMMY PRODUCT DATA (Hotels/Restaurants)
   final List<ProductModel> _dummyProducts = [
 
-    // ------------------- VEGETABLES -------------------
     ProductModel(
-      name: "Fresh Tomatoes",
+      name: "fresh_tomatoes",
       image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg",
       price: "₹40/kg",
       category: "Vegetables",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
+
     ProductModel(
-      name: "Onions (Local)",
+      name: "onions_local",
       image: "assets/images/vivek-sharma-rDDICrot22U-unsplash.jpg",
       price: "₹25/kg",
       category: "Vegetables",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
 
-    // --------------------- FRUITS ---------------------
     ProductModel(
-      name: "Apples (Shimla)",
+      name: "apples_shimla",
       image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg",
       price: "₹150/kg",
       category: "Fruits",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
 
-    // --------------------- RICE ---------------------
     ProductModel(
-      name: "Basmati Rice",
+      name: "basmati_rice",
       image: "assets/images/rice.jpg",
       price: "₹120/kg",
       category: "Rice",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
 
-    // --------------------- SNACKS ---------------------
     ProductModel(
-      name: "Potato Chips",
+      name: "potato_chips",
       image: "assets/images/snacks.jpg",
       price: "₹30",
       category: "Snacks",
-      storeName: "Delicious Food Point",
+      storeName: "delicious_food_point",
     ),
 
-    // --------------------- BEVERAGES ---------------------
     ProductModel(
-      name: "Soda Pack",
+      name: "soda_pack",
       image: "assets/images/Beverages.jpg",
       price: "₹200",
       category: "Beverages",
-      storeName: "Delicious Food Point",
+      storeName: "delicious_food_point",
     ),
 
-    // --------------------- SPICES ---------------------
     ProductModel(
-      name: "Turmeric Powder",
+      name: "turmeric_powder",
       image: "assets/images/spices.jpg",
       price: "₹120/100g",
       category: "Spices",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
 
-    // --------------------- PULSES ---------------------
     ProductModel(
-      name: "Arhar Dal",
+      name: "arhar_dal",
       image: "assets/images/pules.jpg",
       price: "₹110/kg",
       category: "Pulses",
-      storeName: "Sharma Grocery Store",
+      storeName: "sharma_store",
     ),
   ];
+
 
 
 

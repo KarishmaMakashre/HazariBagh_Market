@@ -1,5 +1,5 @@
 class StoreModel {
-  final String nameKey;      // 🔥 localized key
+  final String nameKey;
   final String image;
   final String categoryKey;
   final String distance;
@@ -22,7 +22,7 @@ class StoreModel {
 
 List<StoreModel> nearbyStores = [
   StoreModel(
-    nameKey: "sharmaGrocery",
+    nameKey: "sharma Grocery",
     image: "assets/images/clothe.jpg",
     categoryKey: "groceryStore",
     distance: "1.2 km",
@@ -33,7 +33,7 @@ List<StoreModel> nearbyStores = [
   ),
 
   StoreModel(
-    nameKey: "deliciousFood",
+    nameKey: "Delicious Food",
     image: "assets/images/kitchan.png",
     categoryKey: "foodDelivery",
     distance: "2.1 km",
@@ -44,7 +44,7 @@ List<StoreModel> nearbyStores = [
   ),
 
   StoreModel(
-    nameKey: "fashionHub",
+    nameKey: "Fashion Hub",
     image: "assets/images/electronics.jpg",
     categoryKey: "fashionStore",
     distance: "850 m",

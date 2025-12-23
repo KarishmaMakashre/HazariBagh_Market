@@ -40,14 +40,14 @@ class GroceryProvider extends ChangeNotifier {
 
     // ------------------- VEGETABLES -------------------
     ProductModel(
-      name: "Fresh Tomatoes",
+      name: "fresh_tomatoes",
       image: "assets/images/avin-cp-OlXUUQedQyM-unsplash.jpg",
       price: "₹40/kg",
       category: "Vegetables",
       storeName: "Sharma Grocery Store",
     ),
     ProductModel(
-      name: "Onions (Local)",
+      name: "onions_local",
       image: "assets/images/vivek-sharma-rDDICrot22U-unsplash.jpg",
       price: "₹25/kg",
       category: "Vegetables",
@@ -56,7 +56,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- FRUITS ---------------------
     ProductModel(
-      name: "Apples (Shimla)",
+      name: "apples_shimla",
       image: "assets/images/priscilla-du-preez-CoqJGsFVJtM-unsplash.jpg",
       price: "₹150/kg",
       category: "Fruits",
@@ -65,7 +65,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- RICE ---------------------
     ProductModel(
-      name: "Basmati Rice",
+      name: "basmati_rice",
       image: "assets/images/rice.jpg",
       price: "₹120/kg",
       category: "Rice",
@@ -74,7 +74,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- SNACKS ---------------------
     ProductModel(
-      name: "Potato Chips",
+      name: "potato_chips",
       image: "assets/images/snacks.jpg",
       price: "₹30",
       category: "Snacks",
@@ -83,7 +83,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- BEVERAGES ---------------------
     ProductModel(
-      name: "Soda Pack",
+      name: "soda_pack",
       image: "assets/images/Beverages.jpg",
       price: "₹200",
       category: "Beverages",
@@ -92,7 +92,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- SPICES ---------------------
     ProductModel(
-      name: "Turmeric Powder",
+      name: "turmeric_powder",
       image: "assets/images/spices.jpg",
       price: "₹120/100g",
       category: "Spices",
@@ -101,7 +101,7 @@ class GroceryProvider extends ChangeNotifier {
 
     // --------------------- PULSES ---------------------
     ProductModel(
-      name: "Arhar Dal",
+      name: "arhar_dal",
       image: "assets/images/pules.jpg",
       price: "₹110/kg",
       category: "Pulses",

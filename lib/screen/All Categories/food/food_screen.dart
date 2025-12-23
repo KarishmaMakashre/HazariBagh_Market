@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/screen/All%20Categories/food/restaurant_card.dart';
+import 'package:provider/provider.dart';
 import '../../../widgets/top_header.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../provider/food_provider.dart';
+import 'restaurant_card.dart';
 
 class FoodHomeScreen extends StatelessWidget {
   const FoodHomeScreen({super.key});
 
-  static const Color foodGreen = Color(0xFFd0b5b5);
+  static const Color bannerBlue = Color(0xFF2E6DA4);
 
   @override
   Widget build(BuildContext context) {
@@ -13,72 +16,76 @@ class FoodHomeScreen extends StatelessWidget {
     final w = size.width;
     final h = size.height;
 
+    final loc = AppLocalizations.of(context);
+    final foodProvider = context.watch<FoodProvider>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF0F172A) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final subTextColor =
+    isDark ? Colors.grey.shade300 : Colors.black54;
+    final backIconColor = isDark ? Colors.white : Colors.black;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor,
       body: Column(
         children: [
-          ///  FIXED HEADER
+          /// 🔝 TOP HEADER
           const TopHeader(),
+          SizedBox(height: h * 0.004),
 
-          /// 🔽 SCROLLABLE CONTENT
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: h * 0.02),
+                  SizedBox(height: h * 0.015),
 
-                  /// 🔙 BACK BUTTON (LEFT)
+                  /// 🔙 BACK
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: w * 0.04,
-                      vertical: h * 0.01,
-                    ),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(8),
-                      onTap: () => Navigator.pop(context),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.arrow_back,
-                            color: foodGreen,
-                            size: w * 0.06,
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Row(
+                            children: [
+                              Icon(Icons.arrow_back,
+                                  color: backIconColor),
+                              SizedBox(width: w * 0.02),
+                              Text(
+                                loc.back,
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: w * 0.045,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: w * 0.02),
-                          Text(
-                            "Back",
-                            style: TextStyle(
-                              fontSize: w * 0.045,
-                              fontWeight: FontWeight.w600,
-                              color: foodGreen,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-
-                  SizedBox(height: h * 0.02),
+                  SizedBox(height: h * 0.008),
 
                   /// 🍔 FOOD DELIVERY BANNER
                   Padding(
-                    padding: EdgeInsets.all(w * 0.02),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: w * 0.05,
-                        vertical: h * 0.025,
-                      ),
+                      padding: EdgeInsets.all(w * 0.05),
                       decoration: BoxDecoration(
-                        color: foodGreen,
-                        borderRadius: BorderRadius.circular(14),
+                        color: bannerBlue,
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Food Delivery",
+                            loc.getByKey('foodDelivery'),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: w * 0.055,
@@ -87,10 +94,10 @@ class FoodHomeScreen extends StatelessWidget {
                           ),
                           SizedBox(height: h * 0.008),
                           Text(
-                            "Order delicious food from top restaurants",
+                            loc.getByKey('foodDeliverySubtitle'),
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: w * 0.035,
+                              color: Colors.white70,
+                              fontSize: w * 0.036,
                             ),
                           ),
                         ],
@@ -100,70 +107,91 @@ class FoodHomeScreen extends StatelessWidget {
 
                   SizedBox(height: h * 0.025),
 
-                  /// 🏪 SECTION TITLE
+                  /// 🍽 RESTAURANTS NEAR YOU
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Text(
-                      "Restaurants Near You",
+                      loc.getByKey('restaurantsNearYou'),
                       style: TextStyle(
                         fontSize: w * 0.05,
                         fontWeight: FontWeight.w700,
+                        color: textColor,
                       ),
                     ),
                   ),
 
                   SizedBox(height: h * 0.015),
 
-                  /// 🍽 RESTAURANTS
+                  /// 🧾 RESTAURANT LIST
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                    child: Column(
-                      children: [
-                        RestaurantCard(
-                          size: size,
-                          img: "assets/images/grocery.jpg",
-                          name: "Spice Paradise",
-                          type: "Indian • Mughlai • Biryani",
-                          rating: "4.5",
-                          time: "20–30 min",
-                          distance: "0.8 km",
-                        ),
-                        SizedBox(height: h * 0.018),
-                        RestaurantCard(
-                          size: size,
-                          img: "assets/images/electronics.jpg",
-                          name: "Pizza Corner",
-                          type: "Fast Food • Pizzas",
-                          rating: "4.3",
-                          time: "25–35 min",
-                          distance: "1.2 km",
-                        ),
-                        SizedBox(height: h * 0.018),
-                        RestaurantCard(
-                          size: size,
-                          img: "assets/images/clothe.jpg",
-                          name: "The Dining Room",
-                          type: "Cafe • Chinese • Continental",
-                          rating: "4.6",
-                          time: "18–28 min",
-                          distance: "0.5 km",
-                        ),
-                      ],
+                    child: foodProvider.isLoading
+                        ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                        : ListView.builder(
+                      shrinkWrap: true,
+                      physics:
+                      const NeverScrollableScrollPhysics(),
+                      itemCount:
+                      foodProvider.allRestaurants.length,
+                      itemBuilder: (context, index) {
+                        final restaurant =
+                        foodProvider.allRestaurants[index];
+
+                        return Padding(
+                          padding:
+                          EdgeInsets.only(bottom: h * 0.018),
+                          child: RestaurantCard(
+                            restaurant: restaurant,
+                          ),
+                        );
+                      },
                     ),
                   ),
 
-                  SizedBox(height: h * 0.02),
+                  SizedBox(height: h * 0.03),
 
-                  /// 📸 BANNER IMAGE
+                  /// 🎉 OFFER BANNER
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(w * 0.035),
-                      child: Image.asset(
-                        "assets/images/grocery.jpg",
-                        height: h * 0.22,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(16),
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/images/grocery.jpg',
+                            height: h * 0.22,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            right: w * 0.05,
+                            bottom: h * 0.04,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Flat 50% OFF',
+                                  style: TextStyle(
+                                    color: Colors.yellow,
+                                    fontSize: w * 0.06,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: h * 0.005),
+                                Text(
+                                  'On Food Orders',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: w * 0.035,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

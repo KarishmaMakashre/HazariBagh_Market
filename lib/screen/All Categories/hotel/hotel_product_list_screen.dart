@@ -7,8 +7,10 @@ import '../../../colors/AppColors.dart';
 import '../../../provider/hotel_provider.dart';
 import '../../../provider/cart_provider.dart';
 import '../../../widgets/top_header.dart';
+import '../../../l10n/app_localizations.dart';
 
 class HotelProductListScreen extends StatelessWidget {
+  /// 🔑 ALWAYS ENGLISH KEY
   final String categoryTitle;
 
   const HotelProductListScreen({
@@ -19,6 +21,8 @@ class HotelProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hotelProvider = context.watch<HotelProvider>();
+    final loc = AppLocalizations.of(context);
+
     final List<ProductModel> products =
     hotelProvider.getProductsByCategory(categoryTitle);
 
@@ -31,20 +35,23 @@ class HotelProductListScreen extends StatelessWidget {
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          ///  BACK BUTTON + TITLE
+          /// 🔙 BACK + LOCALIZED TITLE
           Padding(
             padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 8),
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, color: AppColors.success),
+                  icon:
+                  const Icon(Icons.arrow_back, color: AppColors.success),
                   onPressed: () => Navigator.pop(context),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
                 SizedBox(width: w * 0.02),
+
+                /// 📛 CATEGORY TITLE
                 Text(
-                  categoryTitle,
+                  loc.getByKey(categoryTitle),
                   style: GoogleFonts.inter(
                     color: AppColors.success,
                     fontSize: 18,
@@ -60,7 +67,8 @@ class HotelProductListScreen extends StatelessWidget {
             child: products.isEmpty
                 ? Center(
               child: Text(
-                "No listings currently available for $categoryTitle.",
+                "${loc.getByKey('no_products')} ${loc.getByKey(categoryTitle)}",
+                textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   color: Colors.grey,
@@ -68,13 +76,15 @@ class HotelProductListScreen extends StatelessWidget {
               ),
             )
                 : ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              padding:
+              EdgeInsets.symmetric(horizontal: w * 0.04),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return _buildProductCard(
                   context,
                   products[index],
                   w,
+                  loc,
                 );
               },
             ),
@@ -86,8 +96,13 @@ class HotelProductListScreen extends StatelessWidget {
 
   /// 🟢 PRODUCT CARD
   Widget _buildProductCard(
-      BuildContext context, ProductModel product, double w) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+      BuildContext context,
+      ProductModel product,
+      double w,
+      AppLocalizations loc,
+      ) {
+    final cartProvider =
+    Provider.of<CartProvider>(context, listen: false);
 
     final imageSize = w * 0.20;
     final padding = w * 0.03;
@@ -120,9 +135,9 @@ class HotelProductListScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// Product Name
+                  /// Product Name (Localized)
                   Text(
-                    product.name,
+                    loc.getByKey(product.name),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
@@ -134,7 +149,7 @@ class HotelProductListScreen extends StatelessWidget {
 
                   SizedBox(height: w * 0.01),
 
-                  /// Price
+                  /// 💰 PRICE
                   Text(
                     product.price,
                     style: GoogleFonts.inter(
@@ -153,7 +168,8 @@ class HotelProductListScreen extends StatelessWidget {
                 cartProvider.addItem({
                   "name": product.name,
                   "price": double.tryParse(
-                    product.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                    product.price
+                        .replaceAll(RegExp(r'[^\d.]'), ''),
                   ) ??
                       0.0,
                   "qty": 1,
@@ -163,16 +179,17 @@ class HotelProductListScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      "${product.name} added to cart!",
+                      "${loc.getByKey(product.name)} ${loc.getByKey('added_to_cart')}",
                       style: GoogleFonts.inter(),
                     ),
-                    duration: const Duration(milliseconds: 800),
+                    duration:
+                    const Duration(milliseconds: 800),
                   ),
                 );
               },
               icon: Icon(Icons.shopping_bag, size: w * 0.045),
               label: Text(
-                "Add",
+                loc.getByKey('add'),
                 style: GoogleFonts.inter(
                   fontSize: w * 0.035,
                   fontWeight: FontWeight.w600,

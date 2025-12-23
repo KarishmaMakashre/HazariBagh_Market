@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widgets/top_header.dart';
-import '../../../colors/AppColors.dart';
 import '../../../provider/property_provider.dart';
 import '../../../Model/property_model.dart';
+import '../../../l10n/app_localizations.dart';
 import 'property_enquiry_screen.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
@@ -12,45 +12,52 @@ class PropertyDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final propertyProvider = context.watch<PropertyProvider>();
-    final PropertyModel? property = propertyProvider.selectedProperty;
+    final provider = context.watch<PropertyProvider>();
+    final PropertyModel? property = provider.selectedProperty;
+    final loc = AppLocalizations.of(context);
+
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     if (property == null) {
-      return const Scaffold(
-        body: Center(child: Text("No Property Selected")),
+      return Scaffold(
+        body: Center(
+          child: Text(loc.getByKey('noPropertySelected')),
+        ),
       );
     }
 
-    final w = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          /// 🔙 BACK + TITLE
+          /// 🔙 BACK BUTTON
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
+            padding: EdgeInsets.symmetric(
+              horizontal: w * 0.04,
+              vertical: h * 0.012,
+            ),
             child: InkWell(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               onTap: () => Navigator.pop(context),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.arrow_back,
-                    color: AppColors.propertyAccent,
-                  ),
+                  Icon(Icons.arrow_back,
+                      color: theme.colorScheme.primary),
                   SizedBox(width: w * 0.02),
-                  const Text(
-                    "Back",
-                    style: TextStyle(
-                      fontSize: 18,
+                  Text(
+                    loc.back,
+                    style: theme.textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.propertyAccent,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ],
@@ -58,179 +65,195 @@ class PropertyDetailsScreen extends StatelessWidget {
             ),
           ),
 
-
-          /// 🔽 BODY
+          /// BODY
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Column(
                 children: [
-                  /// ✅ FULL CARD CLICKABLE
-                  InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () {
-                      debugPrint("Property card tapped");
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(w * 0.04),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 6,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /// 🖼 IMAGE
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: Image.asset(
-                              property.image,
-                              height: w * 0.55,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
 
-                          const SizedBox(height: 12),
-
-                          /// 🏷 TAGS + PRICE
-                          Row(
-                            children: [
-                              _tag(property.type, AppColors.warning),
-                              const SizedBox(width: 8),
-                              _tag("Verified", AppColors.success),
-                              const Spacer(),
-                              Text(
-                                property.price,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.success,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          /// 📍 INFO
-                          _infoRow(Icons.location_on, "Civil Lines, Hazaribagh"),
-                          _infoRow(Icons.square_foot, "600 sq ft"),
-                          _infoRow(Icons.bed, "1 Bedroom, 1 Bathroom"),
-
-                          const SizedBox(height: 12),
-
-                          /// 📝 DESCRIPTION
-                          const Text(
-                            "Description",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            "Compact 1BHK Flat in central location, perfect for working professionals.",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  /// 📞 CONTACT INFO
+                  /// 🏠 PROPERTY CARD
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: EdgeInsets.all(w * 0.04),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 4),
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(w * 0.04),
+                      boxShadow: isDark
+                          ? []
+                          : const [
+                        BoxShadow(
+                            color: Colors.black12, blurRadius: 8),
                       ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Contact Information",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                        /// IMAGE
+                        ClipRRect(
+                          borderRadius:
+                          BorderRadius.circular(w * 0.035),
+                          child: Image.asset(
+                            property.image,
+                            height: h * 0.28,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        const Text("Name\nCity Brokers",
-                            style: TextStyle(fontSize: 12)),
-                        const SizedBox(height: 6),
-                        const Text("Type\nBroker",
-                            style: TextStyle(fontSize: 12)),
-                        const SizedBox(height: 6),
+
+                        SizedBox(height: h * 0.015),
+
+                        /// TAGS + PRICE
                         Row(
-                          children: const [
-                            Icon(Icons.phone,
-                                size: 16, color: AppColors.success),
-                            SizedBox(width: 6),
-                            Text("+91 4321098765",
-                                style: TextStyle(fontSize: 12)),
+                          children: [
+                            _tag(
+                              loc.getByKey(property.type),
+                              theme.colorScheme.secondary,
+                              w,
+                            ),
+                            SizedBox(width: w * 0.02),
+                            _tag(
+                              loc.verified,
+                              Colors.green,
+                              w,
+                            ),
+                            const Spacer(),
+                            Text(
+                              property.price,
+                              style: theme.textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: const [
-                            Icon(Icons.email,
-                                size: 16, color: AppColors.primary),
-                            SizedBox(width: 6),
-                            Text("citybrokers@gmail.com",
-                                style: TextStyle(fontSize: 12)),
-                          ],
+
+                        SizedBox(height: h * 0.015),
+
+                        _infoRow(
+                          context,
+                          Icons.location_on,
+                          property.location,
+                          w,
+                        ),
+                        _infoRow(
+                          context,
+                          Icons.square_foot,
+                          property.area,
+                          w,
+                        ),
+                        _infoRow(
+                          context,
+                          Icons.bed,
+                          property.bedInfo,
+                          w,
+                        ),
+
+                        SizedBox(height: h * 0.018),
+
+                        /// DESCRIPTION
+                        Text(
+                          loc.description,
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: h * 0.006),
+                        Text(
+                          property.description,
+                          style: theme.textTheme.bodyMedium,
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  SizedBox(height: h * 0.02),
 
-                  /// ⚠️ VERIFY NOTE
+                  /// 📞 CONTACT INFO
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(w * 0.035),
                     decoration: BoxDecoration(
-                      color: AppColors.yellowNote,
-                      borderRadius: BorderRadius.circular(10),
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(w * 0.04),
+                      boxShadow: isDark
+                          ? []
+                          : const [
+                        BoxShadow(
+                            color: Colors.black12, blurRadius: 6),
+                      ],
                     ),
-                    child: const Text(
-                      "Verify property documents, owner credentials and visit the property before making any payment.",
-                      style: TextStyle(fontSize: 11),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          loc.contactInformation,
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: h * 0.012),
+
+                        _contactRow(
+                          context,
+                          Icons.person,
+                          property.contactName,
+                        ),
+                        _contactRow(
+                          context,
+                          Icons.phone,
+                          property.contactPhone,
+                        ),
+                        _contactRow(
+                          context,
+                          Icons.email,
+                          property.contactEmail,
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: h * 0.016),
 
-                  /// 📲 ACTION BUTTONS
+                  /// ⚠️ VERIFY NOTE
+                  Container(
+                    padding: EdgeInsets.all(w * 0.03),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(w * 0.03),
+                    ),
+                    child: Text(
+                      loc.getByKey('verifyNote'),
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+
+                  SizedBox(height: h * 0.025),
+
+                  /// 🎯 ACTION BUTTONS
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.call),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.success,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: Colors.green,
+                            padding: EdgeInsets.symmetric(
+                                vertical: h * 0.018),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: () {},
-                          child: const Text("Call Now"),
+                          label: Text(loc.getByKey('callNow')),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: w * 0.03),
                       Expanded(
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.message),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.propertyAccent,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding: EdgeInsets.symmetric(
+                                vertical: h * 0.018),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -243,16 +266,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Text(
-                            "Enquire Now",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          label: Text(loc.getByKey('enquireNow')),
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: h * 0.03),
                 ],
               ),
             ),
@@ -262,34 +282,62 @@ class PropertyDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// 🏷 TAG
-  Widget _tag(String text, Color color) {
+  /// TAG
+  Widget _tag(String text, Color color, double w) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: w * 0.025,
+        vertical: w * 0.01,
+      ),
       decoration: BoxDecoration(
         color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(w * 0.02),
       ),
       child: Text(
         text,
         style: TextStyle(
           color: color,
-          fontSize: 11,
+          fontSize: w * 0.03,
           fontWeight: FontWeight.w600,
         ),
       ),
     );
   }
 
-  /// ℹ️ INFO ROW
-  Widget _infoRow(IconData icon, String text) {
+  /// INFO ROW
+  Widget _infoRow(
+      BuildContext context, IconData icon, String text, double w) {
+    final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: w * 0.012),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: AppColors.textGrey),
-          const SizedBox(width: 6),
-          Text(text, style: const TextStyle(fontSize: 12)),
+          Icon(icon, size: w * 0.045, color: theme.iconTheme.color),
+          SizedBox(width: w * 0.02),
+          Expanded(
+            child: Text(
+              text,
+              style: theme.textTheme.bodyMedium,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// CONTACT ROW
+  Widget _contactRow(
+      BuildContext context, IconData icon, String text) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: theme.colorScheme.primary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(text, style: theme.textTheme.bodyMedium),
+          ),
         ],
       ),
     );

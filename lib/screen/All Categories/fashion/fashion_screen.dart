@@ -3,6 +3,7 @@ import 'package:hazari_bagh_market/screen/All%20Categories/fashion/service_detai
 import 'package:provider/provider.dart';
 import 'package:hazari_bagh_market/widgets/top_header.dart';
 import '../../../provider/fashion_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 class FashionScreen extends StatefulWidget {
   const FashionScreen({super.key});
@@ -14,10 +15,10 @@ class FashionScreen extends StatefulWidget {
 class _FashionScreenState extends State<FashionScreen>
     with SingleTickerProviderStateMixin {
 
-  ///  PRIMARY THEME COLOR
+  /// PRIMARY THEME COLOR
   static const Color themeColor = Color(0xFF9C89B8);
 
-  /// ✅ SELECTED CATEGORY
+  /// SELECTED CATEGORY
   String selectedCategoryId = "mens";
 
   late AnimationController _controller;
@@ -56,10 +57,11 @@ class _FashionScreenState extends State<FashionScreen>
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<FashionProvider>();
+    final loc = AppLocalizations.of(context);
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    /// ✅ FILTERED SERVICES
+    /// FILTERED SERVICES
     final services =
     provider.getServicesByCategory(selectedCategoryId);
 
@@ -69,10 +71,10 @@ class _FashionScreenState extends State<FashionScreen>
         child: Column(
           children: [
 
-            /// 🔝 FIXED TOP HEADER
+            /// 🔝 TOP HEADER
             const TopHeader(),
 
-            /// 🔽 SCROLLABLE CONTENT
+            /// 🔽 CONTENT
             Expanded(
               child: FadeTransition(
                 opacity: _fade,
@@ -96,7 +98,7 @@ class _FashionScreenState extends State<FashionScreen>
                                     color: themeColor, size: w * 0.06),
                                 SizedBox(width: w * 0.02),
                                 Text(
-                                  "Back",
+                                  loc.back,
                                   style: TextStyle(
                                     fontSize: w * 0.045,
                                     fontWeight: FontWeight.w600,
@@ -123,7 +125,7 @@ class _FashionScreenState extends State<FashionScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Fashion Store",
+                                  loc.getByKey('fashionStore'),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: w * 0.055,
@@ -132,7 +134,7 @@ class _FashionScreenState extends State<FashionScreen>
                                 ),
                                 SizedBox(height: h * 0.008),
                                 Text(
-                                  "Explore latest fashion & trends",
+                                  loc.getByKey('fashionSubtitle'),
                                   style: TextStyle(
                                     color: Colors.white70,
                                     fontSize: w * 0.035,
@@ -144,7 +146,7 @@ class _FashionScreenState extends State<FashionScreen>
                         ),
 
                         /// 📂 CATEGORIES
-                        _sectionTitle("Categories", w),
+                        _sectionTitle(loc.categories, w),
                         SizedBox(height: h * 0.015),
 
                         Padding(
@@ -176,7 +178,8 @@ class _FashionScreenState extends State<FashionScreen>
                                     child: Stack(
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                          BorderRadius.circular(12),
                                           child: Image.asset(
                                             cat.image,
                                             fit: BoxFit.cover,
@@ -185,7 +188,8 @@ class _FashionScreenState extends State<FashionScreen>
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
                                             gradient: LinearGradient(
                                               begin: Alignment.bottomCenter,
                                               end: Alignment.topCenter,
@@ -200,7 +204,7 @@ class _FashionScreenState extends State<FashionScreen>
                                           left: 12,
                                           bottom: 12,
                                           child: Text(
-                                            cat.title,
+                                            loc.getByKey(cat.title),
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: w * 0.04,
@@ -220,7 +224,7 @@ class _FashionScreenState extends State<FashionScreen>
                         SizedBox(height: h * 0.03),
 
                         /// 🛍 SERVICES
-                        _sectionTitle("Services", w),
+                        _sectionTitle(loc.services, w),
                         SizedBox(height: h * 0.015),
 
                         Padding(
@@ -256,7 +260,8 @@ class _FashionScreenState extends State<FashionScreen>
                                     borderRadius: BorderRadius.circular(14),
                                     boxShadow: const [
                                       BoxShadow(
-                                          color: Colors.black12, blurRadius: 5),
+                                          color: Colors.black12,
+                                          blurRadius: 5),
                                     ],
                                   ),
                                   child: Column(
@@ -280,7 +285,9 @@ class _FashionScreenState extends State<FashionScreen>
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
                                             child: Text(
-                                              service.title.toUpperCase(),
+                                              loc
+                                                  .getByKey(service.title)
+                                                  .toUpperCase(),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: w * 0.028,
@@ -310,7 +317,6 @@ class _FashionScreenState extends State<FashionScreen>
         ),
       ),
     );
-
   }
 
   Widget _sectionTitle(String title, double w) {

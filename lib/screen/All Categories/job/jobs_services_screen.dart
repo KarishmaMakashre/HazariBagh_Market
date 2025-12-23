@@ -6,7 +6,7 @@ import '../../../widgets/top_header.dart';
 import '../../../l10n/app_localizations.dart';
 import 'job_details_screen.dart';
 
-/// 🎯 APP PRIMARY COLOR
+/// 🎯 PRIMARY COLOR
 const Color primaryColor = Color(0xFF84B3B6);
 
 class JobsServicesScreen extends StatelessWidget {
@@ -19,11 +19,27 @@ class JobsServicesScreen extends StatelessWidget {
     final w = size.width;
     final h = size.height;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF0F172A) : const Color(0xFFF5F7FA);
+    final cardColor = isDark ? const Color(0xFF1E293B) : Colors.white;
+    final textColor = isDark ? Colors.white : const Color(0xFF1E293B);
+    final subTextColor =
+    isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+
+    final shadow = [
+      BoxShadow(
+        color: isDark ? Colors.black54 : Colors.black12,
+        blurRadius: 12,
+        offset: const Offset(0, 6),
+      ),
+    ];
+
     final provider = context.watch<JobsServicesProvider>();
     final dataList = provider.filteredList;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: bgColor,
       body: Column(
         children: [
           const TopHeader(),
@@ -31,19 +47,20 @@ class JobsServicesScreen extends StatelessWidget {
 
           /// 🔙 BACK
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
             child: InkWell(
+              borderRadius: BorderRadius.circular(10),
               onTap: () => Navigator.pop(context),
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back,
-                      color: primaryColor, size: w * 0.055),
+                  Icon(Icons.arrow_back_ios_new,
+                      color: primaryColor, size: w * 0.045),
                   SizedBox(width: w * 0.02),
                   Text(
                     loc.back,
                     style: TextStyle(
                       color: primaryColor,
-                      fontSize: w * 0.045,
+                      fontSize: w * 0.042,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -56,13 +73,19 @@ class JobsServicesScreen extends StatelessWidget {
 
           /// 🟦 HEADER
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.all(w * 0.04),
+              padding: EdgeInsets.all(w * 0.06),
               decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(w * 0.04),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF84B3B6),
+                    Color(0xFF5FA0A4),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: shadow,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,16 +94,16 @@ class JobsServicesScreen extends StatelessWidget {
                     loc.jobsAndServices,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: w * 0.05,
-                      fontWeight: FontWeight.bold,
+                      fontSize: w * 0.055,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(height: h * 0.004),
+                  SizedBox(height: h * 0.008),
                   Text(
                     loc.jobsServicesDesc,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.95),
-                      fontSize: w * 0.03,
+                      color: Colors.white70,
+                      fontSize: w * 0.032,
                     ),
                   ),
                 ],
@@ -88,16 +111,17 @@ class JobsServicesScreen extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: h * 0.015),
+          SizedBox(height: h * 0.02),
 
-          /// 🔁 JOB / SERVICES TOGGLE
+          /// 🔁 TOGGLE
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
             child: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                border: Border.all(color: primaryColor, width: 1.5),
-                borderRadius: BorderRadius.circular(12),
+                color: cardColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: shadow,
               ),
               child: Row(
                 children: [
@@ -119,54 +143,52 @@ class JobsServicesScreen extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: h * 0.015),
+          SizedBox(height: h * 0.02),
 
           /// 🎯 FILTER
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
             child: Container(
-              padding: EdgeInsets.all(w * 0.03),
+              padding: EdgeInsets.all(w * 0.04),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(w * 0.04),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 4),
-                ],
+                color: cardColor,
+                borderRadius: BorderRadius.circular(22),
+                boxShadow: shadow,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.tune, color: primaryColor),
-                      const SizedBox(width: 6),
+                      Icon(Icons.tune,
+                          color: primaryColor, size: w * 0.05),
+                      SizedBox(width: w * 0.02),
                       Text(
                         loc.filterByCategory,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const Spacer(),
-                      Text(
-                        loc.viewAll,
                         style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          color: textColor,
+                          fontSize: w * 0.038,
                         ),
                       ),
                     ],
                   ),
-
-                  SizedBox(height: h * 0.01),
-
+                  SizedBox(height: h * 0.012),
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: 10,
+                    runSpacing: 10,
                     children: [
-                      _filterChip(context, loc.all, "all"),
-                      _filterChip(context, loc.itSoftware, "itSoftware"),
-                      _filterChip(context, loc.salesMarketing, "salesMarketing"),
-                      _filterChip(context, loc.healthcare, "healthcare"),
-                      _filterChip(context, loc.education, "education"),
-                      _filterChip(context, loc.logistics, "logistics"),
+                      _filterChip(context, loc.getByKey("all"), "all", isDark),
+                      _filterChip(context, loc.getByKey("itSoftware"),
+                          "itSoftware", isDark),
+                      _filterChip(context, loc.getByKey("salesMarketing"),
+                          "salesMarketing", isDark),
+                      _filterChip(context, loc.getByKey("healthcare"),
+                          "healthcare", isDark),
+                      _filterChip(context, loc.getByKey("education"),
+                          "education", isDark),
+                      _filterChip(context, loc.getByKey("logistics"),
+                          "logistics", isDark),
                     ],
                   ),
                 ],
@@ -177,14 +199,14 @@ class JobsServicesScreen extends StatelessWidget {
           /// 🧾 GRID
           Expanded(
             child: GridView.builder(
-              padding: EdgeInsets.all(w * 0.03),
+              padding: EdgeInsets.all(w * 0.04),
               itemCount: dataList.length,
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.62,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 0.66,
               ),
               itemBuilder: (context, index) {
                 return _jobServiceCard(
@@ -193,6 +215,11 @@ class JobsServicesScreen extends StatelessWidget {
                   h,
                   dataList[index],
                   loc,
+                  cardColor,
+                  textColor,
+                  subTextColor,
+                  shadow,
+                  isDark,
                 );
               },
             ),
@@ -210,20 +237,23 @@ class JobsServicesScreen extends StatelessWidget {
     required double h,
   }) {
     return Expanded(
-      child: GestureDetector(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
         onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: h * 0.012),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          height: h * 0.05,
           decoration: BoxDecoration(
-            color: isActive ? primaryColor : Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(10),
+            color: isActive ? primaryColor : Colors.transparent,
+            borderRadius: BorderRadius.circular(14),
           ),
           child: Center(
             child: Text(
               title,
               style: TextStyle(
-                color: isActive ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
+                color: isActive ? Colors.white : Colors.grey,
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
               ),
             ),
           ),
@@ -239,85 +269,108 @@ class JobsServicesScreen extends StatelessWidget {
       double h,
       Map<String, String> job,
       AppLocalizations loc,
+      Color cardColor,
+      Color textColor,
+      Color subTextColor,
+      List<BoxShadow> shadow,
+      bool isDark,
       ) {
     return InkWell(
-      borderRadius: BorderRadius.circular(w * 0.04),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const JobDetailsScreen()),
-        );
-      },
+      borderRadius: BorderRadius.circular(20),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const JobDetailsScreen()),
+      ),
       child: Container(
-        padding: EdgeInsets.all(w * 0.025),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(w * 0.04),
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 4),
-          ],
+          color: cardColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: shadow,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// IMAGE
             ClipRRect(
-              borderRadius: BorderRadius.circular(w * 0.03),
+              borderRadius:
+              const BorderRadius.vertical(top: Radius.circular(20)),
               child: Image.asset(
                 'assets/images/electronics.jpg',
-                height: h * 0.13,
+                height: h * 0.12, // 🔽 slightly reduced
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
 
-            SizedBox(height: h * 0.008),
+            /// CONTENT
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(w * 0.035),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      loc.getByKey(job["titleKey"]!),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: w * 0.035,
+                        fontWeight: FontWeight.w700,
+                        color: textColor,
+                      ),
+                    ),
 
-            Text(
-              loc.getByKey(job["titleKey"]!),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: w * 0.034,
-              ),
-            ),
+                    const SizedBox(height: 4),
 
-            Text(
-              loc.getByKey(job["companyKey"]!),
-              style: TextStyle(
-                fontSize: w * 0.028,
-                color: Colors.grey,
-              ),
-            ),
+                    Text(
+                      loc.getByKey(job["companyKey"]!),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: w * 0.028,
+                        color: subTextColor,
+                      ),
+                    ),
 
-            SizedBox(height: h * 0.006),
+                    const SizedBox(height: 6),
 
-            _jobRow(Icons.currency_rupee, job["salary"]!, w),
-            _jobRow(Icons.work, loc.getByKey(job["typeKey"]!), w),
-            _jobRow(Icons.category, loc.getByKey(job["categoryKey"]!), w),
+                    _jobRow(Icons.currency_rupee, job["salary"]!, w, isDark),
+                    _jobRow(
+                      Icons.work,
+                      loc.getByKey(job["typeKey"]!),
+                      w,
+                      isDark,
+                    ),
 
-            const Spacer(),
+                    const Spacer(), // ⭐ MOST IMPORTANT
 
-            SizedBox(
-              height: h * 0.045,
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(w * 0.02),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=> JobDetailsScreen()));
-                },
-                child: Text(
-                  loc.viewDetails,
-                  style: TextStyle(
-                    fontSize: w * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                    SizedBox(
+                      height: h * 0.04,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const JobDetailsScreen(),
+                          ),
+                        ),
+                        child: Text(
+                          loc.viewDetails,
+                          style: TextStyle(
+                            fontSize: w * 0.03,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -327,17 +380,21 @@ class JobsServicesScreen extends StatelessWidget {
     );
   }
 
-  static Widget _jobRow(IconData icon, String title, double w) {
+  static Widget _jobRow(
+      IconData icon, String title, double w, bool isDark) {
     return Row(
       children: [
-        Icon(icon, size: w * 0.03, color: primaryColor),
+        Icon(icon, size: w * 0.032, color: primaryColor),
         SizedBox(width: w * 0.02),
         Expanded(
           child: Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: w * 0.026),
+            style: TextStyle(
+              fontSize: w * 0.027,
+              color: isDark ? Colors.white70 : Colors.black87,
+            ),
           ),
         ),
       ],
@@ -345,25 +402,31 @@ class JobsServicesScreen extends StatelessWidget {
   }
 
   static Widget _filterChip(
-      BuildContext context, String title, String key) {
+      BuildContext context, String title, String key, bool isDark) {
     final provider =
     Provider.of<JobsServicesProvider>(context, listen: false);
     final isActive = provider.selectedCategoryKey == key;
 
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: () => provider.selectCategory(key),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
         decoration: BoxDecoration(
-          color: isActive ? primaryColor : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(8),
+          color: isActive
+              ? primaryColor
+              : isDark
+              ? const Color(0xFF1F2937)
+              : const Color(0xFFF1F5F9),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: isActive ? Colors.white : Colors.black,
             fontSize: 12,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
+            color: isActive ? Colors.white : Colors.grey.shade800,
           ),
         ),
       ),

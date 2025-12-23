@@ -25,14 +25,13 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   late AnimationController _fadeController;
+  Timer? timer;
 
   final List<String> sliderImages = [
     "assets/images/clothe.jpg",
     "assets/images/grocery.jpg",
     "assets/images/electronics.jpg",
   ];
-
-  Timer? timer;
 
   @override
   void initState() {
@@ -85,164 +84,196 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    final provider = context.watch<HomeProvider>();
+
+    final bgColor = isDark ? AppColors.bgDark : AppColors.bgLight;
+    final cardColor = isDark ? const Color(0xFF2A2A2A) : AppColors.white;
+    final textColor = isDark ? AppColors.white : AppColors.textDark;
+
+    final shadow = [
+      BoxShadow(
+        color: isDark ? Colors.black54 : AppColors.shadow,
+        blurRadius: 12,
+        offset: const Offset(0, 6),
+      ),
+    ];
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: bgColor,
       body: FadeTransition(
         opacity: _fadeController,
         child: Column(
           children: [
             const TopHeader(),
+
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(w * 0.03),
+                padding: EdgeInsets.all(w * 0.04),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    /// 🔵 WELCOME CARD
-                    Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                    /// 🔵 WELCOME CARD (FULL WIDTH)
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: w * 0.06,
+                        vertical: h * 0.03,
                       ),
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(w * 0.06),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.primaryDark,
-                              AppColors.primary,
-                              AppColors.primaryLight,
-                            ],
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              loc.welcomeUser,
-                              style: GoogleFonts.inter(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              loc.discoverStores,
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white70,
-                              ),
-                            ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(w * 0.05),
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.primaryDark,
+                            AppColors.primary,
+                            AppColors.primaryLight,
                           ],
                         ),
+                        boxShadow: shadow,
                       ),
-                    ),
-
-                    SizedBox(height: h * 0.02),
-
-                    /// 🖼️ SLIDER
-                    GestureDetector(
-                      onTap: () => _openPage(const AllStoreScreen()),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: SizedBox(
-                          height: h * 0.24,
-                          child: Stack(
-                            children: [
-                              PageView.builder(
-                                controller: _pageController,
-                                itemCount: sliderImages.length,
-                                onPageChanged: provider.changeBanner,
-                                itemBuilder: (_, index) {
-                                  return Image.asset(
-                                    sliderImages[index],
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  );
-                                },
-                              ),
-
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.black.withOpacity(0.55),
-                                      Colors.transparent,
-                                    ],
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
-                                  ),
-                                ),
-                              ),
-
-                              Positioned(
-                                left: 16,
-                                bottom: 16,
-                                right: 16,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: Colors.yellow.shade700,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Text(
-                                        "50% OFF",
-                                        style: GoogleFonts.inter(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      loc.bigSale,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 30,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      loc.groceryOffer,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white70,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            loc.welcomeUser,
+                            style: GoogleFonts.inter(
+                              fontSize: w * 0.065,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.white,
+                            ),
                           ),
-                        ),
+                          SizedBox(height: h * 0.01),
+                          Text(
+                            loc.discoverStores,
+                            style: GoogleFonts.inter(
+                              fontSize: w * 0.035,
+                              color: AppColors.white.withOpacity(0.85),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
 
                     SizedBox(height: h * 0.03),
+
+                    /// 🖼 SLIDER
+                    GestureDetector(
+                      onTap: () => _openPage(const AllStoreScreen()),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(w * 0.045),
+                          boxShadow: shadow,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(w * 0.045),
+                          child: SizedBox(
+                            height: h * 0.26,
+                            child: Stack(
+                              children: [
+
+                                /// 🖼️ IMAGE SLIDER
+                                PageView.builder(
+                                  controller: _pageController,
+                                  itemCount: sliderImages.length,
+                                  itemBuilder: (_, index) {
+                                    return Image.asset(
+                                      sliderImages[index],
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    );
+                                  },
+                                ),
+
+                                /// 🌑 DARK GRADIENT OVERLAY (Text visible rahe)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black.withOpacity(0.55),
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                /// 🏷️ OFFER BADGE
+                                Positioned(
+                                  top: h * 0.02,
+                                  left: w * 0.04,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: w * 0.035,
+                                      vertical: h * 0.006,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.warning,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Text(
+                                      "50% OFF",
+                                      style: GoogleFonts.inter(
+                                        fontSize: w * 0.035,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                /// 📝 TEXT CONTENT
+                                Positioned(
+                                  left: w * 0.05,
+                                  bottom: h * 0.025,
+                                  right: w * 0.05,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context).bigSale,
+                                        style: GoogleFonts.inter(
+                                          fontSize: w * 0.065,
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: h * 0.005),
+                                      Text(
+                                        AppLocalizations.of(context).groceryOffer,
+                                        style: GoogleFonts.inter(
+                                          fontSize: w * 0.035,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+                    SizedBox(height: h * 0.035),
 
                     /// 🟦 CATEGORIES
                     _sectionHeader(
                       title: loc.categories,
                       onViewAll: () =>
                           _openPage(const AllCategoriesScreen()),
+                      textColor: textColor,
                     ),
 
-                    SizedBox(height: h * 0.01),
+                    SizedBox(height: h * 0.02),
 
                     GridView.builder(
                       shrinkWrap: true,
@@ -250,54 +281,40 @@ class _HomeScreenState extends State<HomeScreen>
                       itemCount:
                       homeCategories.length > 8 ? 8 : homeCategories.length,
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                      SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        childAspectRatio: 0.74,
+                        mainAxisSpacing: w * 0.04,
+                        crossAxisSpacing: w * 0.04,
+                        childAspectRatio: 0.75,
                       ),
                       itemBuilder: (_, index) {
                         final item = homeCategories[index];
-
                         return InkWell(
-                          borderRadius: BorderRadius.circular(18),
                           onTap: () => _openPage(item.screen),
+                          borderRadius: BorderRadius.circular(w * 0.04),
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.all(w * 0.025),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.08),
-                                  blurRadius: 14,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
+                              color: cardColor,
+                              borderRadius:
+                              BorderRadius.circular(w * 0.04),
+                              boxShadow: shadow,
                             ),
                             child: Column(
                               children: [
                                 Expanded(
-                                  flex: 6,
-                                  child: Image.asset(
-                                    item.image,
-                                    fit: BoxFit.contain,
-                                  ),
+                                  child: Image.asset(item.image),
                                 ),
-                                const SizedBox(height: 8),
-                                Expanded(
-                                  flex: 3,
-                                  child: Center(
-                                    child: Text(
-                                      loc.getByKey(item.titleKey),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                SizedBox(height: h * 0.008),
+                                Text(
+                                  loc.getByKey(item.titleKey),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: w * 0.03,
+                                    fontWeight: FontWeight.w600,
+                                    color: textColor,
                                   ),
                                 ),
                               ],
@@ -307,87 +324,83 @@ class _HomeScreenState extends State<HomeScreen>
                       },
                     ),
 
-                    SizedBox(height: h * 0.03),
+                    SizedBox(height: h * 0.04),
 
                     /// 🏬 NEARBY STORES
                     _sectionHeader(
                       title: loc.nearbyStores,
                       onViewAll: () =>
                           _openPage(const AllStoreScreen()),
+                      textColor: textColor,
                     ),
 
-                    SizedBox(height: h * 0.01),
+                    SizedBox(height: h * 0.02),
 
                     SizedBox(
-                      height: 170,
+                      height: h * 0.24,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: nearbyStores.length,
                         itemBuilder: (_, index) {
                           final store = nearbyStores[index];
-
                           return GestureDetector(
                             onTap: () {
-                              /// ✅ SET STORE IN PROVIDER
-                              context.read<StoreProvider>().setStore(store);
-
-                              /// ✅ NAVIGATE TO DETAILS SCREEN
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const StoreDetailsScreen(),
-                                ),
-                              );
+                              context
+                                  .read<StoreProvider>()
+                                  .setStore(store);
+                              _openPage(const StoreDetailsScreen());
                             },
                             child: Container(
-                              width: 170,
-                              margin: const EdgeInsets.only(right: 12),
+                              width: w * 0.45,
+                              margin:
+                              EdgeInsets.only(right: w * 0.035),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(14),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 10,
-                                  ),
-                                ],
+                                color: cardColor,
+                                borderRadius:
+                                BorderRadius.circular(w * 0.045),
+                                boxShadow: shadow,
                               ),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
                                 children: [
-                                  /// 🖼 IMAGE
                                   ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(14),
+                                    borderRadius:
+                                    BorderRadius.vertical(
+                                      top: Radius.circular(w * 0.045),
                                     ),
                                     child: Image.asset(
                                       store.image,
-                                      height: 110,
+                                      height: h * 0.14,
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-
-                                  /// 📄 TEXT
                                   Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: EdgeInsets.all(w * 0.03),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           loc.getByKey(store.nameKey),
                                           maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: w * 0.04,
-                                            fontWeight: FontWeight.w700,
+                                          overflow:
+                                          TextOverflow.ellipsis,
+                                          style: GoogleFonts.inter(
+                                            fontWeight:
+                                            FontWeight.w700,
+                                            fontSize: w * 0.038,
+                                            color: textColor,
                                           ),
                                         ),
+                                        SizedBox(height: h * 0.004),
                                         Text(
-                                          loc.getByKey(store.categoryKey),
+                                          loc.getByKey(
+                                              store.categoryKey),
                                           style: GoogleFonts.inter(
-                                            fontSize: 11,
-                                            color: Colors.grey,
+                                            fontSize: w * 0.028,
+                                            color: AppColors.textGrey,
                                           ),
                                         ),
                                       ],
@@ -401,45 +414,59 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
 
-                    SizedBox(height: h * 0.03),
+                    SizedBox(height: h * 0.02),
 
-                    /// 🟧 BOTTOM OFFER
+                    /// 🟧 BOTTOM SPECIAL OFFER
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 28),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: w * 0.07,
+                        vertical: h * 0.035,
+                      ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(w * 0.05),
                         gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                           colors: [
-                            Color(0xFFFF9800),
+                            AppColors.warning,
                             Color(0xFFFFB300),
                           ],
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 14,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
                       ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             loc.specialWeekend,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
+                              fontSize: w * 0.065,
+                              fontWeight: FontWeight.w800,
                               color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: h * 0.01),
                           Text(
                             loc.flatOff,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.inter(
-                              fontSize: 15,
+                              fontSize: w * 0.038,
+                              fontWeight: FontWeight.w500,
                               color: Colors.white70,
                             ),
                           ),
                         ],
                       ),
                     ),
+
                   ],
                 ),
               ),
@@ -453,6 +480,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _sectionHeader({
     required String title,
     required VoidCallback onViewAll,
+    required Color textColor,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,16 +489,17 @@ class _HomeScreenState extends State<HomeScreen>
           title,
           style: GoogleFonts.inter(
             fontSize: 18,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
+            color: textColor,
           ),
         ),
         GestureDetector(
           onTap: onViewAll,
           child: Text(
-            AppLocalizations.of(context).viewAll,
+            AppLocalizations.of(context)!.viewAll,
             style: GoogleFonts.inter(
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF3670A3),
+              fontWeight: FontWeight.w600,
+              color: AppColors.primary,
             ),
           ),
         ),

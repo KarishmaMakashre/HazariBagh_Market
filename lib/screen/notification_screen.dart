@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/screen/categories/TrackOrderScreen.dart';
 import 'package:hazari_bagh_market/screen/home/home_screen.dart';
+
 import '../../widgets/top_header.dart';
+import '../../l10n/app_localizations.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -12,6 +14,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
@@ -41,9 +44,8 @@ class NotificationScreen extends StatelessWidget {
                     size: w * 0.06,
                   ),
                 ),
-
                 Text(
-                  "Notifications",
+                  loc.getByKey('notifications'),
                   style: TextStyle(
                     fontSize: w * 0.05,
                     fontWeight: FontWeight.bold,
@@ -60,14 +62,14 @@ class NotificationScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Today",
+                  loc.getByKey('today'),
                   style: TextStyle(
                     fontSize: w * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  "Mark as read",
+                  loc.getByKey('mark_as_read'),
                   style: TextStyle(
                     fontSize: w * 0.035,
                     color: primaryColor,
@@ -91,7 +93,7 @@ class NotificationScreen extends StatelessWidget {
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
-                  status: "Out for Delivery",
+                  status: loc.getByKey('out_for_delivery'),
                   price: "₹12,000",
                 ),
                 _notificationCard(
@@ -100,35 +102,8 @@ class NotificationScreen extends StatelessWidget {
                   image: "assets/images/clothe.jpg",
                   transactionId: "A23B567K",
                   date: "22/09/32",
-                  status: "Out for Delivery",
+                  status: loc.getByKey('out_for_delivery'),
                   price: "₹15,000",
-                ),
-                _notificationCard(
-                  context: context,
-                  w: w,
-                  image: "assets/images/clothe.jpg",
-                  transactionId: "A23B567K",
-                  date: "22/09/32",
-                  status: "Out for Delivery",
-                  price: "₹18,000",
-                ),
-                _notificationCard(
-                  context: context,
-                  w: w,
-                  image: "assets/images/clothe.jpg",
-                  transactionId: "A23B567K",
-                  date: "22/09/32",
-                  status: "Out for Delivery",
-                  price: "₹9,000",
-                ),
-                _notificationCard(
-                  context: context,
-                  w: w,
-                  image: "assets/images/clothe.jpg",
-                  transactionId: "A23B567K",
-                  date: "22/09/32",
-                  status: "Out for Delivery",
-                  price: "₹10,000",
                 ),
               ],
             ),
@@ -148,6 +123,8 @@ class NotificationScreen extends StatelessWidget {
     required String status,
     required String price,
   }) {
+    final loc = AppLocalizations.of(context);
+
     return Container(
       margin: EdgeInsets.only(bottom: w * 0.03),
       padding: EdgeInsets.all(w * 0.03),
@@ -176,7 +153,7 @@ class NotificationScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Transaction ID : $transactionId",
+                  "${loc.getByKey('transaction_id')} : $transactionId",
                   style: TextStyle(
                     fontSize: w * 0.035,
                     fontWeight: FontWeight.bold,
@@ -184,7 +161,7 @@ class NotificationScreen extends StatelessWidget {
                 ),
                 SizedBox(height: w * 0.01),
                 Text(
-                  "Scheduled for : $date",
+                  "${loc.getByKey('scheduled_for')} : $date",
                   style: TextStyle(
                     fontSize: w * 0.03,
                     color: Colors.grey,
@@ -212,23 +189,27 @@ class NotificationScreen extends StatelessWidget {
             ),
           ),
 
-          /// 🚚 TRACK ORDER BUTTON
+          /// 🚚 TRACK ORDER
           SizedBox(
             height: w * 0.08,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
-                padding:
-                EdgeInsets.symmetric(horizontal: w * 0.025),
+                padding: EdgeInsets.symmetric(horizontal: w * 0.025),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(w * 0.02),
                 ),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_)=>TrackOrderScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const TrackOrderScreen(),
+                  ),
+                );
               },
               child: Text(
-                "Track",
+                loc.getByKey('track'),
                 style: TextStyle(
                   fontSize: w * 0.03,
                   color: Colors.white,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../colors/AppColors.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../widgets/top_header.dart';
 import '../../../provider/cart_provider.dart';
 
@@ -25,10 +27,22 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
+    final h = size.height;
+    final loc = AppLocalizations.of(context);
+
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final bgColor = isDark ? const Color(0xFF0F172A) : Colors.white;
+    final cardColor = isDark ? const Color(0xFF1E293B) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final subTextColor =
+    isDark ? Colors.grey.shade400 : Colors.grey.shade600;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor,
       body: Column(
         children: [
           const TopHeader(),
@@ -38,12 +52,11 @@ class RestaurantDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: h * 0.02),
 
-                  SizedBox(height: mq.height * 0.02),
-
-                  ///  BACK BUTTON (arrow + text both clickable)
+                  /// 🔙 BACK
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
                       borderRadius: BorderRadius.circular(8),
@@ -51,14 +64,13 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.arrow_back,
-                              color: themeColor,
-                              size: mq.width * 0.06),
-                          SizedBox(width: mq.width * 0.02),
+                              color: textColor, size: w * 0.055),
+                          SizedBox(width: w * 0.02),
                           Text(
-                            "Back",
+                            loc.back,
                             style: TextStyle(
-                              fontSize: mq.width * 0.045,
-                              color: themeColor,
+                              fontSize: w * 0.045,
+                              color: textColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -67,115 +79,104 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: mq.height * 0.015),
+                  SizedBox(height: h * 0.015),
 
-                  /// 🏪 RESTAURANT DETAILS
+                  /// 🏪 RESTAURANT CARD
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: const [
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 3),
+                            color: isDark
+                                ? Colors.black54
+                                : Colors.black12,
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(14)),
+                                top: Radius.circular(16)),
                             child: Image.asset(
                               img,
-                              height: mq.height * 0.25,
+                              height: h * 0.25,
                               width: double.infinity,
                               fit: BoxFit.cover,
                             ),
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(14),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   name,
                                   style: TextStyle(
-                                    fontSize: mq.width * 0.055,
+                                    fontSize: w * 0.055,
                                     fontWeight: FontWeight.bold,
+                                    color: textColor,
                                   ),
                                 ),
-
                                 const SizedBox(height: 6),
-
                                 Text(
                                   type,
                                   style: TextStyle(
-                                    fontSize: mq.width * 0.035,
-                                    color: Colors.grey,
+                                    fontSize: w * 0.035,
+                                    color: subTextColor,
                                   ),
                                 ),
-
                                 const SizedBox(height: 12),
-
                                 Row(
                                   children: [
-                                    const Icon(Icons.star,
-                                        color: Colors.orange),
-                                    const SizedBox(width: 5),
-                                    Text(rating),
-
-                                    const SizedBox(width: 20),
-
-                                    const Icon(Icons.timer, color: Colors.grey),
-                                    const SizedBox(width: 5),
-                                    Text(time),
-
-                                    const SizedBox(width: 20),
-
-                                    const Icon(Icons.location_on,
-                                        color: Colors.red),
-                                    const SizedBox(width: 5),
-                                    Text(distance),
+                                    _iconText(Icons.star, rating,
+                                        Colors.orange, w),
+                                    SizedBox(width: w * 0.05),
+                                    _iconText(Icons.timer, time,
+                                        subTextColor, w),
+                                    SizedBox(width: w * 0.05),
+                                    _iconText(Icons.location_on, distance,
+                                        Colors.redAccent, w),
                                   ],
                                 )
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
 
-                  SizedBox(height: mq.height * 0.03),
+                  SizedBox(height: h * 0.03),
 
                   /// 📋 MENU TITLE
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
                     child: Text(
-                      "Menu",
+                      loc.getByKey('menu'),
                       style: TextStyle(
-                        fontSize: mq.width * 0.06,
+                        fontSize: w * 0.06,
                         fontWeight: FontWeight.bold,
+                        color: textColor,
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 12),
 
-                  /// 🍽 MENU ITEMS
-                  _menuItem(context, mq, "Chicken Biryani", "220"),
-                  _menuItem(context, mq, "Veg Biryani", "180"),
-                  _menuItem(context, mq, "Butter Chicken", "280"),
-                  _menuItem(context, mq, "Paneer Tikka", "240"),
+                  _menuItem(context, w, loc.getByKey('chickenBiryani'), "220"),
+                  _menuItem(context, w, loc.getByKey('vegBiryani'), "180"),
+                  _menuItem(context, w, loc.getByKey('butterChicken'), "280"),
+                  _menuItem(context, w, loc.getByKey('paneerTikka'), "240"),
 
-                  SizedBox(height: mq.height * 0.08),
+                  SizedBox(height: h * 0.08),
                 ],
               ),
             ),
@@ -185,86 +186,68 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// 🍽 MENU ITEM CARD
+  /// 🍽 MENU ITEM
   Widget _menuItem(
-      BuildContext context, Size mq, String title, String price) {
+      BuildContext context, double w, String title, String price) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 6),
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
           borderRadius: BorderRadius.circular(14),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: isDark ? Colors.black54 : Colors.black12,
               blurRadius: 6,
-              offset: Offset(0, 3),
-            )
+            ),
           ],
         ),
         child: Row(
           children: [
-
-            /// 🖼 PRODUCT IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 img,
-                width: mq.width * 0.20,
-                height: mq.width * 0.20,
+                width: w * 0.22,
+                height: w * 0.22,
                 fit: BoxFit.cover,
               ),
             ),
-
             const SizedBox(width: 12),
-
-            /// 📝 DETAILS
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: mq.width * 0.045,
-                    ),
-                  ),
-
+                  Text(title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: w * 0.045)),
                   const SizedBox(height: 4),
-
-                  Text(
-                    "Authentic & delicious",
-                    style: TextStyle(
-                      fontSize: mq.width * 0.033,
-                      color: Colors.grey,
-                    ),
-                  ),
-
+                  Text("Authentic & delicious",
+                      style: TextStyle(
+                          fontSize: w * 0.032,
+                          color: Colors.grey)),
                   const SizedBox(height: 6),
-
-                  Text(
-                    "₹$price",
-                    style: TextStyle(
-                      fontSize: mq.width * 0.045,
-                      fontWeight: FontWeight.bold,
-                      color: themeColor,
-                    ),
-                  ),
+                  Text("₹$price",
+                      style: TextStyle(
+                          fontSize: w * 0.045,
+                          fontWeight: FontWeight.bold,
+                          color: themeColor)),
                 ],
               ),
             ),
-
-            /// 🛒 ADD TO CART
             InkWell(
               onTap: () {
-                Provider.of<CartProvider>(context, listen: false).addItem({
+                context.read<CartProvider>().addItem({
                   "name": title,
                   "price": double.parse(price),
                   "qty": 1,
                   "image": img,
-                  "store": name, // ✅ restaurant wise cart
+                  "store": name,
                 });
 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -275,22 +258,31 @@ class RestaurantDetailsScreen extends StatelessWidget {
                 padding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: themeColor.withOpacity(0.25),
+                  color: themeColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   "Add",
                   style: TextStyle(
-                    color: themeColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: mq.width * 0.035,
-                  ),
+                      color: themeColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _iconText(
+      IconData icon, String text, Color color, double w) {
+    return Row(
+      children: [
+        Icon(icon, size: w * 0.045, color: color),
+        const SizedBox(width: 4),
+        Text(text, style: TextStyle(fontSize: w * 0.035)),
+      ],
     );
   }
 }

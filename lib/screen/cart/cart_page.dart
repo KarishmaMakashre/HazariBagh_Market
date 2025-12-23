@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/screen/categories/payment_method_screen.dart';
 import 'package:hazari_bagh_market/widgets/top_header.dart';
 import 'package:provider/provider.dart';
+
 import '../../provider/cart_provider.dart';
 import '../../colors/AppColors.dart';
+import '../../l10n/app_localizations.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -11,6 +13,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: AppColors.bgLight,
@@ -19,7 +22,7 @@ class CartScreen extends StatelessWidget {
           if (cart.cartItems.isEmpty) {
             return Center(
               child: Text(
-                "Your cart is empty",
+                loc.getByKey('cart_empty'),
                 style: TextStyle(
                   fontSize: mq.width * 0.05,
                   color: AppColors.textGrey,
@@ -28,10 +31,10 @@ class CartScreen extends StatelessWidget {
             );
           }
 
-          ///  GROUP ITEMS BY STORE
+          /// GROUP ITEMS BY STORE
           final Map<String, List<Map<String, dynamic>>> groupedItems = {};
           for (var item in cart.cartItems) {
-            final store = item["store"] ?? "Unknown Store";
+            final store = item["store"] ?? loc.getByKey('unknown_store');
             groupedItems.putIfAbsent(store, () => []);
             groupedItems[store]!.add(item);
           }
@@ -40,7 +43,6 @@ class CartScreen extends StatelessWidget {
             children: [
               const TopHeader(),
 
-              /// 🏪 STORE WISE CART
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.all(mq.width * 0.03),
@@ -51,6 +53,7 @@ class CartScreen extends StatelessWidget {
                       storeName: entry.key,
                       items: entry.value,
                       cart: cart,
+                      loc: loc,
                     );
                   }).toList(),
                 ),
@@ -62,13 +65,14 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  /// 🏪 STORE CARD WITH IMAGE + BILLING
+  /// 🏪 STORE CARD
   Widget _storeCard({
     required BuildContext context,
     required Size mq,
     required String storeName,
     required List<Map<String, dynamic>> items,
     required CartProvider cart,
+    required AppLocalizations loc,
   }) {
     double storeSubtotal = 0;
     for (var i in items) {
@@ -85,7 +89,7 @@ class CartScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 🏪 STORE HEADER
+          /// STORE HEADER
           Row(
             children: [
               const Icon(Icons.store, color: AppColors.success),
@@ -102,16 +106,14 @@ class CartScreen extends StatelessWidget {
 
           Divider(height: mq.height * 0.025),
 
-          /// 🧾 ITEMS LIST
+          /// ITEMS
           ...items.map((item) {
             final index = cart.cartItems.indexOf(item);
 
             return Padding(
               padding: EdgeInsets.only(bottom: mq.height * 0.015),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  /// 🖼 PRODUCT IMAGE
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
@@ -124,7 +126,6 @@ class CartScreen extends StatelessWidget {
 
                   SizedBox(width: mq.width * 0.03),
 
-                  /// 📝 NAME
                   Expanded(
                     child: Text(
                       item["name"],
@@ -137,14 +138,10 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
 
-                  /// ➖➕ QTY
                   Row(
                     children: [
-                      _qtyBtn(
-                        mq,
-                        Icons.remove,
-                            () => cart.decreaseQty(index),
-                      ),
+                      _qtyBtn(mq, Icons.remove,
+                              () => cart.decreaseQty(index)),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: mq.width * 0.02),
@@ -156,17 +153,13 @@ class CartScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      _qtyBtn(
-                        mq,
-                        Icons.add,
-                            () => cart.increaseQty(index),
-                      ),
+                      _qtyBtn(mq, Icons.add,
+                              () => cart.increaseQty(index)),
                     ],
                   ),
 
                   SizedBox(width: mq.width * 0.03),
 
-                  /// 💰 PRICE
                   Text(
                     "₹${item["price"] * item["qty"]}",
                     style: TextStyle(
@@ -177,10 +170,10 @@ class CartScreen extends StatelessWidget {
 
                   SizedBox(width: mq.width * 0.02),
 
-                  /// 🗑 REMOVE
                   GestureDetector(
                     onTap: () => cart.removeItem(index),
-                    child: const Icon(Icons.delete, color: AppColors.error),
+                    child:
+                    const Icon(Icons.delete, color: AppColors.error),
                   ),
                 ],
               ),
@@ -189,15 +182,16 @@ class CartScreen extends StatelessWidget {
 
           Divider(height: mq.height * 0.03),
 
-          /// 💳 STORE BILLING
-          _billRow(mq, "Subtotal", "₹${storeSubtotal.toStringAsFixed(0)}"),
-          _billRow(mq, "Delivery Fee", "₹40"),
+          /// BILL
+          _billRow(mq, loc.getByKey('subtotal'),
+              "₹${storeSubtotal.toStringAsFixed(0)}"),
+          _billRow(mq, loc.getByKey('delivery_fee'), "₹40"),
 
           Divider(),
 
           _billRow(
             mq,
-            "Payable Amount",
+            loc.getByKey('payable_amount'),
             "₹${payable.toStringAsFixed(0)}",
             isBold: true,
             color: AppColors.success,
@@ -205,7 +199,7 @@ class CartScreen extends StatelessWidget {
 
           SizedBox(height: mq.height * 0.015),
 
-          /// ✅ STORE CHECKOUT BUTTON
+          /// PAYMENT BUTTON
           SizedBox(
             width: double.infinity,
             height: mq.height * 0.055,
@@ -217,14 +211,19 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> PaymentMethodScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const PaymentMethodScreen(),
+                  ),
+                );
               },
               child: Text(
-                "Payment",
+                loc.getByKey('payment'),
                 style: TextStyle(
                   fontSize: mq.width * 0.04,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.white
                 ),
               ),
             ),
@@ -234,7 +233,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  /// ➕➖ QTY BUTTON
   Widget _qtyBtn(Size mq, IconData icon, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
@@ -249,7 +247,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  /// 📊 BILL ROW
   Widget _billRow(
       Size mq,
       String title,
@@ -282,7 +279,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  /// 🎨 CARD DECORATION
   BoxDecoration _box() => BoxDecoration(
     color: AppColors.white,
     borderRadius: BorderRadius.circular(14),

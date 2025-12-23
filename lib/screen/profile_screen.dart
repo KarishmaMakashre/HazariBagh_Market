@@ -5,6 +5,7 @@ import '../../widgets/top_header.dart';
 import '../../provider/theme_provider.dart';
 import '../../provider/language_provider.dart';
 import '../../l10n/app_localizations.dart';
+import '../colors/AppColors.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -15,9 +16,19 @@ class ProfileScreen extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
 
     final t = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final themeProvider = context.watch<ThemeProvider>();
+    final isDark = theme.brightness == Brightness.dark;
+
+    // 🌗 THEME BASED COLORS
+    final bgColor = isDark ? AppColors.bgDark : AppColors.bgLight;
+    final tileBgColor =
+    isDark ? const Color(0xFF2A2A2A) : AppColors.white;
+    final iconBgColor =
+    isDark ? Colors.grey.shade800 : Colors.grey.shade200;
 
     return Scaffold(
+      backgroundColor: bgColor,
       body: Column(
         children: [
           const TopHeader(),
@@ -33,13 +44,18 @@ class ProfileScreen extends StatelessWidget {
               onTap: () => Navigator.pop(context),
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back, size: w * 0.055),
+                  Icon(
+                    Icons.arrow_back,
+                    size: w * 0.055,
+                    color: AppColors.primary,
+                  ),
                   SizedBox(width: w * 0.015),
                   Text(
                     t.back,
                     style: TextStyle(
                       fontSize: w * 0.04,
                       fontWeight: FontWeight.w600,
+                      color: theme.textTheme.bodyLarge!.color,
                     ),
                   ),
                 ],
@@ -58,8 +74,12 @@ class ProfileScreen extends StatelessWidget {
                   /// 👤 PROFILE IMAGE
                   CircleAvatar(
                     radius: w * 0.12,
-                    backgroundImage:
-                    const AssetImage("assets/images/girl.png"),
+                    backgroundColor: iconBgColor,
+                    child: CircleAvatar(
+                      radius: w * 0.115,
+                      backgroundImage:
+                      const AssetImage("assets/images/girl.jpg"),
+                    ),
                   ),
 
                   SizedBox(height: h * 0.015),
@@ -70,6 +90,7 @@ class ProfileScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: w * 0.05,
+                      color: theme.textTheme.bodyLarge!.color,
                     ),
                   ),
 
@@ -80,18 +101,20 @@ class ProfileScreen extends StatelessWidget {
                     "hello@reallygreatsite.com",
                     style: TextStyle(
                       fontSize: w * 0.035,
-                      color: Colors.black54,
+                      color: theme.textTheme.bodySmall!.color,
                     ),
                   ),
 
                   SizedBox(height: h * 0.035),
 
                   /// ✏ EDIT PROFILE
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.edit,
                     title: t.editProfile,
-                    iconColor: Colors.green,
+                    iconColor: AppColors.success,
+                    tileBgColor: tileBgColor,
                     onTap: () {},
                   ),
 
@@ -105,6 +128,7 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: w * 0.045,
+                        color: theme.textTheme.bodyLarge!.color,
                       ),
                     ),
                   ),
@@ -113,15 +137,30 @@ class ProfileScreen extends StatelessWidget {
 
                   /// 🌗 DARK / LIGHT MODE
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: h * 0.015),
+                    padding: EdgeInsets.symmetric(
+                      vertical: h * 0.015,
+                      horizontal: w * 0.04,
+                    ),
+                    decoration: BoxDecoration(
+                      color: tileBgColor,
+                      borderRadius: BorderRadius.circular(w * 0.03),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.shadow,
+                          blurRadius: 4,
+                        )
+                      ],
+                    ),
                     child: Row(
                       children: [
                         CircleAvatar(
                           radius: w * 0.04,
-                          backgroundColor: Colors.black,
+                          backgroundColor: AppColors.primary,
                           child: Icon(
-                            Icons.dark_mode,
-                            color: Colors.white,
+                            isDark
+                                ? Icons.dark_mode
+                                : Icons.light_mode,
+                            color: AppColors.white,
                             size: w * 0.04,
                           ),
                         ),
@@ -131,67 +170,85 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             Text(
                               t.mode,
-                              style: TextStyle(fontSize: w * 0.038),
+                              style: TextStyle(
+                                fontSize: w * 0.038,
+                                fontWeight: FontWeight.w600,
+                                color:
+                                theme.textTheme.bodyLarge!.color,
+                              ),
                             ),
                             Text(
                               t.darkLight,
                               style: TextStyle(
                                 fontSize: w * 0.03,
-                                color: Colors.grey,
+                                color:
+                                theme.textTheme.bodySmall!.color,
                               ),
                             ),
                           ],
                         ),
                         const Spacer(),
-                        Switch(
-                          value:
-                          themeProvider.themeMode == ThemeMode.dark,
-                          onChanged: (value) {
-                            themeProvider.toggleTheme(value);
-                          },
+                        Switch.adaptive(
+                          activeColor: AppColors.primary,
+                          value: themeProvider.themeMode ==
+                              ThemeMode.dark,
+                          onChanged:
+                          themeProvider.toggleTheme,
                         ),
                       ],
                     ),
                   ),
 
+                  SizedBox(height: h * 0.02),
+
                   /// 🌍 LANGUAGE
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.language,
                     title: t.language,
-                    iconColor: Colors.amber,
+                    iconColor: AppColors.warning,
+                    tileBgColor: tileBgColor,
                     onTap: () => _showLanguageDialog(context),
                   ),
 
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.settings,
                     title: t.settings,
-                    iconColor: Colors.grey,
+                    iconColor: AppColors.textGrey,
+                    tileBgColor: tileBgColor,
                     onTap: () {},
                   ),
 
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.info_outline,
                     title: t.about,
-                    iconColor: Colors.purple,
+                    iconColor: AppColors.primaryLight,
+                    tileBgColor: tileBgColor,
                     onTap: () {},
                   ),
 
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.description,
                     title: t.terms,
-                    iconColor: Colors.blue,
+                    iconColor: AppColors.primaryDark,
+                    tileBgColor: tileBgColor,
                     onTap: () {},
                   ),
 
-                  profileTile(
+                  _profileTile(
+                    context: context,
                     w: w,
                     icon: Icons.privacy_tip,
                     title: t.privacy,
-                    iconColor: Colors.red,
+                    iconColor: AppColors.error,
+                    tileBgColor: tileBgColor,
                     onTap: () {},
                   ),
 
@@ -203,7 +260,8 @@ class ProfileScreen extends StatelessWidget {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => const LoginScreen()),
+                          builder: (_) => const LoginScreen(),
+                        ),
                             (route) => false,
                       );
                     },
@@ -212,22 +270,23 @@ class ProfileScreen extends StatelessWidget {
                       padding:
                       EdgeInsets.symmetric(vertical: h * 0.015),
                       decoration: BoxDecoration(
+                        color: tileBgColor,
                         borderRadius:
                         BorderRadius.circular(w * 0.08),
-                        color: Colors.grey.shade200,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.logout,
-                              color: Colors.red, size: w * 0.05),
+                              color: AppColors.error,
+                              size: w * 0.05),
                           SizedBox(width: w * 0.02),
                           Text(
                             t.logout,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: w * 0.04,
-                              color: Colors.red,
+                              color: AppColors.error,
                             ),
                           ),
                         ],
@@ -247,10 +306,14 @@ class ProfileScreen extends StatelessWidget {
   void _showLanguageDialog(BuildContext context) {
     final langProvider = context.read<LanguageProvider>();
     final t = AppLocalizations.of(context)!;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
 
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        backgroundColor:
+        isDark ? AppColors.bgDark : AppColors.white,
         title: Text(t.selectLanguage),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -258,14 +321,16 @@ class ProfileScreen extends StatelessWidget {
             ListTile(
               title: const Text("English"),
               onTap: () {
-                langProvider.changeLanguage(const Locale('en'));
+                langProvider.changeLanguage(
+                    const Locale('en'));
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: const Text("हिन्दी"),
               onTap: () {
-                langProvider.changeLanguage(const Locale('hi'));
+                langProvider.changeLanguage(
+                    const Locale('hi'));
                 Navigator.pop(context);
               },
             ),
@@ -276,23 +341,45 @@ class ProfileScreen extends StatelessWidget {
   }
 
   /// ♻ REUSABLE TILE
-  Widget profileTile({
+  Widget _profileTile({
+    required BuildContext context,
     required double w,
     required IconData icon,
     required String title,
     required Color iconColor,
+    required Color tileBgColor,
     required VoidCallback onTap,
   }) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: CircleAvatar(
-        radius: w * 0.04,
-        backgroundColor: iconColor.withOpacity(0.2),
-        child: Icon(icon, color: iconColor, size: w * 0.04),
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: w * 0.01),
+      decoration: BoxDecoration(
+        color: tileBgColor,
+        borderRadius: BorderRadius.circular(w * 0.03),
       ),
-      title: Text(title, style: TextStyle(fontSize: w * 0.038)),
-      trailing: Icon(Icons.chevron_right, size: w * 0.05),
-      onTap: onTap,
+      child: ListTile(
+        contentPadding:
+        EdgeInsets.symmetric(horizontal: w * 0.04),
+        leading: CircleAvatar(
+          radius: w * 0.04,
+          backgroundColor: iconColor.withOpacity(0.2),
+          child:
+          Icon(icon, color: iconColor, size: w * 0.04),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: w * 0.038,
+            color: theme.textTheme.bodyLarge!.color,
+          ),
+        ),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: theme.textTheme.bodySmall!.color,
+        ),
+        onTap: onTap,
+      ),
     );
   }
 }

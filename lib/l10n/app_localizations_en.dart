@@ -1,4 +1,3 @@
-// ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
@@ -6,26 +5,21 @@ import 'app_localizations.dart';
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
+  // ===================== BASIC =====================
   @override
   String get welcomeUser => 'Welcome, User!';
 
   @override
-  String get discoverStores =>
-      'Discover local stores & amazing deals';
+  String get discoverStores => 'Discover local stores & amazing deals';
 
   @override
   String get exploreStores =>
       'Explore stores by category & distance';
 
   @override
-  String get visitStore => 'Visit Store'; // ✅ ONLY ONCE
+  String get visitStore => 'Visit Store';
 
-  @override
-  String get bigSale => 'Big Sale this Week!';
-
-  @override
-  String get groceryOffer => 'On all grocery items';
-
+  // ===================== HOME =====================
   @override
   String get categories => 'Categories';
 
@@ -36,12 +30,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewAll => 'View All';
 
   @override
+  String get bigSale => 'Big Sale this Week!';
+
+  @override
+  String get groceryOffer => 'On all grocery items';
+
+  @override
   String get specialWeekend => 'Special Weekend Offer!';
 
   @override
   String get flatOff =>
       'Get flat 30% off on all orders above ₹999';
 
+  // ===================== COMMON =====================
   @override
   String get back => 'Back';
 
@@ -84,14 +85,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get selectLanguage => 'Select Language';
 
-  // 🔥 ORDER
+  // ===================== ORDER =====================
   @override
   String get placedOn => 'Placed on';
 
   @override
   String get qty => 'Qty';
 
-  // 🔥 STATUS
+  // ===================== STATUS =====================
   @override
   String get pending => 'Pending';
 
@@ -101,7 +102,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cancelled => 'Cancelled';
 
-  // 🔥 SUPPORT
+  // ===================== SUPPORT =====================
   @override
   String get contactUs => 'Contact Us';
 
@@ -114,9 +115,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get raiseComplaint => 'Raise Complaint';
 
-  // 🔥 RAISE COMPLAINT
+  // ===================== RAISE COMPLAINT =====================
   @override
-  String get raiseComplaintTitle => 'Raise a Complaint / Request Refund';
+  String get raiseComplaintTitle =>
+      'Raise a Complaint / Request Refund';
 
   @override
   String get subject => 'Subject';
@@ -125,16 +127,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subjectHint => 'Brief subject of your complaint';
 
   @override
-  String get orderNumberOptional => 'Order Number (Optional)';
+  String get orderNumberOptional =>
+      'Order Number (Optional)';
 
   @override
-  String get orderNumberHint => 'Enter order number if applicable';
+  String get orderNumberHint =>
+      'Enter order number if applicable';
 
   @override
   String get description => 'Description';
 
   @override
-  String get descriptionHint => 'Describe your issue in detail...';
+  String get descriptionHint =>
+      'Describe your issue in detail...';
 
   @override
   String get submitComplaint => 'Submit Complaint';
@@ -143,60 +148,67 @@ class AppLocalizationsEn extends AppLocalizations {
   String get complaintResponseNote =>
       'Our team will respond within 24 hours.';
 
-  // 🔥 LIVE CHAT
+  // ===================== LIVE CHAT =====================
   @override
   String get liveChatTitle => 'Live Chat Support';
 
   @override
-  String get liveChatSubtitle => 'Typically replies within minutes.';
+  String get liveChatSubtitle =>
+      'Typically replies within minutes.';
 
   @override
   String get chatHint => 'Type your message...';
 
-  // 🔥 FAQ
+  // ===================== FAQ =====================
   @override
-  String get faqTrackOrderQ => 'How do I track my order?';
+  String get faqTrackOrderQ =>
+      'How do I track my order?';
 
   @override
   String get faqTrackOrderA =>
       'You can track your order from the Orders section in your profile.';
 
   @override
-  String get faqPaymentQ => 'What payment methods are accepted?';
+  String get faqPaymentQ =>
+      'What payment methods are accepted?';
 
   @override
   String get faqPaymentA =>
       'We accept UPI, Debit Card, Credit Card and Cash on Delivery.';
 
   @override
-  String get faqCancelQ => 'How can I cancel my order?';
+  String get faqCancelQ =>
+      'How can I cancel my order?';
 
   @override
   String get faqCancelA =>
       'Orders can be cancelled before dispatch from the Orders page.';
 
   @override
-  String get faqDeliveryFeeQ => 'Is there a delivery fee?';
+  String get faqDeliveryFeeQ =>
+      'Is there a delivery fee?';
 
   @override
   String get faqDeliveryFeeA =>
       'Delivery fee depends on distance and order value.';
 
   @override
-  String get faqVendorQ => 'How do I become a vendor?';
+  String get faqVendorQ =>
+      'How do I become a vendor?';
 
   @override
   String get faqVendorA =>
       'You can register as a vendor from the Become a Vendor section.';
 
   @override
-  String get faqRefundQ => 'What is your refund policy?';
+  String get faqRefundQ =>
+      'What is your refund policy?';
 
   @override
   String get faqRefundA =>
       'Refunds are processed within 5–7 working days after approval.';
 
-  // 🔥 CONTACT US
+  // ===================== CONTACT =====================
   @override
   String get contactCallTitle => 'Call Us';
 
@@ -221,20 +233,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactEmailSubtitle =>
       'We reply within 24 hours';
 
-  // 🔥 SUPPORT
-  @override
-  String get supportContactUs => 'Contact Us';
-
-  @override
-  String get supportLiveChat => 'Live Chat';
-
-  @override
-  String get supportFaqs => 'FAQs';
-
-  @override
-  String get supportRaiseComplaint => 'Raise Complaint';
-
-  // 🔥 BOTTOM NAV
+  // ===================== BOTTOM NAV =====================
   @override
   String get navHome => 'Home';
 
@@ -247,7 +246,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get navSupport => 'Support';
 
-  // 🔥 STORE DETAILS
+  // ===================== STORE =====================
   @override
   String get aboutStore => 'About Store';
 
@@ -258,24 +257,56 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noDataFound => 'No data found';
 
-
+  // ===================== JOBS & SERVICES =====================
   @override
-  String get jobsAndServices => "Jobs & Services";
+  String get jobsAndServices => 'Jobs & Services';
 
   @override
   String get jobsServicesDesc =>
-      "Find opportunities and professional services in Hazaribagh";
+      'Find opportunities and professional services in Hazaribagh';
 
   @override
-  String get jobs => "Jobs";
+  String get jobs => 'Jobs';
 
   @override
-  String get services => "Services";
+  String get services => 'Services';
 
   @override
-  String get filterByCategory => "Filter By Category";
+  String get filterByCategory =>
+      'Filter By Category';
 
   @override
-  String get viewDetails => "View Details";
+  String get viewDetails => 'View Details';
+
+  // ===================== PROPERTY =====================
+  @override
+  String get propertyListing =>
+      'Property Listing';
+
+  @override
+  String get propertySubtitle =>
+      'Find verified properties near you';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get propertyType =>
+      'Property Type';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get verified => 'Verified';
+
+  @override
+  String get owner => 'Owner';
+
+  @override
+  String get propertyWarning =>
+      'Verify property documents and visit the property before payment.';
+  @override
+  String get contactInformation => 'Contact Information';
 
 }

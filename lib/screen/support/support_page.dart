@@ -39,13 +39,13 @@ class _SupportPageState extends State<SupportPage> {
             padding: EdgeInsets.symmetric(horizontal: w * 0.03),
             child: Row(
               children: [
-                _tabButton(loc.supportContactUs, 0, w, h),
+                _tabButton(loc.contactUs, 0, w, h),
                 SizedBox(width: w * 0.025),
-                _tabButton(loc.supportLiveChat, 1, w, h),
+                _tabButton(loc.liveChat, 1, w, h),
                 SizedBox(width: w * 0.025),
-                _tabButton(loc.supportFaqs, 2, w, h),
+                _tabButton(loc.faqs, 2, w, h),
                 SizedBox(width: w * 0.025),
-                _tabButton(loc.supportRaiseComplaint, 3, w, h),
+                _tabButton(loc.raiseComplaint, 3, w, h),
               ],
             ),
           ),
