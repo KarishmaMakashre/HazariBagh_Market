@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../User/provider/theme_provider.dart';
 import '../VendorProvider/vendor_profile_provider.dart';
+import '../widget/vendor_top_header.dart';
 
 class VendorProfileScreen extends StatelessWidget {
   const VendorProfileScreen({super.key});
@@ -32,6 +33,14 @@ class VendorProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
+      appBar: VendorTopHeader(
+        onNotificationTap: () {
+          // notification screen open
+        },
+        onProfileTap: () {
+          // profile screen open
+        },
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.045),
         child: Column(

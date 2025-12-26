@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../VendorProvider/order_provider.dart';
 import '../models/order_model.dart';
+import '../widget/vendor_top_header.dart';
 
 class VendorOrdersScreen extends StatelessWidget {
   const VendorOrdersScreen({super.key});
@@ -29,6 +30,14 @@ class VendorOrdersScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
+      appBar: VendorTopHeader(
+        onNotificationTap: () {
+          // notification screen open
+        },
+        onProfileTap: () {
+          // profile screen open
+        },
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(w * 0.045),

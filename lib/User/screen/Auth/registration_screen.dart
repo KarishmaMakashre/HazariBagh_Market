@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazari_bagh_market/Vendor/vendor Screens/vendor_dashboard_home_screen.dart';
-import '../../../Vendor/vendor Screens/auth/vendor_activation_screen.dart';
 import '../../../colors/AppColors.dart';
 import '../flash_screen.dart';
 
@@ -13,6 +12,8 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   String? selectedGender;
   bool agree = false;
 
@@ -23,8 +24,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
 
     return WillPopScope(
       onWillPop: () async {
@@ -38,10 +39,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Scaffold(
         body: Stack(
           children: [
-            /// BACKGROUND IMAGE
+            /// BACKGROUND
             Container(
-              height: height,
-              width: width,
+              height: h,
+              width: w,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/loginbg.png"),
@@ -50,244 +51,204 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
 
-            /// DARK OVERLAY
-            Container(
-              height: height,
-              width: width,
-              color: Colors.black.withOpacity(0.65),
-            ),
+            Container(color: Colors.black.withOpacity(0.65)),
 
-            /// MAIN CONTENT
+            /// CONTENT
             SafeArea(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.07),
-                child: Column(
-                  children: [
-                    SizedBox(height: height * 0.05),
+                padding: EdgeInsets.symmetric(horizontal: w * 0.07),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(height: h * 0.05),
 
-                    /// LOGO
-                    Transform.translate(
-                      offset: Offset(0, -height * 0.01),
-                      child: Container(
-                        padding: EdgeInsets.all(width * 0.030),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary,
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(width * 0.03),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.asset(
-                              "assets/images/logo.png",
-                              height: width * 0.22,
-                              width: width * 0.22,
-                            ),
-                          ),
+                      /// LOGO
+                      _logo(w),
+
+                      SizedBox(height: h * 0.02),
+
+                      Text(
+                        "Create Profile",
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: w * 0.055,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
 
-                    SizedBox(height: height * 0.02),
+                      SizedBox(height: h * 0.025),
 
-                    Text(
-                      "Create Profile",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: width * 0.055,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-
-                    SizedBox(height: height * 0.005),
-
-                    Text(
-                      "Please provide the details below to\ncreate your account",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white70,
-                        fontSize: width * 0.032,
-                      ),
-                    ),
-
-                    SizedBox(height: height * 0.03),
-
-                    /// GOOGLE BUTTON
-                    SizedBox(
-                      width: double.infinity,
-                      height: height * 0.055,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      /// GOOGLE LOGIN
+                      SizedBox(
+                        width: double.infinity,
+                        height: h * 0.055,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
                           ),
-                        ),
-                        icon: Image.asset(
-                          "assets/Icons/google.png",
-                          height: height * 0.025,
-                        ),
-                        label: Text(
-                          "Sign in with Google",
-                          style: GoogleFonts.poppins(
-                            color: AppColors.black,
-                            fontSize: width * 0.04,
-                            fontWeight: FontWeight.w500,
+                          icon: Image.asset(
+                            "assets/Icons/google.png",
+                            height: h * 0.025,
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> VendorDashboardHomeScreen()));
-                        },
-                      ),
-                    ),
-
-                    SizedBox(height: height * 0.02),
-
-                    /// OR
-                    Row(
-                      children: [
-                        Expanded(child: Container(height: 1, color: Colors.white30)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "OR",
+                          label: Text(
+                            "Sign in with Google",
                             style: GoogleFonts.poppins(
-                              color: Colors.white70,
-                              fontSize: width * 0.035,
+                              color: Colors.black,
+                              fontSize: w * 0.04,
                             ),
                           ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                const VendorDashboardHomeScreen(),
+                              ),
+                            );
+                          },
                         ),
-                        Expanded(child: Container(height: 1, color: Colors.white30)),
-                      ],
-                    ),
+                      ),
 
-                    SizedBox(height: height * 0.02),
+                      SizedBox(height: h * 0.02),
 
-                    _inputField("Full Name", Icons.person, fullName, height, width),
-                    _inputField("Email Address", Icons.email, email, height, width),
-                    _inputField("Phone Number", Icons.phone, phone, height, width),
+                      _orDivider(w),
 
-                    /// GENDER + DOB
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: height * 0.055,
-                            padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-                            margin: const EdgeInsets.only(bottom: 12),
-                            decoration: _boxDecoration(),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                hint: Text(
-                                  "Gender",
-                                  style: GoogleFonts.poppins(),
-                                ),
-                                value: selectedGender,
-                                items: ["Male", "Female", "Other"]
-                                    .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(
-                                    e,
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                ))
-                                    .toList(),
-                                onChanged: (val) {
-                                  setState(() => selectedGender = val);
-                                },
+                      SizedBox(height: h * 0.02),
+
+                      _textField(
+                        "Full Name",
+                        Icons.person,
+                        fullName,
+                        TextInputType.name,
+                            (v) => v!.isEmpty ? "Enter full name" : null,
+                        h,
+                        w,
+                      ),
+
+                      _textField(
+                        "Email Address",
+                        Icons.email,
+                        email,
+                        TextInputType.emailAddress,
+                            (v) =>
+                        !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v!)
+                            ? "Invalid email"
+                            : null,
+                        h,
+                        w,
+                      ),
+
+                      _textField(
+                        "Phone Number",
+                        Icons.phone,
+                        phone,
+                        TextInputType.phone,
+                            (v) =>
+                        v!.length != 10 ? "Enter valid mobile" : null,
+                        h,
+                        w,
+                        maxLength: 10,
+                      ),
+
+                      /// GENDER
+                      Container(
+                        height: h * 0.055,
+                        padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                        decoration: _boxDecoration(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedGender,
+                            hint: const Text("Gender"),
+                            items: ["Male", "Female", "Other"]
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              ),
+                            )
+                                .toList(),
+                            onChanged: (val) =>
+                                setState(() => selectedGender = val),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: h * 0.015),
+
+                      _textField(
+                        "Home Address",
+                        Icons.location_on,
+                        address,
+                        TextInputType.text,
+                            (v) => v!.isEmpty ? "Enter address" : null,
+                        h,
+                        w,
+                      ),
+
+                      /// TERMS
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: agree,
+                            onChanged: (v) => setState(() => agree = v!),
+                          ),
+                          Expanded(
+                            child: Text(
+                              "I agree with Terms and Conditions",
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: w * 0.03,
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: width * 0.03),
-                        Expanded(
-                          child: Container(
-                            height: height * 0.055,
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-                            decoration: _boxDecoration(),
-                            child: Text(
-                              "DOB",
-                              style: GoogleFonts.poppins(),
+                        ],
+                      ),
+
+                      SizedBox(height: h * 0.015),
+
+                      /// REGISTER BUTTON
+                      SizedBox(
+                        width: double.infinity,
+                        height: h * 0.055,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                          ),
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) return;
+
+                            if (selectedGender == null) {
+                              _snack("Select gender");
+                              return;
+                            }
+
+                            if (!agree) {
+                              _snack("Accept terms & conditions");
+                              return;
+                            }
+
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (_) =>
+                            //     const VendorActivationScreen(),
+                            //   ),
+                            // );
+                          },
+                          child: Text(
+                            "Register & Continue",
+                            style: GoogleFonts.poppins(
+                              fontSize: w * 0.04,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-
-                    _inputField(
-                        "Home Address", Icons.location_on, address, height, width),
-
-                    /// TERMS
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: agree,
-                          activeColor: Colors.white,
-                          checkColor: Colors.black,
-                          onChanged: (val) => setState(() => agree = val!),
-                        ),
-                        Text(
-                          "I agree with Terms and Conditions",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: width * 0.03,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: height * 0.015),
-
-                    /// REGISTER
-                    SizedBox(
-                      width: double.infinity,
-                      height: height * 0.055,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3670A3),
-                        ),
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_)=> VendorActivationScreen()));
-                        },
-                        child: Text(
-                          "Register & Continue",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: width * 0.04,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
                       ),
-                    ),
 
-                    SizedBox(height: height * 0.018),
-
-                    /// BACK
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const FlashScreen()),
-                              (route) => false,
-                        );
-                      },
-                      child: Text(
-                        "Back To Log-in",
-                        style: GoogleFonts.poppins(
-                          color: Colors.blueAccent,
-                          fontSize: width * 0.03,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: height * 0.04),
-                  ],
+                      SizedBox(height: h * 0.03),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -297,26 +258,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  /// INPUT FIELD
-  Widget _inputField(
+  /// HELPERS --------------------------------------------------
+
+  Widget _logo(double w) {
+    return ClipOval(
+      child: Image.asset(
+        "assets/images/logo.png",
+        height: w * 0.25,
+        width: w * 0.25,
+      ),
+    );
+  }
+
+  Widget _orDivider(double w) {
+    return Row(
+      children: [
+        const Expanded(child: Divider(color: Colors.white30)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            "OR",
+            style: GoogleFonts.poppins(color: Colors.white70),
+          ),
+        ),
+        const Expanded(child: Divider(color: Colors.white30)),
+      ],
+    );
+  }
+
+  Widget _textField(
       String hint,
       IconData icon,
       TextEditingController controller,
-      double height,
-      double width,
-      ) {
+      TextInputType type,
+      String? Function(String?) validator,
+      double h,
+      double w, {
+        int? maxLength,
+      }) {
     return Container(
-      height: height * 0.055,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: _boxDecoration(),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
-        style: GoogleFonts.poppins(fontSize: width * 0.038),
+        keyboardType: type,
+        maxLength: maxLength,
+        validator: validator,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, size: width * 0.05),
+          prefixIcon: Icon(icon),
           hintText: hint,
-          hintStyle: GoogleFonts.poppins(),
+          counterText: "",
           border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: h * 0.017),
         ),
       ),
     );
@@ -327,5 +320,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       color: Colors.white,
       borderRadius: BorderRadius.circular(6),
     );
+  }
+
+  void _snack(String msg) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(msg)));
   }
 }

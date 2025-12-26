@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../VendorProvider/product_provider.dart';
 import '../models/product_model.dart';
+import '../widget/vendor_top_header.dart';
 
 class VendorAddProductScreen extends StatefulWidget {
   const VendorAddProductScreen({super.key});
@@ -67,6 +68,14 @@ class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
 
     return Scaffold(
 
+      appBar: VendorTopHeader(
+        onNotificationTap: () {
+          // notification screen open
+        },
+        onProfileTap: () {
+          // profile screen open
+        },
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.05),
         child: Form(

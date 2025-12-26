@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../VendorProvider/vendor_reports_provider.dart';
 import '../models/report_model.dart';
+import '../widget/vendor_top_header.dart';
 
 class VendorReportsScreen extends StatelessWidget {
   const VendorReportsScreen({super.key});
@@ -28,6 +29,14 @@ class VendorReportsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
+      appBar: VendorTopHeader(
+        onNotificationTap: () {
+          // notification screen open
+        },
+        onProfileTap: () {
+          // profile screen open
+        },
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(w * 0.045),

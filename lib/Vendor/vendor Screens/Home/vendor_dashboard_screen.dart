@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import '../../widget/vendor_top_header.dart';
+
 class VendorDashboardScreen extends StatefulWidget {
   const VendorDashboardScreen({super.key});
 
@@ -48,6 +50,14 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
 
     return Scaffold(
       backgroundColor: bgColor,
+      appBar: VendorTopHeader(
+        onNotificationTap: () {
+          // notification screen open
+        },
+        onProfileTap: () {
+          // profile screen open
+        },
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.045),
         child: Column(

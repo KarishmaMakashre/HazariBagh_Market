@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hazari_bagh_market/Vendor/vendor%20Screens/auth/vendor_register_screen.dart';
 import '../../colors/AppColors.dart';
 import 'Auth/login_screen.dart';
-import 'Auth/registration_screen.dart';
 
 class FlashScreen extends StatelessWidget {
   const FlashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // 🔥 STATUS BAR TRANSPARENT
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark, // Android icons
+        statusBarBrightness: Brightness.light, // iOS text
+      ),
+    );
+
     final size = MediaQuery.of(context).size;
     final h = size.height;
     final w = size.width;
 
     return Scaffold(
       backgroundColor: AppColors.white,
+      extendBodyBehindAppBar: true, // 🔥 image behind status bar
 
       body: SafeArea(
+        top: false, // 🔥 allow image under status bar
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
@@ -165,7 +177,7 @@ class FlashScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) =>
-                                          const RegistrationScreen(),
+                                          const VendorRegisterScreen(),
                                         ),
                                       );
                                     },

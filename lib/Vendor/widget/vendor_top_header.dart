@@ -24,6 +24,7 @@ class VendorTopHeader extends StatelessWidget
       shadowColor: Colors.transparent,
       automaticallyImplyLeading: false,
 
+
       title: Image.asset(
         'assets/images/logo.png',
         height: 32,

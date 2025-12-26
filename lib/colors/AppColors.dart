@@ -45,4 +45,7 @@ class AppColors {
 
   // 🌑 SHADOW COLOR
   static Color shadow = Colors.black.withOpacity(0.25);
+
+  static const Color fieldBg = Color(0xFFF1F3F6);
+
 }
