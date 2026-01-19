@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../widgets/top_header.dart';
+import '../../widgets/top_header.dart';
 
 class ViewStoreScreen extends StatelessWidget {
   const ViewStoreScreen({super.key});
@@ -18,7 +17,9 @@ class ViewStoreScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const TopHeader(),
+            TopHeader(
+),
+
 
             ///  TITLE BAR
             Padding(

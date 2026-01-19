@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../Model/home_model.dart';
 import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
-
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class PropertyEnquiryScreen extends StatelessWidget {
   final String propertyTitle;
@@ -19,7 +20,8 @@ class PropertyEnquiryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final loc = AppLocalizations.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     final bgColor = isDark ? const Color(0xFF0F172A) : AppColors.bgLight;
     final cardColor = isDark ? const Color(0xFF1E293B) : AppColors.white;
@@ -30,36 +32,20 @@ class PropertyEnquiryScreen extends StatelessWidget {
     isDark ? Colors.grey.shade600 : AppColors.border;
 
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: Column(
         children: [
-          const TopHeader(),
+          TopHeader(),
 
-          /// 🔙 BACK HEADER
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: () => Navigator.pop(context),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.arrow_back,
-                    color: AppColors.propertyAccent,
-                  ),
-                  SizedBox(width: w * 0.02),
-                  Text(
-                    loc.back,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.propertyAccent,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          SizedBox(height: w * 0.05),
+
+          /// 🔙 Back Bar (ACCENT COLOR)
+          AppBackButton(
+            width: w,
+            color: AppColors.primary ,
+            text: loc.back,
           ),
+          SizedBox(height: w * 0.05),
 
           /// 📄 FORM
           Expanded(
@@ -69,8 +55,9 @@ class PropertyEnquiryScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildInputField(
-                    title: loc.getByKey('fullName'),
-                    hintText: loc.getByKey('fullNameHint'),
+                    context: context,
+                    title: loc.getByKey('full Name'),
+                    hintText: loc.getByKey('full Name Hint'),
                     keyboardType: TextInputType.name,
                     maxLines: 1,
                     cardColor: cardColor,
@@ -80,7 +67,8 @@ class PropertyEnquiryScreen extends StatelessWidget {
                   SizedBox(height: w * 0.05),
 
                   _buildInputField(
-                    title: loc.getByKey('phoneNumber'),
+                    context: context,
+                    title: loc.getByKey('phone Number'),
                     hintText: '+91-XXXXXXXXXX',
                     keyboardType: TextInputType.phone,
                     maxLines: 1,
@@ -91,6 +79,7 @@ class PropertyEnquiryScreen extends StatelessWidget {
                   SizedBox(height: w * 0.05),
 
                   _buildInputField(
+                    context: context,
                     title: loc.description,
                     hintText: loc.descriptionHint,
                     keyboardType: TextInputType.multiline,
@@ -108,28 +97,30 @@ class PropertyEnquiryScreen extends StatelessWidget {
                     textColor,
                     subTextColor,
                   ),
-                  SizedBox(height: w * 0.1),
+                  SizedBox(height: w * 0.012),
 
-                  /// 🚀 SEND BUTTON
+                  /// 🚀 SEND BUTTON (ACCENT COLOR)
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.propertyAccent,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () {
-                        debugPrint("Enquiry Sent for $propertyTitle");
+                        debugPrint(
+                          "Enquiry Sent for $propertyTitle to $contactName",
+                        );
                       },
                       child: Text(
                         loc.getByKey('enquireNow'),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.white,
                         ),
                       ),
                     ),
@@ -145,6 +136,7 @@ class PropertyEnquiryScreen extends StatelessWidget {
 
   /// 🔹 INPUT FIELD
   Widget _buildInputField({
+    required BuildContext context,
     required String title,
     required String hintText,
     required TextInputType keyboardType,
@@ -183,8 +175,10 @@ class PropertyEnquiryScreen extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide:
-              const BorderSide(color: AppColors.primary, width: 2),
+              borderSide: const BorderSide(
+                color: AppColors.propertyAccent,
+                width: 2,
+              ),
             ),
           ),
         ),

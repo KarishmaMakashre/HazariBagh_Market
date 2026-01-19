@@ -1,329 +1,356 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hazari_bagh_market/Vendor/vendor Screens/vendor_dashboard_home_screen.dart';
-import '../../../colors/AppColors.dart';
-import '../flash_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../Vendor/vendor Screens/auth/vendor_doc_bank_screen.dart';
+import '../../../Vendor/vendorColors/AppColors.dart';
+
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  State<RegistrationScreen> createState() => _VendorRegisterScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _VendorRegisterScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String? selectedGender;
-  bool agree = false;
+  final ownerCtrl = TextEditingController();
+  final emailCtrl = TextEditingController();
+  final mobileCtrl = TextEditingController();
+  final shopNameCtrl = TextEditingController();
+  final shopDescCtrl = TextEditingController();
 
-  final TextEditingController fullName = TextEditingController();
-  final TextEditingController email = TextEditingController();
-  final TextEditingController phone = TextEditingController();
-  final TextEditingController address = TextEditingController();
+  final streetCtrl = TextEditingController();
+  final cityCtrl = TextEditingController();
+  final stateCtrl = TextEditingController();
+  final pincodeCtrl = TextEditingController();
+  final landmarkCtrl = TextEditingController();
+
+  String? category;
+  String? storeType;
+  File? vendorPhoto;
+
+  final picker = ImagePicker();
+
+  /* ================= IMAGE PICKER ================= */
+
+  Future<void> _pickImage() async {
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
+    if (picked != null) {
+      setState(() => vendorPhoto = File(picked.path));
+    }
+  }
+
+  /* ================= VALIDATORS ================= */
+
+  String? _required(String? v) =>
+      v == null || v.trim().isEmpty ? "Required" : null;
+
+  String? _validateName(String? v) {
+    if (v == null || v.isEmpty) return "Required";
+    if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(v)) {
+      return "Only alphabets allowed";
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? v) {
+    if (v == null || v.isEmpty) return "Email required";
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v)) {
+      return "Enter valid email";
+    }
+    return null;
+  }
+
+  String? _validateMobile(String? v) {
+    if (v == null || v.isEmpty) return "Mobile required";
+    if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
+      return "Enter 10 digit mobile";
+    }
+    return null;
+  }
+
+  String? _validatePincode(String? v) {
+    if (v == null || v.isEmpty) return "Pincode required";
+    if (!RegExp(r'^[0-9]{6}$').hasMatch(v)) {
+      return "Enter valid 6 digit pincode";
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+    final primary = Theme.of(context).colorScheme.primary;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const FlashScreen()),
-              (route) => false,
-        );
-        return false;
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            /// BACKGROUND
-            Container(
-              height: h,
-              width: w,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/loginbg.png"),
-                  fit: BoxFit.cover,
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Registration"),
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+      ),
+      backgroundColor: AppColors.lightBg,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(w * 0.05),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+
+              /// 🔢 STEP INDICATOR
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _StepCircle(text: "1", active: true, color: primary),
+                  const _StepLine(),
+                  _StepCircle(text: "2", active: false, color: primary),
+                ],
               ),
-            ),
 
-            Container(color: Colors.black.withOpacity(0.65)),
+              const SizedBox(height: 28),
 
-            /// CONTENT
-            SafeArea(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: w * 0.07),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(height: h * 0.05),
-
-                      /// LOGO
-                      _logo(w),
-
-                      SizedBox(height: h * 0.02),
-
-                      Text(
-                        "Create Profile",
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: w * 0.055,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-
-                      SizedBox(height: h * 0.025),
-
-                      /// GOOGLE LOGIN
-                      SizedBox(
-                        width: double.infinity,
-                        height: h * 0.055,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                          ),
-                          icon: Image.asset(
-                            "assets/Icons/google.png",
-                            height: h * 0.025,
-                          ),
-                          label: Text(
-                            "Sign in with Google",
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: w * 0.04,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                const VendorDashboardHomeScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      SizedBox(height: h * 0.02),
-
-                      _orDivider(w),
-
-                      SizedBox(height: h * 0.02),
-
-                      _textField(
-                        "Full Name",
-                        Icons.person,
-                        fullName,
-                        TextInputType.name,
-                            (v) => v!.isEmpty ? "Enter full name" : null,
-                        h,
-                        w,
-                      ),
-
-                      _textField(
-                        "Email Address",
-                        Icons.email,
-                        email,
-                        TextInputType.emailAddress,
-                            (v) =>
-                        !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v!)
-                            ? "Invalid email"
-                            : null,
-                        h,
-                        w,
-                      ),
-
-                      _textField(
-                        "Phone Number",
-                        Icons.phone,
-                        phone,
-                        TextInputType.phone,
-                            (v) =>
-                        v!.length != 10 ? "Enter valid mobile" : null,
-                        h,
-                        w,
-                        maxLength: 10,
-                      ),
-
-                      /// GENDER
-                      Container(
-                        height: h * 0.055,
-                        padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-                        decoration: _boxDecoration(),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: selectedGender,
-                            hint: const Text("Gender"),
-                            items: ["Male", "Female", "Other"]
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(e),
-                              ),
-                            )
-                                .toList(),
-                            onChanged: (val) =>
-                                setState(() => selectedGender = val),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: h * 0.015),
-
-                      _textField(
-                        "Home Address",
-                        Icons.location_on,
-                        address,
-                        TextInputType.text,
-                            (v) => v!.isEmpty ? "Enter address" : null,
-                        h,
-                        w,
-                      ),
-
-                      /// TERMS
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: agree,
-                            onChanged: (v) => setState(() => agree = v!),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "I agree with Terms and Conditions",
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: w * 0.03,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: h * 0.015),
-
-                      /// REGISTER BUTTON
-                      SizedBox(
-                        width: double.infinity,
-                        height: h * 0.055,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                          ),
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) return;
-
-                            if (selectedGender == null) {
-                              _snack("Select gender");
-                              return;
-                            }
-
-                            if (!agree) {
-                              _snack("Accept terms & conditions");
-                              return;
-                            }
-
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (_) =>
-                            //     const VendorActivationScreen(),
-                            //   ),
-                            // );
-                          },
-                          child: Text(
-                            "Register & Continue",
-                            style: GoogleFonts.poppins(
-                              fontSize: w * 0.04,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: h * 0.03),
-                    ],
+              /// 📸 PHOTO PICKER
+              GestureDetector(
+                onTap: _pickImage,
+                child: CircleAvatar(
+                  radius: 58,
+                  backgroundColor: primary,
+                  child: CircleAvatar(
+                    radius: 54,
+                    backgroundColor: Colors.white,
+                    backgroundImage:
+                    vendorPhoto != null ? FileImage(vendorPhoto!) : null,
+                    child: vendorPhoto == null
+                        ? Icon(Icons.camera_alt, size: 34, color: primary)
+                        : null,
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  /// HELPERS --------------------------------------------------
+              const SizedBox(height: 25),
 
-  Widget _logo(double w) {
-    return ClipOval(
-      child: Image.asset(
-        "assets/images/logo.png",
-        height: w * 0.25,
-        width: w * 0.25,
-      ),
-    );
-  }
+              _input(ownerCtrl, "Owner Name", Icons.person, primary,
+                  validator: _validateName),
 
-  Widget _orDivider(double w) {
-    return Row(
-      children: [
-        const Expanded(child: Divider(color: Colors.white30)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            "OR",
-            style: GoogleFonts.poppins(color: Colors.white70),
+              _input(emailCtrl, "Email", Icons.email, primary,
+                  keyboard: TextInputType.emailAddress,
+                  validator: _validateEmail),
+
+              _input(mobileCtrl, "Mobile Number", Icons.phone, primary,
+                  keyboard: TextInputType.number,
+                  maxLength: 10,
+                  formatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: _validateMobile),
+
+              _input(shopNameCtrl, "Shop Name", Icons.store, primary,
+                  validator: _required),
+
+              _input(shopDescCtrl, "Shop Description", Icons.description,
+                  primary,
+                  maxLines: 3,
+                  validator: _required),
+
+              _dropdown(
+                label: "Category",
+                value: category,
+                items: const ["Retail", "Food", "Electronics", "Services"],
+                onChanged: (v) => setState(() => category = v),
+              ),
+
+              _dropdown(
+                label: "Store Type",
+                value: storeType,
+                items: const ["Fashion", "Grocery"],
+                onChanged: (v) => setState(() => storeType = v),
+              ),
+
+              /// 📍 ADDRESS
+              _input(streetCtrl, "Street / Area", Icons.location_on, primary,
+                  validator: _required),
+
+              _input(cityCtrl, "City", Icons.location_city, primary,
+                  validator: _validateName),
+
+              _input(stateCtrl, "State", Icons.map, primary,
+                  validator: _validateName),
+
+              _input(pincodeCtrl, "Pincode", Icons.pin, primary,
+                  keyboard: TextInputType.number,
+                  maxLength: 6,
+                  formatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: _validatePincode),
+
+              _input(landmarkCtrl, "Landmark (Optional)", Icons.place, primary,
+                  validator: (_) => null),
+
+              const SizedBox(height: 30),
+
+              /// ▶ CONTINUE BUTTON
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (category == null ||
+                          storeType == null ||
+                          vendorPhoto == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Select category, store type & photo"),
+                          ),
+                        );
+                        return;
+                      }
+
+                      await Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                          const VendorDocBankScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(-1.0, 0.0); // 👈 from LEFT
+                            const end = Offset.zero;        // 🎯 to CENTER
+                            const curve = Curves.easeInOut;
+
+                            final tween =
+                            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+
+                    }
+                  },
+                  child: const Text(
+                    "Continue",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        const Expanded(child: Divider(color: Colors.white30)),
-      ],
+      ),
     );
   }
 
-  Widget _textField(
-      String hint,
+  /// 🔹 INPUT FIELD
+  Widget _input(
+      TextEditingController ctrl,
+      String label,
       IconData icon,
-      TextEditingController controller,
-      TextInputType type,
-      String? Function(String?) validator,
-      double h,
-      double w, {
+      Color primary, {
+        int maxLines = 1,
         int? maxLength,
+        TextInputType keyboard = TextInputType.text,
+        List<TextInputFormatter>? formatters,
+        String? Function(String?)? validator,
       }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: _boxDecoration(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
-        controller: controller,
-        keyboardType: type,
+        controller: ctrl,
+        maxLines: maxLines,
         maxLength: maxLength,
+        keyboardType: keyboard,
+        inputFormatters: formatters,
         validator: validator,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon),
-          hintText: hint,
           counterText: "",
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: h * 0.017),
+          labelText: label,
+          prefixIcon: Icon(icon, color: primary),
+          filled: true,
+          fillColor: AppColors.fieldBg,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
   }
 
-  BoxDecoration _boxDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(6),
+  /// 🔹 DROPDOWN
+  Widget _dropdown({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: DropdownButtonFormField<String>(
+        value: value,
+        items: items
+            .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+            .toList(),
+        onChanged: onChanged,
+        validator: (v) => v == null ? "Select $label" : null,
+        decoration: InputDecoration(
+          labelText: label,
+          filled: true,
+          fillColor: AppColors.fieldBg,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
     );
   }
+}
 
-  void _snack(String msg) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+/// 🔢 STEP CIRCLE
+class _StepCircle extends StatelessWidget {
+  final String text;
+  final bool active;
+  final Color color;
+
+  const _StepCircle(
+      {required this.text, required this.active, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 18,
+      backgroundColor: active ? color : Colors.grey.shade300,
+      child: Text(
+        text,
+        style: TextStyle(
+            color: active ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+}
+
+class _StepLine extends StatelessWidget {
+  const _StepLine();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(width: 60, height: 2, color: Colors.grey.shade400);
   }
 }

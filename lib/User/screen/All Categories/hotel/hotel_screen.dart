@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/hotel_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 import 'hotel_category_card.dart';
+import '../../../../colors/AppColors.dart';
 
 class HotelScreen extends StatelessWidget {
   const HotelScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    /// 🔑 PROVIDER
     final hotelProvider = context.watch<HotelProvider>();
     final w = MediaQuery.of(context).size.width;
     final loc = AppLocalizations.of(context);
 
-    /// 🎨 THEME
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
     return Scaffold(
-      backgroundColor: colors.surface,
+      backgroundColor: Color(0xffF6F6F6FF),
 
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,44 +26,25 @@ class HotelScreen extends StatelessWidget {
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          /// 🔙 BACK BUTTON
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  borderRadius: BorderRadius.circular(8),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.arrow_back,
-                        color: colors.primary,
-                      ),
-                      SizedBox(width: w * 0.02),
-                      Text(
-                        loc.back,
-                        style: TextStyle(
-                          color: colors.primary,
-                          fontSize: w * 0.045,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 2),
+
+          /// 🔙 BACK BUTTON (PRIMARY COLOR)
+          AppBackButton(
+            width: w,
+            color: AppColors.primary, // ✅ main blue
+            text: loc.back,
           ),
+
+          // const SizedBox(height: 2),
 
           /// 🏨 HOTEL CATEGORIES GRID
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(w * 0.04),
               child: hotelProvider.isLoading
-                  ? Center(
+                  ? const Center(
                 child: CircularProgressIndicator(
-                  color: colors.primary,
+                  color: AppColors.primaryDark, // ✅ dark blue loader
                 ),
               )
                   : GridView.builder(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../Model/home_model.dart';
 import '../../../../Model/property_model.dart';
+import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/property_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 import 'property_enquiry_screen.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
@@ -31,38 +34,20 @@ class PropertyDetailsScreen extends StatelessWidget {
     final h = size.height;
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: Column(
         children: [
           /// 🔝 TOP HEADER
-          const TopHeader(),
+          TopHeader(),
+          SizedBox(height: h * 0.015),
 
-          /// 🔙 BACK BUTTON
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: w * 0.04,
-              vertical: h * 0.012,
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: () => Navigator.pop(context),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(Icons.arrow_back,
-                      color: theme.colorScheme.primary),
-                  SizedBox(width: w * 0.02),
-                  Text(
-                    loc.back,
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          /// 🔙 Back Bar
+          AppBackButton(
+            width: w,
+            color: AppColors.primary,
+            text: loc.back,
           ),
+          SizedBox(height: h * 0.015),
 
           /// BODY
           Expanded(
@@ -230,9 +215,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          icon: const Icon(Icons.call),
+                          icon: const Icon(Icons.call,color: AppColors.white,),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: AppColors.primary,
                             padding: EdgeInsets.symmetric(
                                 vertical: h * 0.018),
                             shape: RoundedRectangleBorder(
@@ -240,7 +225,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {},
-                          label: Text(loc.getByKey('callNow')),
+                          label: Text(loc.getByKey('call Now'), style: TextStyle(color: Colors.white),),
                         ),
                       ),
                       SizedBox(width: w * 0.03),
@@ -332,7 +317,7 @@ class PropertyDetailsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: theme.colorScheme.primary),
+          Icon(icon, size: 16, color: AppColors.primary),
           const SizedBox(width: 10),
           Expanded(
             child: Text(text, style: theme.textTheme.bodyMedium),

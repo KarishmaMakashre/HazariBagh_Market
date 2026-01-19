@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/widgets/top_header.dart';
-
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import '../../../../Model/service_model.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 
 class ServiceListScreen extends StatelessWidget {
   final ServiceModel service;
   const ServiceListScreen({super.key, required this.service});
 
-  static const Color primaryColor = Color(0xFF9C89B8);
 
   @override
   Widget build(BuildContext context) {
@@ -24,38 +24,18 @@ class ServiceListScreen extends StatelessWidget {
         child: Column(
           children: [
 
-            const TopHeader(),
+            TopHeader(
+),
 
-            /// 🔙 HEADER
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
-              child: InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.arrow_back,
-                      color: primaryColor,
-                      size: w * 0.06,
-                    ),
-                    SizedBox(width: w * 0.02),
+            const SizedBox(height: 10),
 
-                    Expanded(
-                      child: Text(
-                        loc.getByKey(service.title),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: w * 0.045,
-                          fontWeight: FontWeight.w600,
-                          color: colors.onSurface,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            /// 🔙 Back Bar
+            AppBackButton(
+              width: w,
+              color: AppColors.primary,
+              text: loc.back,
             ),
+            const SizedBox(height: 4),
 
             /// 📄 CARD CONTENT
             Expanded(
@@ -109,7 +89,7 @@ class ServiceListScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: primaryColor,
+                          color: AppColors.primary,
                         ),
                       ),
 
@@ -138,7 +118,7 @@ class ServiceListScreen extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryColor,
+                                backgroundColor: AppColors.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

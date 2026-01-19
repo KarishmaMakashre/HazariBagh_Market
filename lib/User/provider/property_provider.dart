@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../Model/property_model.dart';
 
 class PropertyProvider extends ChangeNotifier {
   bool _isLoading = false;
 
-  String selectedType = "All";
-  String selectedCategory = "All";
+  String selectedType = "all";
+  String selectedCategory = "all";
 
   PropertyModel? _selectedProperty;
 
@@ -61,13 +60,13 @@ class PropertyProvider extends ChangeNotifier {
     ),
   ];
 
-  /// 🔍 FILTERED PROPERTIES
+  /// 🔍 FILTER LOGIC
   List<PropertyModel> get filteredProperties {
     return _allProperties.where((p) {
       final typeMatch =
-          selectedType == "All" || p.type == selectedType;
+          selectedType == "all" || p.type == selectedType;
       final categoryMatch =
-          selectedCategory == "All" || p.category == selectedCategory;
+          selectedCategory == "all" || p.category == selectedCategory;
       return typeMatch && categoryMatch;
     }).toList();
   }

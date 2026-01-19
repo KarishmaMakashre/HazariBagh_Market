@@ -67,15 +67,8 @@ class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
     final provider = context.read<ProductProvider>();
 
     return Scaffold(
+      appBar: const VendorTopHeader(),
 
-      appBar: VendorTopHeader(
-        onNotificationTap: () {
-          // notification screen open
-        },
-        onProfileTap: () {
-          // profile screen open
-        },
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.05),
         child: Form(

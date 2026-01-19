@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hazari_bagh_market/User/screen/categories/payment_method_screen.dart';
-
-import '../../../widgets/top_header.dart';
-
+import '../../../colors/AppColors.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../widgets/app_back_button.dart';
+import '../../widgets/top_header.dart';
 
 class ProceedToCheckoutScreen extends StatefulWidget {
   const ProceedToCheckoutScreen({super.key});
@@ -19,110 +20,94 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
+    final w = mq.width;
+    final h = mq.height;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TopHeader(),
+            /// 🔝 TOP HEADER (NO EXTRA PADDING)
+            TopHeader(),
 
-            SizedBox(height: mq.height * 0.005),
 
-            // 🔙 BACK + TITLE
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: mq.width * 0.04,
-                vertical: mq.height * 0.01,
-              ),
-              child: InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.arrow_back,
-                      color: const Color(0xFF3670A3),
-                      size: mq.width * 0.06,
-                    ),
-                    SizedBox(width: mq.width * 0.02),
-                    Text(
-                      "Delivery Details",
-                      style: GoogleFonts.inter(
-                        fontSize: mq.width * 0.045,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF3670A3),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            SizedBox(height: h * 0.01),
+
+            /// 🔙 BACK BUTTON
+            AppBackButton(
+              width: w,
+              color: AppColors.black,
+              text: loc.back,
             ),
 
-            SizedBox(height: mq.height * 0.02),
+            SizedBox(height: h * 0.02),
 
-            // 🏠 HOME DELIVERY
+            /// 🏠 HOME DELIVERY
             Padding(
-              padding: EdgeInsets.all(mq.width * 0.02),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: GestureDetector(
                 onTap: () => setState(() => isHomeDelivery = true),
                 child: deliveryOption(
                   mq: mq,
                   title: "Home Delivery",
-                  subtitle: "Get it Delivered To Your Doorstep",
+                  subtitle: "Get it delivered to your doorstep",
                   isSelected: isHomeDelivery,
                 ),
               ),
             ),
 
-            // 🏪 STORE PICKUP
+            SizedBox(height: h * 0.015),
+
+            /// 🏪 STORE PICKUP
             Padding(
-              padding: EdgeInsets.all(mq.width * 0.02),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: GestureDetector(
                 onTap: () => setState(() => isHomeDelivery = false),
                 child: deliveryOption(
                   mq: mq,
                   title: "Store Pickup",
-                  subtitle: "Collect From Store - No Delivery Fee",
+                  subtitle: "Collect from store (No delivery fee)",
                   isSelected: !isHomeDelivery,
                 ),
               ),
             ),
 
-            SizedBox(height: mq.height * 0.02),
+            SizedBox(height: h * 0.03),
 
-            // 📍 DELIVERY ADDRESS
-            Text(
-              "Delivery Address",
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.bold,
-                fontSize: mq.width * 0.045,
-                color: const Color(0xFF3670A3),
+            /// 📍 DELIVERY ADDRESS
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              child: Text(
+                "Delivery Address",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.bold,
+                  fontSize: w * 0.045,
+                  color: AppColors.primary,
+                ),
               ),
             ),
 
-            SizedBox(height: mq.height * 0.01),
+            SizedBox(height: h * 0.01),
 
             Padding(
-              padding: EdgeInsets.all(mq.width * 0.03),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: mq.width * 0.03,
-                  vertical: mq.height * 0.01,
-                ),
+                padding: EdgeInsets.all(w * 0.035),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(mq.width * 0.02),
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: TextField(
                   maxLines: 3,
-                  style: GoogleFonts.inter(
-                    fontSize: mq.width * 0.04,
-                  ),
+                  style: GoogleFonts.inter(fontSize: w * 0.04),
                   decoration: InputDecoration(
-                    hintText: "Enter Your Complete Delivery Address...",
+                    hintText: "Enter your complete delivery address",
                     hintStyle: GoogleFonts.inter(
-                      fontSize: mq.width * 0.038,
+                      fontSize: w * 0.038,
                       color: Colors.grey,
                     ),
                     border: InputBorder.none,
@@ -131,25 +116,25 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
               ),
             ),
 
-            SizedBox(height: mq.height * 0.02),
+            SizedBox(height: h * 0.03),
 
-            // 🔘 BUTTONS
+            /// 🔘 ACTION BUTTONS
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: mq.width * 0.04),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
               child: Row(
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: mq.height * 0.055,
+                      height: h * 0.055,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.grey.shade300,
                         ),
                         onPressed: () => Navigator.pop(context),
                         child: Text(
                           "Back To Cart",
                           style: GoogleFonts.inter(
-                            fontSize: mq.width * 0.04,
+                            fontSize: w * 0.04,
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
                           ),
@@ -157,13 +142,13 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: mq.width * 0.03),
+                  SizedBox(width: w * 0.03),
                   Expanded(
                     child: SizedBox(
-                      height: mq.height * 0.055,
+                      height: h * 0.055,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3670A3),
+                          backgroundColor: AppColors.primary,
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -178,7 +163,7 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
                           "Continue",
                           style: GoogleFonts.inter(
                             color: Colors.white,
-                            fontSize: mq.width * 0.04,
+                            fontSize: w * 0.04,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -189,14 +174,14 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
               ),
             ),
 
-            SizedBox(height: mq.height * 0.03),
+            SizedBox(height: h * 0.04),
           ],
         ),
       ),
     );
   }
 
-  // 🔶 DELIVERY OPTION TILE
+  /// 🔶 DELIVERY OPTION TILE
   Widget deliveryOption({
     required Size mq,
     required String title,
@@ -204,14 +189,14 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
     required bool isSelected,
   }) {
     return Container(
-      padding: EdgeInsets.all(mq.width * 0.03),
+      padding: EdgeInsets.all(mq.width * 0.035),
       decoration: BoxDecoration(
         color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected ? Colors.green : Colors.grey.shade300,
-          width: mq.width * 0.003,
+          width: 1.5,
         ),
-        borderRadius: BorderRadius.circular(mq.width * 0.03),
       ),
       child: Row(
         children: [
@@ -234,7 +219,7 @@ class _ProceedToCheckoutScreenState extends State<ProceedToCheckoutScreen> {
                     fontSize: mq.width * 0.04,
                   ),
                 ),
-                SizedBox(height: mq.height * 0.005),
+                SizedBox(height: mq.height * 0.004),
                 Text(
                   subtitle,
                   style: GoogleFonts.inter(

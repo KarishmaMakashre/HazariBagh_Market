@@ -26,7 +26,7 @@ class GroceryProvider extends ChangeNotifier {
     GroceryItem(title: "Rice", image: "assets/images/electronics.jpg"),
     // 🔑 Note: Corrected case/spelling for exact matching
     GroceryItem(title: "Wheat", image: "assets/images/flashImg.jpg"),
-    GroceryItem(title: "Oil", image: "assets/images/girl.png"),
+    GroceryItem(title: "Oil", image: "assets/images/oil.jpg"),
     // 🔑 Note: Corrected case/spelling for exact matching
     GroceryItem(title: "Milk", image: "assets/images/grocery.jpg"),
     GroceryItem(title: "Snacks", image: "assets/images/job-seeker.png"),

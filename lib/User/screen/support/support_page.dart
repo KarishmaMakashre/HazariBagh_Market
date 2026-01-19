@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/widgets/top_header.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../widgets/top_header.dart';
 import 'contact_us_screen.dart';
 import 'faq_screen.dart';
 import 'live_chat_screen.dart';
@@ -16,7 +17,6 @@ class SupportPage extends StatefulWidget {
 class _SupportPageState extends State<SupportPage> {
   int selectedIndex = 0;
 
-  static const Color primaryColor = Color(0xFF3670A3);
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +25,12 @@ class _SupportPageState extends State<SupportPage> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TopHeader(),
-
+          TopHeader(),
           SizedBox(height: h * 0.015),
-
           /// 🔵 SUPPORT TABS
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -83,7 +81,7 @@ class _SupportPageState extends State<SupportPage> {
           vertical: h * 0.012,
         ),
         decoration: BoxDecoration(
-          color: isSelected ? primaryColor : Colors.white,
+          color: isSelected ? AppColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(w * 0.03),
           boxShadow: isSelected
               ? []

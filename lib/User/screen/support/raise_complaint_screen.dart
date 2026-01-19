@@ -16,7 +16,7 @@ class RaiseComplaintScreen extends StatelessWidget {
     final h = size.height;
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: SingleChildScrollView(
         child: Center(
           child: Container(

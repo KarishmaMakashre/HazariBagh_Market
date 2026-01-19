@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import 'package:provider/provider.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/food_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 import 'restaurant_card.dart';
 
 class FoodHomeScreen extends StatelessWidget {
@@ -31,7 +33,9 @@ class FoodHomeScreen extends StatelessWidget {
       body: Column(
         children: [
           /// 🔝 TOP HEADER
-          const TopHeader(),
+          TopHeader(
+),
+
           SizedBox(height: h * 0.004),
 
           Expanded(
@@ -39,37 +43,15 @@ class FoodHomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: h * 0.015),
+                  SizedBox(height: h * 0.011),
 
-                  /// 🔙 BACK
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          borderRadius: BorderRadius.circular(8),
-                          child: Row(
-                            children: [
-                              Icon(Icons.arrow_back,
-                                  color: backIconColor),
-                              SizedBox(width: w * 0.02),
-                              Text(
-                                loc.back,
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: w * 0.045,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  /// 🔙 Back Bar
+                  AppBackButton(
+                    width: w,
+                    color:AppColors.primary,
+                    text: loc.back,
                   ),
-                  SizedBox(height: h * 0.008),
+                  SizedBox(height: h * 0.011),
 
                   /// 🍔 FOOD DELIVERY BANNER
                   Padding(
@@ -78,14 +60,14 @@ class FoodHomeScreen extends StatelessWidget {
                       width: double.infinity,
                       padding: EdgeInsets.all(w * 0.05),
                       decoration: BoxDecoration(
-                        color: bannerBlue,
+                        color: AppColors.primary,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            loc.getByKey('foodDelivery'),
+                            loc.getByKey('food Delivery'),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: w * 0.055,
@@ -94,7 +76,7 @@ class FoodHomeScreen extends StatelessWidget {
                           ),
                           SizedBox(height: h * 0.008),
                           Text(
-                            loc.getByKey('foodDeliverySubtitle'),
+                            loc.getByKey('food Delivery Subtitle'),
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: w * 0.036,

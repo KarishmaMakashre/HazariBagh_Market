@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_add_product_screen.dart';
 import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_reports_screen.dart';
-import '../../widgets/top_header.dart';
 import '../widget/vendor_bottom_Nav.dart';
 import '../widget/vendor_top_header.dart';
 import 'Home/vendor_dashboard_screen.dart';
@@ -45,6 +44,7 @@ class _VendorDashboardHomeScreenState
         children: [
           /// 🔝 COMMON HEADER
           const VendorTopHeader(),
+
 
           /// 📱 SCREEN CONTENT
           Expanded(

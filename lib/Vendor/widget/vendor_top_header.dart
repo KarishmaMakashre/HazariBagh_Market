@@ -14,7 +14,7 @@ class VendorTopHeader extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary; // 🔥 SAME AS BOTTOM NAV
+    final primary = theme.colorScheme.primary;
 
     return AppBar(
       elevation: 0,
@@ -26,7 +26,7 @@ class VendorTopHeader extends StatelessWidget
 
 
       title: Image.asset(
-        'assets/images/logo.png',
+        'assets/images/HazariBaghLogo.jpeg',
         height: 32,
 
       ),

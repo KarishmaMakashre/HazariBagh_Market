@@ -13,6 +13,7 @@ import 'User/provider/hotel_provider.dart';
 import 'User/provider/jobs_services_provider.dart';
 import 'User/provider/language_provider.dart';
 import 'User/provider/payment_provider.dart';
+import 'User/provider/profile_provider.dart';
 import 'User/provider/property_provider.dart';
 import 'User/provider/store_provider.dart';
 import 'User/provider/support_provider.dart';
@@ -52,6 +53,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => VendorProfileProvider()),
         ChangeNotifierProvider(create: (_) => VendorReportsProvider()),
         ChangeNotifierProvider(create: (_) => VendorBottomNavProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: const MyApp(),
     ),

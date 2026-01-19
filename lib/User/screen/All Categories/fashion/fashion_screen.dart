@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/User/screen/All%20Categories/fashion/service_detail_screen.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import 'package:provider/provider.dart';
-import 'package:hazari_bagh_market/widgets/top_header.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../provider/fashion_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class FashionScreen extends StatefulWidget {
   const FashionScreen({super.key});
@@ -15,7 +17,6 @@ class FashionScreen extends StatefulWidget {
 class _FashionScreenState extends State<FashionScreen>
     with SingleTickerProviderStateMixin {
   /// PRIMARY THEME COLOR
-  static const Color themeColor = Color(0xFF9C89B8);
 
   String selectedCategoryId = "mens";
 
@@ -77,7 +78,9 @@ class _FashionScreenState extends State<FashionScreen>
       body: SafeArea(
         child: Column(
           children: [
-            const TopHeader(),
+            TopHeader(
+),
+
 
             Expanded(
               child: FadeTransition(
@@ -91,28 +94,14 @@ class _FashionScreenState extends State<FashionScreen>
                       children: [
                         SizedBox(height: h * 0.01),
 
-                        /// 🔙 BACK
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                          child: InkWell(
-                            onTap: () => Navigator.pop(context),
-                            child: Row(
-                              children: [
-                                Icon(Icons.arrow_back,
-                                    color: themeColor, size: w * 0.06),
-                                SizedBox(width: w * 0.02),
-                                Text(
-                                  loc.back,
-                                  style: TextStyle(
-                                    fontSize: w * 0.045,
-                                    fontWeight: FontWeight.w600,
-                                    color: themeColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+
+                        /// 🔙 Back Bar
+                        AppBackButton(
+                          width: w,
+                          color:AppColors.primary,
+                          text: loc.back,
                         ),
+                        SizedBox(height: h * 0.011),
 
                         /// 🔵 BANNER
                         Padding(
@@ -122,7 +111,7 @@ class _FashionScreenState extends State<FashionScreen>
                             padding: EdgeInsets.symmetric(
                                 horizontal: w * 0.05, vertical: h * 0.025),
                             decoration: BoxDecoration(
-                              color: themeColor,
+                              color: AppColors.primary,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
@@ -177,7 +166,7 @@ class _FashionScreenState extends State<FashionScreen>
                                       BorderRadius.circular(14),
                                       border: Border.all(
                                         color: isSelected
-                                            ? themeColor
+                                            ? AppColors.primary
                                             : Colors.transparent,
                                         width: 2,
                                       ),
@@ -313,7 +302,7 @@ class _FashionScreenState extends State<FashionScreen>
                                                 fontSize: w * 0.028,
                                                 fontWeight:
                                                 FontWeight.w600,
-                                                color: themeColor,
+                                                color: AppColors.primary,
                                               ),
                                             ),
                                           ),
@@ -344,7 +333,7 @@ class _FashionScreenState extends State<FashionScreen>
       child: Text(
         title,
         style: TextStyle(
-          color: themeColor,
+          color: AppColors.primary,
           fontSize: w * 0.045,
           fontWeight: FontWeight.bold,
         ),

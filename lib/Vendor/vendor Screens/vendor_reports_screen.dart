@@ -29,14 +29,6 @@ class VendorReportsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: VendorTopHeader(
-        onNotificationTap: () {
-          // notification screen open
-        },
-        onProfileTap: () {
-          // profile screen open
-        },
-      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(w * 0.045),

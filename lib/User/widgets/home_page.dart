@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/widgets/user_bottom_nav.dart';
+import 'package:hazari_bagh_market/User/widgets/user_bottom_nav.dart';
 import 'package:provider/provider.dart';
-import '../User/provider/bottom_nav_provider.dart';
-import '../User/screen/categories/categories_page.dart';
-import '../User/screen/home/home_screen.dart';
-import '../User/screen/orders/orders_page.dart';
-import '../User/screen/support/support_page.dart';
-
+import '../provider/bottom_nav_provider.dart';
+import '../screen/categories/categories_page.dart';
+import '../screen/home/home_screen.dart';
+import '../screen/orders/orders_page.dart';
+import '../screen/support/support_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,11 +22,18 @@ class HomePage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.white,
+
+      /// ⭐ VERY IMPORTANT FOR NOTCH BAR
+      extendBody: true,
+
       body: IndexedStack(
         index: nav.currentIndex,
         children: pages,
       ),
+
       bottomNavigationBar: const UserBottomNav(),
     );
   }
 }
+

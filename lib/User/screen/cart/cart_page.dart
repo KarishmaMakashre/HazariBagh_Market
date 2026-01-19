@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/User/widgets/home_page.dart';
 import 'package:provider/provider.dart';
-import 'package:hazari_bagh_market/widgets/top_header.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../provider/cart_provider.dart';
+import '../../widgets/top_header.dart';
 import '../categories/payment_method_screen.dart';
 import '../home/home_screen.dart';
 
@@ -17,12 +18,14 @@ class CartScreen extends StatelessWidget {
     final colors = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: Consumer<CartProvider>(
         builder: (context, cart, child) {
           return Column(
             children: [
-              const TopHeader(),
+              TopHeader(
+),
+
 
               /// 🛒 EMPTY CART UI
               if (cart.cartItems.isEmpty)
@@ -79,7 +82,7 @@ class CartScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
-                                    const HomeScreen(),
+                                    const HomePage(),
                                   ),
                                 );
                               },

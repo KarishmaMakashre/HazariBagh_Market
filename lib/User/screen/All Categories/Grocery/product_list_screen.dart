@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../Model/home_model.dart';
 import '../../../../Model/product_model.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/grocery_provider.dart';
 import '../../../provider/cart_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class ProductListScreen extends StatelessWidget {
   /// 🔑 ALWAYS ENGLISH KEY (used for filtering)
@@ -32,35 +34,16 @@ class ProductListScreen extends StatelessWidget {
       body: Column(
         children: [
           /// 🔝 TOP HEADER
-          const TopHeader(),
+          TopHeader(
+          ),
 
-          /// 🔙 BACK + LOCALIZED TITLE
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 8),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: colors.primary,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                SizedBox(width: w * 0.02),
 
-                /// 📛 CATEGORY TITLE
-                Text(
-                  loc.getByKey(categoryKey.toLowerCase()),
-                  style: TextStyle(
-                    color: colors.primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+          SizedBox(height: w * 0.01),
+          /// 🔙 Back Bar
+          AppBackButton(
+            width: w,
+            color:Colors.black,
+            text: loc.back,
           ),
 
           /// 🧺 PRODUCT LIST

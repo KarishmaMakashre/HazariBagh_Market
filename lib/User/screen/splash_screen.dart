@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/widgets/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../widgets/home_page.dart';
 import 'flash_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,11 +11,20 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat(reverse: true);
+
     _checkLogin();
   }
 
@@ -32,42 +39,58 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (_) =>
-          isLoggedIn ? const HomePage() : const FlashScreen(),
+          isLoggedIn ? const HomePage() : const FoodServiceScreen(),
         ),
       );
     });
   }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget floatingItem({
+    required String imageUrl,
+    required double left,
+    required double top,
+    required double size,
+  }) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, child) {
+        return Positioned(
+          left: left,
+          top: top + (15 * _controller.value),
+          child: Opacity(
+            opacity: 0.9,
+            child: Image.network(
+              imageUrl,
+              width: size,
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
+    final w = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white,
+        child: Stack(
           children: [
-            /// BACKGROUND IMAGE
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/loginbg.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-      
-            /// BLUR + OVERLAY
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: Container(
-                color: Colors.black.withOpacity(0.35),
-              ),
-            ),
-      
-            /// LOGO
+            // 👉 Yaha logo ya floating items add kar sakti ho
             Center(
               child: Image.asset(
-                "assets/images/logo.png",
-                height: 130,
-                width: 130,
+                'assets/images/HazariBaghLogo-removebg.png',
+                width: w * 0.45,
               ),
             ),
           ],
@@ -75,4 +98,5 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
 }

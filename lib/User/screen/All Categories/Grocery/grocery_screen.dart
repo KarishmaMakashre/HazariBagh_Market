@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../Model/grocery_model.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/grocery_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 import 'product_list_screen.dart';
 
 class GroceryScreen extends StatelessWidget {
@@ -88,6 +90,7 @@ class GroceryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context); // ✅ FIXED
     final groceryProvider = context.watch<GroceryProvider>();
     final groceryItems = groceryProvider.groceryItems;
     final isLoading = groceryProvider.isLoading;
@@ -104,39 +107,20 @@ class GroceryScreen extends StatelessWidget {
       body: Column(
         children: [
           /// 🔝 TOP HEADER
-          const TopHeader(),
+          TopHeader(
+          ),
+
 
           SizedBox(height: h * 0.02),
 
-          /// 🔙 BACK BUTTON
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  borderRadius: BorderRadius.circular(8),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.arrow_back,
-                        color: colors.onSurface,
-                      ),
-                      SizedBox(width: w * 0.02),
-                      Text(
-                        "Back",
-                        style: TextStyle(
-                          color: colors.onSurface,
-                          fontSize: w * 0.045,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          /// 🔙 Back Bar
+          AppBackButton(
+            width: w,
+            color: Colors.black,
+            text: loc.back,
           ),
+
+          SizedBox(height: h * 0.011),
 
           /// 🧺 GROCERY GRID
           Expanded(

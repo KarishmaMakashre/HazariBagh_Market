@@ -15,7 +15,7 @@ class ContactUsScreen extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: Color(0xffF6F6F6FF),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.04),
         child: Column(

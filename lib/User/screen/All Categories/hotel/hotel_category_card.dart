@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../Model/hotel_category_model.dart';
+import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
 import 'hotel_product_list_screen.dart';
 
@@ -16,12 +17,15 @@ class HotelCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    /// 🎨 THEME
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final cardColor =
+    isDark ? const Color(0xFF1E293B) : Colors.white;
+    final textColor =
+    isDark ? Colors.white : Colors.black87;
+    final borderColor =
+    isDark ? Colors.white10 : Colors.transparent;
 
     return InkWell(
       borderRadius: BorderRadius.circular(14),
@@ -38,10 +42,10 @@ class HotelCategoryCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: colors.surface,
+          color: cardColor,
           borderRadius: BorderRadius.circular(14),
 
-          /// 🌙 DARK MODE = BORDER | ☀️ LIGHT MODE = SHADOW
+          /// 🌙 DARK = BORDER | ☀️ LIGHT = SHADOW
           boxShadow: isDark
               ? []
               : const [
@@ -51,11 +55,7 @@ class HotelCategoryCard extends StatelessWidget {
               offset: Offset(0, 3),
             ),
           ],
-          border: isDark
-              ? Border.all(
-            color: colors.outline.withOpacity(0.2),
-          )
-              : null,
+          border: Border.all(color: borderColor),
         ),
         child: Column(
           children: [
@@ -74,12 +74,13 @@ class HotelCategoryCard extends StatelessWidget {
               ),
             ),
 
-            /// 📛 LOCALIZED TITLE
+            /// 📛 TITLE
             Expanded(
               flex: 3,
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
                     loc.getByKey(category.title),
                     maxLines: 2,
@@ -88,9 +89,20 @@ class HotelCategoryCard extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: width * 0.032,
                       fontWeight: FontWeight.w600,
-                      color: colors.onSurface,
+                      color: textColor,
                     ),
                   ),
+                ),
+              ),
+            ),
+
+            /// 🔴 ACCENT LINE (OPTIONAL – PREMIUM LOOK)
+            Container(
+              height: 3,
+              decoration: BoxDecoration(
+                // color: AppColors.primary,
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(14),
                 ),
               ),
             ),

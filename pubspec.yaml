@@ -29,6 +29,10 @@ dependencies:
   shared_preferences: ^2.5.4
   fl_chart: ^1.1.1
   image_picker: ^1.2.1
+  video_player: ^2.10.1
+  visibility_detector: ^0.4.0+2
+  animated_notch_bottom_bar: ^1.0.4
+  cuberto_bottom_bar: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -44,3 +48,4 @@ flutter:
   assets:
     - assets/images/
     - assets/Icons/
+    - assets/Videos/shopAds.mp4

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import 'package:provider/provider.dart';
 
 import '../../../provider/cart_provider.dart';
@@ -16,7 +17,6 @@ class AddToCartScreen extends StatelessWidget {
     required this.itemImage,
   });
 
-  static const Color themeColor = Color(0xFFD0B5B5);
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class AddToCartScreen extends StatelessWidget {
               "₹$itemPrice",
               style: TextStyle(
                 fontSize: w * 0.05,
-                color: themeColor,
+                color: AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -130,7 +130,7 @@ class AddToCartScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: themeColor,
+                  backgroundColor: AppColors.primary,
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(w * 0.04),

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-
+import '../../../../Model/home_model.dart';
+import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
-
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class JobApplyFormScreen extends StatelessWidget {
   const JobApplyFormScreen({super.key});
-
-  /// 🎯 PRIMARY COLOR
-  static const Color primaryColor = Color(0xFF84B3B6);
 
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
     final w = mq.width;
     final h = mq.height;
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -28,152 +26,119 @@ class JobApplyFormScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🔵 TOP HEADER
+            /// 🔝 HEADER
             const TopHeader(),
 
+            SizedBox(height: h * 0.01),
+
+            /// 🔙 BACK BUTTON
+            AppBackButton(
+              width: w,
+              color: AppColors.primary,
+              text: loc.back,
+            ),
+
+            SizedBox(height: h * 0.01),
+
+            /// 📄 FORM CARD
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: h * 0.015),
+              padding: EdgeInsets.symmetric(horizontal: w * 0.05),
+              child: Container(
+                padding: EdgeInsets.all(w * 0.05),
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    _textField(
+                      w,
+                      textColor,
+                      hintColor,
+                      "Full Name",
+                      "Enter your name",
+                    ),
+                    _textField(
+                      w,
+                      textColor,
+                      hintColor,
+                      "Phone Number",
+                      "+91-1234567890",
+                      keyboardType: TextInputType.phone,
+                    ),
+                    _textField(
+                      w,
+                      textColor,
+                      hintColor,
+                      "Email",
+                      "your.email@example.com",
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    _textField(
+                      w,
+                      textColor,
+                      hintColor,
+                      "Total Experience",
+                      "e.g. 2 years",
+                      keyboardType: TextInputType.number,
+                    ),
+                    _multiLineField(
+                      w,
+                      textColor,
+                      hintColor,
+                      "Cover Letter / Resume",
+                      "Why are you a good fit for this position?",
+                    ),
 
-                  /// 🔙 BACK & TITLE
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios_new,
-                          color: primaryColor,
-                          size: w * 0.05,
+                    SizedBox(height: h * 0.03),
+
+                    /// 🚀 SUBMIT BUTTON
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        SizedBox(width: w * 0.02),
-                        Text(
-                          loc.getByKey("applyForJob"),
+                        onPressed: () {
+                          debugPrint("Submit Application Clicked");
+                        },
+                        child: const Text(
+                          "Submit Application",
                           style: TextStyle(
-                            color: primaryColor,
-                            fontSize: w * 0.042,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-
-                  SizedBox(height: h * 0.01),
-
-                  /// SUBTITLE
-                  Text(
-                    loc.getByKey("applyJobSubtitle"),
-                    style: TextStyle(
-                      fontSize: w * 0.032,
-                      color: hintColor,
-                    ),
-                  ),
-
-                  SizedBox(height: h * 0.025),
-
-                  /// 📝 FORM CARD
-                  Container(
-                    padding: EdgeInsets.all(w * 0.045),
-                    decoration: BoxDecoration(
-                      color: cardColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _buildTextField(
-                          w,
-                          textColor,
-                          hintColor,
-                          loc.getByKey("fullName"),
-                          loc.getByKey("fullNameHint"),
-                        ),
-                        _buildTextField(
-                          w,
-                          textColor,
-                          hintColor,
-                          loc.getByKey("phoneNumber"),
-                          loc.getByKey("phoneHint"),
-                          keyboardType: TextInputType.phone,
-                        ),
-                        _buildTextField(
-                          w,
-                          textColor,
-                          hintColor,
-                          loc.getByKey("email"),
-                          loc.getByKey("emailHint"),
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        _buildTextField(
-                          w,
-                          textColor,
-                          hintColor,
-                          loc.getByKey("totalExperience"),
-                          loc.getByKey("experienceHint"),
-                        ),
-                        _buildMultiLineField(
-                          w,
-                          textColor,
-                          hintColor,
-                          loc.getByKey("coverLetter"),
-                          loc.getByKey("coverLetterHint"),
-                        ),
-
-                        SizedBox(height: h * 0.02),
-
-                        /// 🚀 SUBMIT BUTTON
-                        SizedBox(
-                          width: double.infinity,
-                          height: h * 0.055,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                              // TODO: submit logic
-                            },
-                            child: Text(
-                              loc.getByKey("submitApplication"),
-                              style: TextStyle(
-                                fontSize: w * 0.04,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: h * 0.04),
-                ],
+                  ],
+                ),
               ),
             ),
+
+            SizedBox(height: h * 0.05),
           ],
         ),
       ),
     );
   }
 
-  /// 🔹 NORMAL TEXT FIELD
-  Widget _buildTextField(
+  /// 🔹 SINGLE LINE FIELD
+  Widget _textField(
       double w,
       Color textColor,
       Color hintColor,
@@ -185,34 +150,30 @@ class JobApplyFormScreen extends StatelessWidget {
       padding: EdgeInsets.only(bottom: w * 0.04),
       child: TextField(
         keyboardType: keyboardType,
-        style: TextStyle(color: textColor, fontSize: w * 0.035),
+        style: TextStyle(color: textColor),
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
-          labelStyle: TextStyle(color: hintColor, fontSize: w * 0.034),
-          hintStyle: TextStyle(color: hintColor, fontSize: w * 0.033),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: w * 0.04,
-            vertical: w * 0.032,
-          ),
-          filled: true,
-          fillColor: Colors.transparent,
+          labelStyle: TextStyle(color: hintColor),
+          hintStyle: TextStyle(color: hintColor),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: hintColor.withOpacity(0.4)),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide:
-            const BorderSide(color: primaryColor, width: 1.5),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 1.5,
+            ),
           ),
         ),
       ),
     );
   }
 
-  /// 🔹 MULTILINE FIELD
-  Widget _buildMultiLineField(
+  /// 🔹 MULTI LINE FIELD
+  Widget _multiLineField(
       double w,
       Color textColor,
       Color hintColor,
@@ -223,23 +184,22 @@ class JobApplyFormScreen extends StatelessWidget {
       padding: EdgeInsets.only(bottom: w * 0.04),
       child: TextField(
         maxLines: 4,
-        style: TextStyle(color: textColor, fontSize: w * 0.035),
+        style: TextStyle(color: textColor),
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
-          labelStyle: TextStyle(color: hintColor, fontSize: w * 0.034),
-          hintStyle: TextStyle(color: hintColor, fontSize: w * 0.033),
-          contentPadding: EdgeInsets.all(w * 0.04),
-          filled: true,
-          fillColor: Colors.transparent,
+          labelStyle: TextStyle(color: hintColor),
+          hintStyle: TextStyle(color: hintColor),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: hintColor.withOpacity(0.4)),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide:
-            const BorderSide(color: primaryColor, width: 1.5),
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
+              color: AppColors.primary,
+              width: 1.5,
+            ),
           ),
         ),
       ),

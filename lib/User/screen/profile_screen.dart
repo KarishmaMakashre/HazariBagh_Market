@@ -2,235 +2,230 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../colors/AppColors.dart';
-import '../../widgets/top_header.dart';
+import '../provider/profile_provider.dart';
 import '../provider/theme_provider.dart';
-import 'All Categories/job/job_details_screen.dart';
+import '../provider/auth_provider.dart';
+import '../widgets/top_header.dart';
+import 'Auth/login_screen.dart';
+import 'edit_profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<ProfileProvider>().fetchProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final themeProvider = context.watch<ThemeProvider>();
-
-    final bgColor = isDark ? AppColors.bgDark : AppColors.white;
-    final cardColor =
-    isDark ? const Color(0xFF1E1E1E) : AppColors.white;
-    final textColor = theme.textTheme.bodyLarge!.color!;
-    final subTextColor =
-    isDark ? Colors.grey.shade400 : Colors.grey;
+    final profileProvider = context.watch<ProfileProvider>();
+    final user = profileProvider.user;
 
     return Scaffold(
-      backgroundColor: bgColor,
-      body: Column(
+      backgroundColor: Colors.grey.shade100,
+      body: profileProvider.loading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         children: [
-          /// 🔝 TOP HEADER
-          const TopHeader(hideProfileIcon: true),
+          const TopHeader(),
 
+          /// 🔙 BACK
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: w * 0.04,
-              vertical: 10,
-            ),
+            padding:
+            EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 10),
             child: InkWell(
-              borderRadius: BorderRadius.circular(8),
               onTap: () => Navigator.pop(context),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.black,
-                    size: w * 0.06,
-                  ),
-                  SizedBox(width: w * 0.02),
+                  const Icon(Icons.arrow_back_ios),
+                  const SizedBox(width: 6),
                   Text(
                     "Back",
                     style: GoogleFonts.poppins(
-                      fontSize: w * 0.045,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
             ),
           ),
 
-          /// 📄 CONTENT
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: w * 0.06),
               child: Column(
                 children: [
-                  SizedBox(height: h * 0.03),
+                  SizedBox(height: h * 0.02),
 
-                  /// 👤 PROFILE IMAGE
-                  CircleAvatar(
-                    radius: w * 0.14,
-                    backgroundColor: isDark
-                        ? Colors.grey.shade700
-                        : Colors.grey.shade300,
-                    child: CircleAvatar(
-                      radius: w * 0.135,
-                      backgroundImage:
-                      const AssetImage("assets/images/girl.jpg"),
+                  /// 👤 PROFILE CARD
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: w * 0.14,
+                          backgroundColor: Colors.grey.shade300,
+                          child: CircleAvatar(
+                            radius: w * 0.135,
+                            backgroundImage: user?.profile != null
+                                ? NetworkImage(user!.profile!)
+                                : const AssetImage(
+                                "assets/images/girl.jpg")
+                            as ImageProvider,
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        /// 🧑 NAME
+                        Text(
+                          user?.name ?? "User",
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        /// 📞 PHONE
+                        Text(
+                          user?.phone ?? "Not available",
+                          style:
+                          const TextStyle(color: Colors.grey),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        /// 🚻 GENDER
+                        Text(
+                          "Gender: ${user?.gender ?? "-"}",
+                          style: const TextStyle(
+                              color: Colors.black54),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        /// 🎂 DOB
+                        Text(
+                          "DOB: ${user?.dob != null ? user!.dob!.split("T").first : "-"}",
+                          style: const TextStyle(
+                              color: Colors.black54),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        /// ✏ EDIT PROFILE
+                        OutlinedButton.icon(
+                          icon: const Icon(Icons.edit),
+                          label: const Text("Edit Profile"),
+                          onPressed: () async {
+                            final updated =
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                const EditProfileScreen(),
+                              ),
+                            );
+
+                            /// 🔄 REFRESH AFTER RETURN
+                            if (updated == true && mounted) {
+                              context
+                                  .read<ProfileProvider>()
+                                  .fetchProfile();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
 
-                  SizedBox(height: h * 0.015),
-
-                  /// 👤 NAME
-                  Text(
-                    "Jonathan Patterson",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: textColor,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  /// 📧 EMAIL
-                  Text(
-                    "hello@reallygreatsite.com",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: subTextColor,
-                    ),
-                  ),
-
-                  SizedBox(height: h * 0.03),
-
-                  /// ✏ EDIT PROFILE
-                  _menuTile(
-                    context: context,
-                    icon: Icons.edit,
-                    iconColor: Colors.green,
-                    title: "Edit Profile",
-                    tileColor: cardColor,
-                    onTap: () {},
-                  ),
-
-                  SizedBox(height: h * 0.025),
-
-                  /// ⚙ GENERAL SETTINGS
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "General Settings",
-                      style: TextStyle(
-                        fontSize: w * 0.045,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: h * 0.015),
+                  const SizedBox(height: 30),
 
                   /// 🌗 DARK MODE
                   _menuTile(
-                    context: context,
                     icon: Icons.dark_mode,
                     iconColor:
                     isDark ? Colors.amber : Colors.black,
                     title: "Dark Mode",
-                    tileColor: cardColor,
                     trailing: Switch.adaptive(
-                      activeColor: AppColors.primary,
                       value: themeProvider.isDarkMode,
                       onChanged: themeProvider.toggleTheme,
                     ),
                   ),
 
-                  _menuTile(
-                    context: context,
-                    icon: Icons.language,
-                    iconColor: Colors.orange,
-                    title: "Language",
-                    tileColor: cardColor,
-                  ),
+                  const SizedBox(height: 25),
 
-                  _menuTile(
-                    context: context,
-                    icon: Icons.settings,
-                    iconColor: Colors.grey,
-                    title: "Settings",
-                    tileColor: cardColor,
-                  ),
+                  /// ⚙ SETTINGS
+                  _settingsTile(Icons.language, "Language"),
+                  _settingsTile(Icons.settings, "Setting"),
+                  _settingsTile(Icons.info_outline, "About"),
+                  _settingsTile(Icons.description_outlined,
+                      "Terms & Conditions"),
+                  _settingsTile(Icons.privacy_tip_outlined,
+                      "Privacy Policy"),
+                  _settingsTile(Icons.star_border, "Rate This App"),
+                  _settingsTile(Icons.share, "Share This App"),
 
-                  _menuTile(
-                    context: context,
-                    icon: Icons.info_outline,
-                    iconColor: Colors.purple,
-                    title: "About",
-                    tileColor: cardColor,
-                  ),
-
-                  _menuTile(
-                    context: context,
-                    icon: Icons.description,
-                    iconColor: Colors.blue,
-                    title: "Terms & Conditions",
-                    tileColor: cardColor,
-                  ),
-
-                  _menuTile(
-                    context: context,
-                    icon: Icons.privacy_tip_outlined,
-                    iconColor: Colors.redAccent,
-                    title: "Privacy Policy",
-                    tileColor: cardColor,
-                  ),
-
-                  _menuTile(
-                    context: context,
-                    icon: Icons.star_rate,
-                    iconColor: Colors.amber,
-                    title: "Rate This App",
-                    tileColor: cardColor,
-                  ),
-
-                  _menuTile(
-                    context: context,
-                    icon: Icons.share,
-                    iconColor: Colors.pink,
-                    title: "Share This App",
-                    tileColor: cardColor,
-                  ),
-
-                  SizedBox(height: h * 0.04),
+                  const SizedBox(height: 30),
 
                   /// 🚪 LOGOUT
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark
-                            ? Colors.grey.shade800
-                            : Colors.grey.shade200,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      icon:
-                      const Icon(Icons.logout, color: Colors.red),
-                      label: const Text(
-                        "Logout",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      onPressed: () {},
-                    ),
+                  _actionButton(
+                    icon: Icons.logout,
+                    title: "Logout",
+                    color: Colors.red,
+                    onTap: () {
+                      context.read<AuthProvider>().logout();
+                      context
+                          .read<ProfileProvider>()
+                          .clearProfile();
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                            const LoginScreen()),
+                            (_) => false,
+                      );
+                    },
                   ),
 
-                  SizedBox(height: h * 0.03),
+                  const SizedBox(height: 14),
+
+                  /// 🗑 DELETE ACCOUNT
+                  _actionButton(
+                    icon: Icons.delete,
+                    title: "Delete Account",
+                    color: Colors.red,
+                    onTap: () =>
+                        _confirmDeleteAccount(context),
+                  ),
+
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -240,22 +235,55 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  /// ♻ MENU TILE
-  static Widget _menuTile({
-    required BuildContext context,
+  /// ⚠ DELETE CONFIRMATION
+  void _confirmDeleteAccount(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Delete Account"),
+        content:
+        const Text("Are you sure? This action cannot be undone."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red),
+            onPressed: () async {
+              Navigator.pop(context);
+              final success = await context
+                  .read<ProfileProvider>()
+                  .deleteAccount();
+
+              if (success && context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const LoginScreen()),
+                      (_) => false,
+                );
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 🌗 MENU TILE
+  Widget _menuTile({
     required IconData icon,
     required Color iconColor,
     required String title,
-    required Color tileColor,
     Widget? trailing,
-    VoidCallback? onTap,
   }) {
-    final textColor = Theme.of(context).textTheme.bodyLarge!.color;
-
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
-        color: tileColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(14),
       ),
       child: ListTile(
@@ -263,13 +291,55 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: iconColor.withOpacity(0.15),
           child: Icon(icon, color: iconColor),
         ),
-        title: Text(
+        title: Text(title),
+        trailing: trailing,
+      ),
+    );
+  }
+
+  /// ⚙ SETTINGS TILE
+  Widget _settingsTile(IconData icon, String title) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.grey.shade700),
+        title: Text(title,
+            style: const TextStyle(
+                fontSize: 15, fontWeight: FontWeight.w500)),
+        trailing:
+        const Icon(Icons.arrow_forward_ios, size: 14),
+      ),
+    );
+  }
+
+  /// 🔴 ACTION BUTTON
+  Widget _actionButton({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: TextButton.icon(
+        icon: Icon(icon, color: color),
+        label: Text(
           title,
-          style: TextStyle(fontSize: 15, color: textColor),
+          style:
+          TextStyle(color: color, fontWeight: FontWeight.w600),
         ),
-        trailing: trailing ??
-            const Icon(Icons.chevron_right, color: Colors.grey),
-        onTap: onTap,
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        onPressed: onTap,
       ),
     );
   }

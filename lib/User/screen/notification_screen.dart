@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../widgets/top_header.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 import '../../l10n/app_localizations.dart';
+import '../widgets/top_header.dart';
 import 'categories/TrackOrderScreen.dart';
 import 'home/home_screen.dart';
 
@@ -21,7 +22,8 @@ class NotificationScreen extends StatelessWidget {
 
       body: Column(
         children: [
-          const TopHeader(),
+           TopHeader(),
+
 
           /// 🔙 BACK + TITLE
           Padding(
@@ -70,7 +72,7 @@ class NotificationScreen extends StatelessWidget {
                 Text(
                   loc.getByKey('mark_as_read'),
                   style: theme.textTheme.bodyMedium!.copyWith(
-                    color: primaryColor,
+                    color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -193,7 +195,8 @@ class NotificationScreen extends StatelessWidget {
             height: w * 0.08,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryColor,
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white, // 👈 BEST PRACTICE
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(w * 0.02),
                 ),
@@ -208,8 +211,10 @@ class NotificationScreen extends StatelessWidget {
               },
               child: Text(
                 loc.getByKey('track'),
-                style: theme.textTheme.labelMedium!
-                    .copyWith(color: Colors.white),
+                style: TextStyle(
+                  fontSize: w * 0.04,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

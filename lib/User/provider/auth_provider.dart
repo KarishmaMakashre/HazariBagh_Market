@@ -1,178 +1,98 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/auth_api_service.dart';
-import '../screen/flash_screen.dart';
 
 class AuthProvider extends ChangeNotifier {
   String mobile = "";
+  String otp = "";
+
   bool loading = false;
+  bool otpSent = false;
+  bool isLoggedIn = false;
 
-  String message = "";
-  String otp = ""; // only for testing
-  String token = "";
-  Map<String, dynamic>? user;
-
-  int otpTimeLeft = 30;
-  Timer? _timer;
-
-  /// ---------------------------
-  /// SET MOBILE
-  /// ---------------------------
+  /// 📱 Set mobile
   void setMobile(String value) {
     mobile = value;
+    debugPrint("📱 Mobile entered: $mobile");
     notifyListeners();
   }
 
-  /// ---------------------------
-  /// SEND OTP
-  /// ---------------------------
+  /// 🔐 Set OTP
+  void setOtp(String value) {
+    otp = value;
+    debugPrint("🔐 OTP entered: $otp");
+    notifyListeners();
+  }
+
+  /// 📤 SEND OTP
   Future<bool> sendOtp() async {
-    if (mobile.length != 10) {
-      message = "Enter valid mobile number";
-      notifyListeners();
-      return false;
-    }
-
     loading = true;
-    message = "";
     notifyListeners();
 
-    try {
-      final data = await AuthApiService.sendOtp(mobile);
-      debugPrint("SEND OTP RESPONSE: $data");
+    final success = await AuthApiService.sendOtp(mobile);
 
-      message = data["message"] ?? "Failed to send OTP";
+    loading = false;
+    otpSent = success;
 
-      if (data["success"] == true) {
-        otp = data["otp"] ?? "";
-        debugPrint("OTP RECEIVED FROM API: $otp");
-
-        startOtpTimer();
-        loading = false;
-        notifyListeners();
-        return true;
-      }
-
-      loading = false;
-      notifyListeners();
-      return false;
-    } catch (e) {
-      loading = false;
-      message = "Server error. Try again";
-      notifyListeners();
-      debugPrint("SEND OTP ERROR: $e");
-      return false;
-    }
+    notifyListeners();
+    return success;
   }
 
-  /// ---------------------------
-  /// VERIFY OTP
-  /// ---------------------------
-  Future<bool> verifyOtp(String enteredOtp) async {
-    if (enteredOtp.length != 6) {
-      message = "Please enter valid OTP";
-      notifyListeners();
-      return false;
-    }
-
+  /// 🔐 VERIFY OTP
+  Future<bool> verifyOtp() async {
     loading = true;
-    message = "";
     notifyListeners();
 
-    try {
-      final data = await AuthApiService.verifyOtp(mobile, enteredOtp);
-      debugPrint("VERIFY OTP RESPONSE: $data");
+    final response = await AuthApiService.verifyOtp(mobile, otp);
 
-      final bool success = data["success"] == true;
+    loading = false;
 
-      if (!success) {
-        message = data["message"] ?? "Wrong OTP";
-        loading = false;
-        notifyListeners();
-        return false; // ❌ WRONG OTP
-      }
+    if (response["success"] == true) {
+      isLoggedIn = true;
 
-      /// ✅ SUCCESS
-      token = data["token"];
-      user = data["user"];
-      message = data["message"] ?? "Login successful";
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool("isLoggedIn", true);
-      await prefs.setString("token", token);
-
-      loading = false;
-      notifyListeners();
-      return true;
-    } catch (e) {
-      loading = false;
-      message = "Invalid OTP or server error";
-      notifyListeners();
-      debugPrint("VERIFY OTP ERROR: $e");
-      return false;
+      /// 🧠 OPTIONAL: save token if backend sends it
+      /// AuthApiService.token = response["token"];
     }
+
+    notifyListeners();
+    return response["success"] == true;
   }
 
-  /// ---------------------------
-  /// RESEND OTP
-  /// ---------------------------
-  Future<void> resendOtp() async {
-    if (otpTimeLeft == 0) {
-      await sendOtp();
-    }
-  }
+  /// 🗑 DELETE ACCOUNT (auth clear)
+  Future<void> onAccountDeleted() async {
+    debugPrint("🗑 Account deleted, clearing auth");
 
-  /// ---------------------------
-  /// GOOGLE SIGN-IN (TEMP)
-  /// ---------------------------
-  void googleSignIn() {
-    debugPrint("Google Sign-In clicked");
-  }
-
-  /// ---------------------------
-  /// LOGOUT
-  /// ---------------------------
-  Future<void> logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-
-    /// RESET STATE
     mobile = "";
     otp = "";
-    token = "";
-    user = null;
-    otpTimeLeft = 0;
+    otpSent = false;
+    isLoggedIn = false;
+
+    /// OPTIONAL: clear token
+    /// AuthApiService.token = null;
 
     notifyListeners();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => const FlashScreen()),
-          (route) => false,
-    );
   }
 
-  /// ---------------------------
-  /// OTP TIMER
-  /// ---------------------------
-  void startOtpTimer() {
-    otpTimeLeft = 30;
-    _timer?.cancel();
+  /// 🚪 LOGOUT
+  void logout() {
+    debugPrint("🚪 User logged out");
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (otpTimeLeft == 0) {
-        timer.cancel();
-      } else {
-        otpTimeLeft--;
-      }
-      notifyListeners();
-    });
+    mobile = "";
+    otp = "";
+    otpSent = false;
+    isLoggedIn = false;
+
+    /// OPTIONAL: clear token
+    /// AuthApiService.token = null;
+
+    notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  /// 🔁 FULL RESET
+  void reset() {
+    mobile = "";
+    otp = "";
+    otpSent = false;
+    isLoggedIn = false;
+    notifyListeners();
   }
 }

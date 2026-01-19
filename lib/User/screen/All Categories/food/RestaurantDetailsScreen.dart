@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../Model/home_model.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/cart_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class RestaurantDetailsScreen extends StatelessWidget {
   final String img;
@@ -22,7 +24,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
     required this.distance,
   });
 
-  static const Color themeColor = Color(0xFFD0B5B5);
+  static const Color bannerBlue = Color(0xFF2E6DA4);
 
   @override
   Widget build(BuildContext context) {
@@ -44,41 +46,27 @@ class RestaurantDetailsScreen extends StatelessWidget {
       backgroundColor: bgColor,
       body: Column(
         children: [
-          const TopHeader(),
+          TopHeader(
+
+),
+
 
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: h * 0.02),
-
                   /// 🔙 BACK
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      borderRadius: BorderRadius.circular(8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.arrow_back,
-                              color: textColor, size: w * 0.055),
-                          SizedBox(width: w * 0.02),
-                          Text(
-                            loc.back,
-                            style: TextStyle(
-                              fontSize: w * 0.045,
-                              color: textColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: h * 0.011),
 
-                  SizedBox(height: h * 0.015),
+                  /// 🔙 Back Bar
+                  AppBackButton(
+                    width: w,
+                    color:bannerBlue,
+                    text: loc.back,
+                  ),
+                  SizedBox(height: h * 0.011),
+
 
                   /// 🏪 RESTAURANT CARD
                   Padding(
@@ -235,7 +223,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: w * 0.045,
                           fontWeight: FontWeight.bold,
-                          color: themeColor)),
+                          color: bannerBlue)),
                 ],
               ),
             ),
@@ -257,13 +245,13 @@ class RestaurantDetailsScreen extends StatelessWidget {
                 padding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: themeColor.withOpacity(0.2),
+                  color: bannerBlue.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   "Add",
                   style: TextStyle(
-                      color: themeColor,
+                      color: bannerBlue,
                       fontWeight: FontWeight.bold),
                 ),
               ),

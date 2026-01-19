@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../../l10n/app_localizations.dart';
-
 
 class OrderCard extends StatelessWidget {
   final String orderId;
@@ -29,67 +27,82 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
+    final mq = MediaQuery.of(context);
+    final w = mq.size.width;
+    final h = mq.size.height;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: h * 0.015),
+      padding: EdgeInsets.all(w * 0.035),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(w * 0.035),
       ),
       child: Row(
         children: [
+
+          /// 🔥 PRODUCT IMAGE
           Image.asset(
             image,
-            width: 60,
-            height: 60,
+            width: w * 0.15,
+            height: w * 0.15,
             fit: BoxFit.cover,
           ),
-          const SizedBox(width: 12),
 
+          SizedBox(width: w * 0.035),
+
+          /// 🔥 DETAILS
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 🔥 PRODUCT NAME (LOCALIZED)
                 Text(
                   loc.getByKey(productKey),
-                  style: const TextStyle(
-                    fontSize: 15,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: w * 0.040,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
 
-                const SizedBox(height: 4),
+                SizedBox(height: h * 0.004),
 
-                /// 🔥 PLACED ON
                 Text(
                   "${loc.placedOn}: $date",
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: w * 0.032,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
 
-                const SizedBox(height: 4),
+                SizedBox(height: h * 0.004),
 
-                /// 🔥 QTY
                 Text(
                   "${loc.qty}: $qty • $price",
-                  style: const TextStyle(fontSize: 13),
+                  style: TextStyle(
+                    fontSize: w * 0.034,
+                  ),
                 ),
               ],
             ),
           ),
 
-          /// 🔥 STATUS
+          /// 🔥 STATUS CHIP
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: EdgeInsets.symmetric(
+              horizontal: w * 0.03,
+              vertical: h * 0.006,
+            ),
             decoration: BoxDecoration(
               color: statusColor.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(w * 0.05),
             ),
             child: Text(
               loc.getByKey(statusKey),
               style: TextStyle(
                 color: statusColor,
-                fontSize: 12,
+                fontSize: w * 0.03,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -40,7 +40,8 @@ class FaqScreenUpdated extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.bgLight,
+      backgroundColor: Color(0xffF6F6F6FF),
+
       body: ListView.builder(
         padding: EdgeInsets.all(w * 0.04),
         itemCount: faqs.length,

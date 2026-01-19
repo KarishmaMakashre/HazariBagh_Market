@@ -13,30 +13,23 @@ class VendorDashboardScreen extends StatefulWidget {
 }
 
 class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
-  bool isOnline = true; // 🔥 ONLINE / OFFLINE STATE
+  bool isOnline = true;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final w = size.width;
     final h = size.height;
-
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    /// 🔥 SYSTEM UI (STATUS + NAV BAR)
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness:
         isDark ? Brightness.light : Brightness.dark,
-        systemNavigationBarColor:
-        isDark ? const Color(0xFF0F172A) : Colors.white,
-        systemNavigationBarIconBrightness:
-        isDark ? Brightness.light : Brightness.dark,
       ),
     );
 
-    /// 🎨 COLORS
     final bgColor =
     isDark ? const Color(0xFF0F172A) : const Color(0xFFF6F8FC);
     final cardColor =
@@ -48,22 +41,13 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
     final shadowColor =
     isDark ? Colors.black.withOpacity(0.35) : Colors.black.withOpacity(0.08);
 
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: VendorTopHeader(
-        onNotificationTap: () {
-          // notification screen open
-        },
-        onProfileTap: () {
-          // profile screen open
-        },
-      ),
+    return Scaffold(backgroundColor: bgColor,
+
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.045),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 👋 WELCOME
             Text(
               "Welcome Back 👋",
               style: TextStyle(
@@ -83,7 +67,7 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
 
             SizedBox(height: h * 0.02),
 
-            /// 🔴🟢 ONLINE / OFFLINE TOGGLE
+            /// ONLINE / OFFLINE
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -96,11 +80,7 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isOnline = !isOnline;
-                    });
-                  },
+                  onTap: () => setState(() => isOnline = !isOnline),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     width: 64,
@@ -132,59 +112,31 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
 
             SizedBox(height: h * 0.03),
 
-            /// 📊 STATS
             Row(
               children: [
-                _statCard(
-                  w,
-                  title: "Orders",
-                  value: "24",
-                  icon: Icons.shopping_cart,
-                  color: Colors.blue,
-                  cardColor: cardColor,
-                  textColor: textColor,
-                  subTextColor: subTextColor,
-                  shadowColor: shadowColor,
-                ),
-                _statCard(
-                  w,
-                  title: "Revenue",
-                  value: "₹1.2k",
-                  icon: Icons.currency_rupee,
-                  color: Colors.green,
-                  cardColor: cardColor,
-                  textColor: textColor,
-                  subTextColor: subTextColor,
-                  shadowColor: shadowColor,
-                ),
-                _statCard(
-                  w,
-                  title: "Products",
-                  value: "38",
-                  icon: Icons.inventory_2,
-                  color: Colors.orange,
-                  cardColor: cardColor,
-                  textColor: textColor,
-                  subTextColor: subTextColor,
-                  shadowColor: shadowColor,
-                ),
-                _statCard(
-                  w,
-                  title: "Rating",
-                  value: "4.6",
-                  icon: Icons.star,
-                  color: Colors.purple,
-                  cardColor: cardColor,
-                  textColor: textColor,
-                  subTextColor: subTextColor,
-                  shadowColor: shadowColor,
-                ),
+                _statCard(w,
+                    title: "Orders",
+                    value: "24",
+                    icon: Icons.shopping_cart,
+                    color: Colors.blue,
+                    cardColor: cardColor,
+                    textColor: textColor,
+                    subTextColor: subTextColor,
+                    shadowColor: shadowColor),
+                _statCard(w,
+                    title: "Revenue",
+                    value: "₹1.2k",
+                    icon: Icons.currency_rupee,
+                    color: Colors.green,
+                    cardColor: cardColor,
+                    textColor: textColor,
+                    subTextColor: subTextColor,
+                    shadowColor: shadowColor),
               ],
             ),
 
             SizedBox(height: h * 0.04),
 
-            /// 📊 SALES CHART
             Text(
               "Weekly Sales",
               style: TextStyle(
@@ -203,48 +155,21 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                 color: cardColor,
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
-                  BoxShadow(
-                    color: shadowColor,
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
+                  BoxShadow(color: shadowColor, blurRadius: 6),
                 ],
               ),
               child: BarChart(_barChartData()),
             ),
-
-            SizedBox(height: h * 0.04),
-
-            /// 🧾 LATEST ORDERS
-            Text(
-              "Latest Orders",
-              style: TextStyle(
-                fontSize: w * 0.046,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-              ),
-            ),
-
-            SizedBox(height: h * 0.02),
-
-            _latestOrderTile(
-                "Order #1023", "₹320", "Delivered", cardColor, shadowColor, textColor),
-            _latestOrderTile(
-                "Order #1022", "₹450", "Pending", cardColor, shadowColor, textColor),
-            _latestOrderTile(
-                "Order #1021", "₹180", "Cancelled", cardColor, shadowColor, textColor),
           ],
         ),
       ),
     );
   }
 
-  /// 📊 BAR CHART
   static BarChartData _barChartData() {
     final values = [1800.0, 2200.0, 1500.0, 3200.0, 2800.0, 4100.0, 3600.0];
 
     return BarChartData(
-      alignment: BarChartAlignment.spaceAround,
       maxY: 5000,
       gridData: FlGridData(show: false),
       borderData: FlBorderData(show: false),
@@ -265,7 +190,6 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
     );
   }
 
-  /// 📊 STAT CARD
   static Widget _statCard(
       double w, {
         required String title,
@@ -279,8 +203,8 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
       }) {
     return Expanded(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: w * 0.008),
-        padding: EdgeInsets.all(w * 0.025),
+        margin: EdgeInsets.symmetric(horizontal: w * 0.01),
+        padding: EdgeInsets.all(w * 0.03),
         decoration: BoxDecoration(
           color: cardColor,
           borderRadius: BorderRadius.circular(14),
@@ -291,81 +215,17 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: CircleAvatar(
-                radius: 14,
-                backgroundColor: color.withOpacity(0.18),
-                child: Icon(icon, color: color, size: 14),
-              ),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: w * 0.036,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
-            ),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: w * 0.025,
-                color: subTextColor,
-              ),
-            ),
+            Icon(icon, color: color, size: 20),
+            const SizedBox(height: 8),
+            Text(value,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: textColor)),
+            Text(title,
+                style: TextStyle(
+                    fontSize: 12, color: subTextColor)),
           ],
         ),
-      ),
-    );
-  }
-
-  /// 🧾 ORDER TILE
-  static Widget _latestOrderTile(
-      String orderId,
-      String amount,
-      String status,
-      Color cardColor,
-      Color shadowColor,
-      Color textColor,
-      ) {
-    final statusColor = status == "Delivered"
-        ? Colors.green
-        : status == "Pending"
-        ? Colors.orange
-        : Colors.red;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(color: shadowColor, blurRadius: 6),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(orderId,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: textColor)),
-              Text(amount,
-                  style: TextStyle(color: textColor.withOpacity(0.6))),
-            ],
-          ),
-          Text(
-            status,
-            style: TextStyle(
-              color: statusColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
       ),
     );
   }

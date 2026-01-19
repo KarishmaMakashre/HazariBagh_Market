@@ -1,320 +1,371 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hazari_bagh_market/widgets/home_page.dart';
+import 'package:hazari_bagh_market/User/screen/Auth/registration_screen.dart' hide AppColors;
 import 'package:provider/provider.dart';
 import '../../../colors/AppColors.dart';
 import '../../provider/auth_provider.dart';
-import '../home/home_screen.dart';
-import 'otp_verification_screen.dart';
+import '../../widgets/home_page.dart';
 
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  late TapGestureRecognizer privacyTap;
-  late TapGestureRecognizer termsTap;
-
-  @override
-  void initState() {
-    super.initState();
-    privacyTap = TapGestureRecognizer();
-    termsTap = TapGestureRecognizer();
-  }
-
-  @override
-  void dispose() {
-    privacyTap.dispose();
-    termsTap.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(
+      // backgroundColor: const Color(0xFFF5F6FA),
+      resizeToAvoidBottomInset: true,
+      body: Column(
         children: [
 
-          /// 🔹 BACKGROUND IMAGE
-          SizedBox(
-            height: size.height,
-            width: size.width,
-            child: Image.asset(
-              "assets/images/loginbg.png",
-              fit: BoxFit.cover,
+          /// 🔹 HEADER
+          Container(
+            height: 190,
+            width: double.infinity,
+            padding: const EdgeInsets.only(left: 16, top: 50),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
+            ),
+            alignment: Alignment.topLeft,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+              ),
             ),
           ),
 
-          /// 🔹 DARK OVERLAY
-          Container(color: Colors.black.withOpacity(0.6)),
-
-          /// 🔹 CONTENT
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  SizedBox(height: size.height * 0.09),
-
-                  /// 🔹 LOGO (EXACT MATCH)
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primary,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
+          /// 🔹 WHITE CARD (FULL HEIGHT + SCROLL SAFE)
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              transform: Matrix4.translationValues(0, -60, 0),
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
+                ),
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
                       ),
-                      child: Image.asset(
-                        "assets/images/logo.png",
-                        height: 68,
-                        width: 68,
-                      ),
-                    ),
-                  ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                  const SizedBox(height: 16),
+                            const SizedBox(height: 20),
 
-                  /// 🔹 SUB TITLE
-                  const Text(
-                    "Sign in with your mobile number or Google",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                    ),
-                  ),
-
-                  const SizedBox(height: 26),
-
-                  /// 🔹 MOBILE LABEL
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Mobile number",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  /// 🔹 MOBILE INPUT
-                  Container(
-                    height: 46,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextField(
-                      maxLength: 10,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      onChanged: auth.setMobile,
-                      decoration: const InputDecoration(
-                        counterText: "",
-                        prefixText: "+91  ",
-                        hintText: "Enter Your Number",
-                        border: InputBorder.none,
-                        contentPadding:
-                        EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  /// 🔹 SEND OTP BUTTON
-                  SizedBox(
-                    width: double.infinity,
-                    height: 46,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3E7CB1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: const BorderSide(color: Colors.white),
-                        ),
-                      ),
-                      onPressed: auth.loading
-                          ? null
-                          : () async {
-                        // ✅ Mobile number validation
-                        if (auth.mobile.length != 10) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Enter valid mobile number"),
+                            const Text(
+                              "Getting started",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          );
-                          return;
-                        }
 
-                        // ✅ Send OTP
-                        final bool success = await auth.sendOtp();
+                            const SizedBox(height: 6),
 
-                        // ✅ Navigate to OTP screen
-                        if (success && context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const OtpVerificationScreen(),
+                            const Text(
+                              "Create account to continue!",
+                              style: TextStyle(color: Colors.black54),
                             ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(auth.message)),
-                          );
-                        }
-                      },
-                      child: auth.loading
-                          ? const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      )
-                          : const Text(
-                        "Send OTP",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+
+                            const SizedBox(height: 20),
+
+                            Row(
+                              children: [
+                                _socialIcon(context, "assets/Icons/google.png"),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            Row(
+                              children: const [
+                                Expanded(
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
+                                  child: Text(
+                                    "OR",
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: Colors.black26,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
+                            const SizedBox(height: 20),
+
+                            /// 📱 MOBILE
+                            _inputField(
+                              icon: Icons.phone,
+                              hint: "Mobile number",
+                              prefix: "+91 ",
+                              keyboard: TextInputType.phone,
+                              maxLength: 10,
+                              onChanged: auth.setMobile,
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            /// 🔐 OTP
+                            _inputField(
+                              icon: Icons.lock_outline,
+                              hint: "Enter OTP",
+                              keyboard: TextInputType.number,
+                              maxLength: 6,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              onChanged: (value) {
+                                debugPrint("🔥 OTP field onChanged: $value");
+                                auth.setOtp(value);
+                              },
+                            ),
+
+                            const SizedBox(height: 12),
+
+
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: auth.loading
+                                  ? const Center(child: CircularProgressIndicator())
+                                  : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+
+                                onPressed: () async {
+                                  /// 📱 SEND OTP
+                                  if (auth.otp.isEmpty) {
+                                    debugPrint("➡️ SEND OTP clicked");
+                                    debugPrint("📱 Mobile: ${auth.mobile}");
+
+                                    if (auth.mobile.length != 10) {
+                                      _showMsg(context, "Enter valid mobile number");
+                                      return;
+                                    }
+
+                                    final success = await auth.sendOtp();
+                                    if (success) {
+                                      _showMsg(context, "OTP sent successfully");
+                                    } else {
+                                      _showMsg(context, "Failed to send OTP");
+                                    }
+                                  }
+
+                                  /// 🔐 VERIFY OTP / LOGIN
+                                  else {
+                                    debugPrint("➡️ LOGIN clicked");
+                                    debugPrint("📱 Mobile: ${auth.mobile}");
+                                    debugPrint("🔐 OTP: ${auth.otp}");
+
+                                    if (auth.otp.length != 6) {
+                                      _showMsg(context, "Enter valid 6 digit OTP");
+                                      return;
+                                    }
+
+                                    final success = await auth.verifyOtp();
+                                    if (success) {
+                                      debugPrint("🎉 Login successful");
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => const HomePage()),
+                                      );
+                                    } else {
+                                      _showMsg(context, "Invalid OTP");
+                                    }
+                                  }
+                                },
+
+                                child: Text(
+                                  auth.otp.isEmpty ? "SEND OTP" : "LOGIN",
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+
+                            const SizedBox(height: 30),
+
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black54, fontSize: 14),
+                                  children: [
+                                    const TextSpan(text: "Already have an account? "),
+                                    TextSpan(
+                                      text: "Register Here",
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // Navigate to RegistrationScreen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const RegistrationScreen(),
+                                            ),
+                                          );
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Center(
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 12,
+                                  ),
+                                  children: [
+                                    const TextSpan(
+                                      text: "By signing in you agree to our ",
+                                    ),
+                                    TextSpan(
+                                      text: "Privacy \nPolicy",
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // TODO: Open Privacy Policy
+                                        },
+                                    ),
+                                    const TextSpan(
+                                      text: " and ",
+                                    ),
+                                    TextSpan(
+                                      text: "Terms.",
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // TODO: Open Terms
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  /// 🔹 OR DIVIDER
-                  Row(
-                    children: const [
-                      Expanded(child: Divider(color: Colors.white30)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "or",
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      ),
-                      Expanded(child: Divider(color: Colors.white30)),
-                    ],
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  /// 🔹 GOOGLE BUTTON
-                  SizedBox(
-                    width: double.infinity,
-                    height: 44,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      icon: Image.asset(
-                        "assets/Icons/google.png",
-                        height: 20,
-                      ),
-                      label: const Text(
-                        "Sign in with Google",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                        ),
-                      ),
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 22),
-
-                  /// 🔹 REGISTER
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "New Users? ",
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      Text(
-                        "Register Here",
-                        style: TextStyle(
-                          color: AppColors.linkBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  /// 🔹 PRIVACY & TERMS (CLICKABLE)
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 11,
-                      ),
-                      children: [
-                        const TextSpan(
-                          text: "By signing in you agree to our ",
-                        ),
-                        TextSpan(
-                          text: "Privacy\nPolicy",
-                          style: const TextStyle(
-                            color: AppColors.linkBlue,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          recognizer: privacyTap
-                            ..onTap = () {
-                              debugPrint("Privacy Policy clicked");
-                            },
-                        ),
-                        const TextSpan(text: " and "),
-                        TextSpan(
-                          text: "Terms.",
-                          style: const TextStyle(
-                            color: AppColors.linkBlue,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          recognizer: termsTap
-                            ..onTap = () {
-                              debugPrint("Terms clicked");
-                            },
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-                ],
+                  );
+                },
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  /// 🔹 INPUT FIELD
+  static Widget _inputField({
+    required IconData icon,
+    required String hint,
+    String? prefix,
+    TextInputType keyboard = TextInputType.text,
+    int? maxLength,
+    List<TextInputFormatter>? inputFormatters,
+    Function(String)? onChanged,
+  }) {
+    return TextField(
+      keyboardType: keyboard,
+      maxLength: maxLength,
+      inputFormatters: inputFormatters,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        counterText: "",
+        prefixText: prefix,
+        prefixIcon: Icon(icon),
+        hintText: hint,
+        filled: true,
+        fillColor: const Color(0xFFF6F6F6),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 SOCIAL ICON
+  static Widget _socialIcon(BuildContext context, String asset) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(50),
+      onTap: () {
+        // 🔥 Home Screen open
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 14),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.black12),
+        ),
+        child: Image.asset(asset, height: 22),
+      ),
+    );
+  }
+
+  static void _showMsg(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg)),
     );
   }
 }

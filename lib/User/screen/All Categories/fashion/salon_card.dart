@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/colors/AppColors.dart';
 
 import '../../../../Model/salon_model.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -8,7 +9,6 @@ class SalonCard extends StatelessWidget {
   final SalonModel salon;
   const SalonCard({super.key, required this.salon});
 
-  static const Color primaryColor = Color(0xFF9C89B8);
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class SalonCard extends StatelessWidget {
                       children: [
                         Icon(Icons.location_on,
                             size: w * 0.045,
-                            color: primaryColor),
+                            color: AppColors.primary),
                         SizedBox(width: w * 0.01),
                         Expanded(
                           child: Text(
@@ -150,12 +150,12 @@ class SalonCard extends StatelessWidget {
                   label: Text(
                     loc.getByKey(serviceKey),
                     style: TextStyle(
-                      color: primaryColor,
+                      color: AppColors.primary,
                       fontSize: w * 0.03,
                     ),
                   ),
                   backgroundColor:
-                  primaryColor.withOpacity(isDark ? 0.25 : 0.12),
+                  AppColors.primary.withOpacity(isDark ? 0.25 : 0.12),
                   padding: EdgeInsets.symmetric(
                     horizontal: w * 0.015,
                     vertical: h * 0.002,

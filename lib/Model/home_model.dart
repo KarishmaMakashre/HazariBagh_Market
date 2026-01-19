@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../User/screen/All Categories/Grocery/grocery_screen.dart';
 import '../User/screen/All Categories/Property/property_listing_screen.dart';
 import '../User/screen/All Categories/agriculture_screen.dart';
@@ -31,6 +30,8 @@ class HomeCategoryModel {
     required this.titleKey,
     required this.screen,
   });
+
+  set isSelected(bool isSelected) {}
 }
 
 /// 🔹 CATEGORY LIST
@@ -42,27 +43,27 @@ final List<HomeCategoryModel> homeCategories = [
   ),
   HomeCategoryModel(
     image: "assets/Icons/rental.png",
-    titleKey: "rentalProperty",
+    titleKey: "rental Property",
     screen: const PropertyListingScreen(),
   ),
   HomeCategoryModel(
     image: "assets/Icons/food.png",
-    titleKey: "foodDelivery",
+    titleKey: "food Delivery",
     screen: const FoodHomeScreen(),
   ),
   HomeCategoryModel(
     image: "assets/Icons/fashion.png",
-    titleKey: "fashionStore",
+    titleKey: "fashion Store",
     screen: const FashionScreen(),
   ),
   HomeCategoryModel(
     image: "assets/Icons/grocery.png",
-    titleKey: "groceryStore",
+    titleKey: "grocery Store",
     screen: const GroceryScreen(),
   ),
   HomeCategoryModel(
     image: "assets/Icons/hotel.png",
-    titleKey: "hotelsRestaurants",
+    titleKey: "hotels Restaurants",
     screen: const HotelScreen(),
   ),
   HomeCategoryModel(
@@ -102,7 +103,7 @@ final List<HomeCategoryModel> homeCategories = [
   ),
   HomeCategoryModel(
     image: "assets/images/purchaseFlat.png",
-    titleKey: "purchaseHome",
+    titleKey: "purchase Home",
     screen: const HomePurchaseScreen(),
   ),
   HomeCategoryModel(
@@ -112,7 +113,7 @@ final List<HomeCategoryModel> homeCategories = [
   ),
   HomeCategoryModel(
     image: "assets/Icons/Automobile.png",
-    titleKey: "automobile",
+    titleKey: "auto mobile",
     screen: const AutomobileScreen(),
   ),
   HomeCategoryModel(

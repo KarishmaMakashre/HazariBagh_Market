@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/User/screen/categories/placed_order_screen.dart';
 import 'package:provider/provider.dart';
+import '../../../colors/AppColors.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../widgets/top_header.dart';
 import '../../provider/cart_provider.dart';
 import '../../provider/payment_provider.dart';
-
+import '../../widgets/app_back_button.dart';
+import '../../widgets/top_header.dart';
 
 class PaymentMethodScreen extends StatelessWidget {
   const PaymentMethodScreen({super.key});
@@ -21,11 +22,16 @@ class PaymentMethodScreen extends StatelessWidget {
     final deliveryFee = cart.deliveryFee;
     final totalAmount = subtotal + deliveryFee;
 
+    final bool isCartEmpty = cart.cartItems.isEmpty;
+    final bool isPaymentSelected = payment.selectedPayment != -1;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Column(
         children: [
-          const TopHeader(),
+          TopHeader(
+),
+
 
           Expanded(
             child: SingleChildScrollView(
@@ -33,37 +39,17 @@ class PaymentMethodScreen extends StatelessWidget {
               child: Column(
                 children: [
                   /// 🔙 BACK
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: mq.width * 0.04,
-                        vertical: mq.height * 0.01),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Row(
-                        children: [
-                          Icon(Icons.arrow_back,
-                              color: const Color(0xFF3670A3),
-                              size: mq.width * 0.06),
-                          SizedBox(width: mq.width * 0.02),
-                          Text(
-                            loc.getByKey('back'),
-                            style: TextStyle(
-                              fontSize: mq.width * 0.045,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF3670A3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  AppBackButton(
+                    width: mq.width, // ✅ FIXED
+                    color: AppColors.black,
+                    text: loc.back,
                   ),
 
                   SizedBox(height: mq.height * 0.02),
 
                   /// 💰 PAYMENT OPTIONS
                   Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: mq.width * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.03),
                     child: Column(
                       children: [
                         paymentTile(
@@ -100,14 +86,12 @@ class PaymentMethodScreen extends StatelessWidget {
 
                   /// 🧾 ORDER SUMMARY
                   Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: mq.width * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.03),
                     child: Container(
                       padding: EdgeInsets.all(mq.width * 0.03),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                        BorderRadius.circular(mq.width * 0.03),
+                        borderRadius: BorderRadius.circular(mq.width * 0.03),
                       ),
                       child: Column(
                         children: [
@@ -138,24 +122,40 @@ class PaymentMethodScreen extends StatelessWidget {
 
                   /// 🔘 PLACE ORDER
                   Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: mq.width * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: mq.width * 0.03),
                     child: SizedBox(
                       width: double.infinity,
                       height: mq.height * 0.055,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3670A3),
+                          backgroundColor: (isCartEmpty || !isPaymentSelected)
+                              ? Colors.grey
+                              : const Color(0xFF3670A3),
                         ),
                         onPressed: () {
+                          if (isCartEmpty) {
+                            _showMessage(
+                              context,
+                              loc.getByKey('cart_empty'),
+                            );
+                            return;
+                          }
+
+                          if (!isPaymentSelected) {
+                            _showMessage(
+                              context,
+                              loc.getByKey('select_payment_method'),
+                            );
+                            return;
+                          }
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => PlacedOrderScreen(
-                                productName: cart.cartItems.isNotEmpty
-                                    ? cart.cartItems.first["name"] ??
-                                    loc.getByKey('product')
-                                    : loc.getByKey('product'),
+                                productName:
+                                cart.cartItems.first["name"] ??
+                                    loc.getByKey('product'),
                                 totalAmount: totalAmount,
                                 paymentMethod:
                                 loc.getByKey(payment.getPaymentKey()),
@@ -168,8 +168,9 @@ class PaymentMethodScreen extends StatelessWidget {
                         child: Text(
                           loc.getByKey('place_order'),
                           style: TextStyle(
-                              fontSize: mq.width * 0.04,
-                              color: Colors.white),
+                            fontSize: mq.width * 0.04,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -200,7 +201,8 @@ class PaymentMethodScreen extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(mq.width * 0.03),
           border: Border.all(
-              color: isSelected ? Colors.green : Colors.grey.shade300),
+            color: isSelected ? Colors.green : Colors.grey.shade300,
+          ),
         ),
         child: Row(
           children: [
@@ -210,20 +212,29 @@ class PaymentMethodScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: TextStyle(
-                          fontSize: mq.width * 0.04,
-                          fontWeight: FontWeight.bold)),
-                  Text(subtitle,
-                      style: TextStyle(
-                          fontSize: mq.width * 0.032,
-                          color: Colors.black54)),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: mq.width * 0.04,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: mq.width * 0.032,
+                      color: Colors.black54,
+                    ),
+                  ),
                 ],
               ),
             ),
             if (isSelected)
-              Icon(Icons.check_circle,
-                  color: Colors.green, size: mq.width * 0.06),
+              Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: mq.width * 0.06,
+              ),
           ],
         ),
       ),
@@ -241,19 +252,29 @@ class PaymentMethodScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
-              style: TextStyle(
-                  fontSize: mq.width * 0.038,
-                  fontWeight:
-                  isBold ? FontWeight.bold : FontWeight.w500)),
-          Text(value,
-              style: TextStyle(
-                  fontSize: mq.width * 0.04,
-                  fontWeight:
-                  isBold ? FontWeight.bold : FontWeight.w600,
-                  color: isBold ? Colors.green : Colors.black)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: mq.width * 0.038,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: mq.width * 0.04,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+              color: isBold ? Colors.green : Colors.black,
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  void _showMessage(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg)),
     );
   }
 }

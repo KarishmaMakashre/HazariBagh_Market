@@ -33,7 +33,7 @@ class OrderDetailsScreen extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Color(0xffF6F6F6FF),
 
       /// 🔝 APP BAR
       appBar: AppBar(

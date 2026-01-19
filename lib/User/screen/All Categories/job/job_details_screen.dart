@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../../Model/home_model.dart';
+import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 import 'job_apply_form_screen.dart';
-
-/// 🎯 PRIMARY COLOR
-const Color primaryColor = Color(0xFF84B3B6);
 
 class JobDetailsScreen extends StatelessWidget {
   const JobDetailsScreen({super.key});
@@ -13,7 +13,7 @@ class JobDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
@@ -30,29 +30,10 @@ class JobDetailsScreen extends StatelessWidget {
                   SizedBox(height: h * 0.015),
 
                   /// 🔙 BACK
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.arrow_back_ios_new,
-                            color: primaryColor,
-                            size: w * 0.05,
-                          ),
-                          SizedBox(width: w * 0.02),
-                          Text(
-                            loc.back,
-                            style: TextStyle(
-                              color: primaryColor,
-                              fontSize: w * 0.04,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  AppBackButton(
+                    width: w,
+                    color: AppColors.primary,
+                    text: loc.back,
                   ),
 
                   SizedBox(height: h * 0.02),
@@ -70,10 +51,10 @@ class JobDetailsScreen extends StatelessWidget {
                               CircleAvatar(
                                 radius: w * 0.075,
                                 backgroundColor:
-                                primaryColor.withOpacity(0.15),
+                                AppColors.primary.withOpacity(0.15),
                                 child: Icon(
                                   Icons.business,
-                                  color: primaryColor,
+                                  color: AppColors.primary,
                                   size: w * 0.07,
                                 ),
                               ),
@@ -93,9 +74,11 @@ class JobDetailsScreen extends StatelessWidget {
                                     SizedBox(height: h * 0.006),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 4),
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: primaryColor,
+                                        color: AppColors.primary,
                                         borderRadius:
                                         BorderRadius.circular(12),
                                       ),
@@ -116,17 +99,26 @@ class JobDetailsScreen extends StatelessWidget {
 
                           SizedBox(height: h * 0.018),
 
-                          _infoRow(Icons.location_on,
-                              loc.getByKey("jobLocation"), w),
-                          _infoRow(Icons.currency_rupee,
-                              loc.getByKey("jobSalary"), w),
-                          _infoRow(Icons.work,
-                              loc.getByKey("jobExperience"), w),
+                          _infoRow(
+                            Icons.location_on,
+                            loc.getByKey("jobLocation"),
+                            w,
+                          ),
+                          _infoRow(
+                            Icons.currency_rupee,
+                            loc.getByKey("jobSalary"),
+                            w,
+                          ),
+                          _infoRow(
+                            Icons.work,
+                            loc.getByKey("jobExperience"),
+                            w,
+                          ),
 
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              loc.getByKey("jobPosted"),
+                              loc.getByKey("job Posted"),
                               style: TextStyle(
                                 fontSize: w * 0.03,
                                 color: Colors.grey.shade600,
@@ -177,7 +169,7 @@ class JobDetailsScreen extends StatelessWidget {
                             height: h * 0.055,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryColor,
+                                backgroundColor: AppColors.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -207,8 +199,9 @@ class JobDetailsScreen extends StatelessWidget {
                             height: h * 0.055,
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side:
-                                const BorderSide(color: primaryColor),
+                                side: const BorderSide(
+                                  color: AppColors.primary,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -217,7 +210,7 @@ class JobDetailsScreen extends StatelessWidget {
                               child: Text(
                                 loc.getByKey("callEmployer"),
                                 style: const TextStyle(
-                                  color: primaryColor,
+                                  color: AppColors.primary,
                                 ),
                               ),
                             ),
@@ -294,7 +287,7 @@ class JobDetailsScreen extends StatelessWidget {
       padding: EdgeInsets.only(bottom: w * 0.015),
       child: Row(
         children: [
-          Icon(icon, size: w * 0.045, color: primaryColor),
+          Icon(icon, size: w * 0.045, color: AppColors.primary),
           SizedBox(width: w * 0.02),
           Expanded(
             child: Text(

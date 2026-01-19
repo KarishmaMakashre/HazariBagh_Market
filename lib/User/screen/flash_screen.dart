@@ -1,244 +1,358 @@
+import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hazari_bagh_market/Vendor/vendor%20Screens/auth/vendor_register_screen.dart';
+import '../../Vendor/vendor Screens/auth/vendor_register_screen.dart';
 import '../../colors/AppColors.dart';
 import 'Auth/login_screen.dart';
+import 'Auth/registration_screen.dart' hide AppColors;
 
-class FlashScreen extends StatelessWidget {
-  const FlashScreen({super.key});
+class FoodServiceScreen extends StatefulWidget {
+  const FoodServiceScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // 🔥 STATUS BAR TRANSPARENT
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark, // Android icons
-        statusBarBrightness: Brightness.light, // iOS text
+  State<FoodServiceScreen> createState() => _FoodServiceScreenState();
+}
+
+class _FoodServiceScreenState extends State<FoodServiceScreen>
+    with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
+  late Animation<Offset> _bikeMove;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _bikeMove = Tween<Offset>(
+      begin: const Offset(-1.3, 0), // ⬅ left se start
+      end: Offset.zero,    // ➡ right tak
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.linear,
       ),
     );
 
-    final size = MediaQuery.of(context).size;
-    final h = size.height;
-    final w = size.width;
+    _controller.forward(); // 🔁 bike chalti rahe
+  }
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      extendBodyBehindAppBar: true, // 🔥 image behind status bar
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
-      body: SafeArea(
-        top: false, // 🔥 allow image under status bar
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
 
-                    /// 🔵 TOP SECTION
-                    Column(
-                      children: [
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF6F7FB),
+        body: Column(
+          children: [
 
-                        /// 🖼 IMAGE
-                        SizedBox(
-                          height: h * 0.50,
-                          width: w,
-                          child: Image.asset(
-                            'assets/images/flashImg.jpg',
-                            fit: BoxFit.cover,
-                          ),
+            /// 🔵 TOP CURVED SECTION
+            Expanded(
+              flex: 5,
+              child: Stack(
+                children: [
+
+                  /// 🔵 CURVED BG
+                  ClipPath(
+                    clipper: BottomCurveClipper(),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFF1E4F78),
+                            Color(0xFF215E8B),
+                          ],
                         ),
-
-                        /// 🔵 LOGO OVER IMAGE
-                        Transform.translate(
-                          offset: Offset(0, -h * 0.07),
-                          child: Container(
-                            padding: EdgeInsets.all(w * 0.030),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.primary,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.black.withOpacity(0.25),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.all(w * 0.03),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.white,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.asset(
-                                  "assets/images/logo.png",
-                                  height: w * 0.22,
-                                  width: w * 0.22,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: h * 0.005),
-
-                        /// 🏷 TITLE
-                        Text(
-                          "One App",
-                          style: TextStyle(
-                            fontSize: w * 0.06,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textDark,
-                          ),
-                        ),
-
-                        SizedBox(height: h * 0.01),
-
-                        /// 📝 SUBTITLE
-                        Text(
-                          "\"Your trusted marketplace for every\ncategory\"",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: w * 0.032,
-                            color: AppColors.textLight,
-                            height: 1.3,
-                          ),
-                        ),
-
-                        SizedBox(height: h * 0.025),
-
-                        /// 🔘 BUTTONS
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: w * 0.07),
-                          child: Row(
-                            children: [
-
-                              /// CUSTOMER BUTTON
-                              Expanded(
-                                child: SizedBox(
-                                  height: h * 0.05,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(w * 0.02),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                          const LoginScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      "I'm a customer",
-                                      style: TextStyle(
-                                        fontSize: w * 0.034,
-                                        color: AppColors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(width: w * 0.03),
-
-                              /// VENDOR BUTTON
-                              Expanded(
-                                child: SizedBox(
-                                  height: h * 0.05,
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
-                                        color: AppColors.black,
-                                        width: w * 0.003,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(w * 0.02),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                          const VendorRegisterScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      "I'm a vendor",
-                                      style: TextStyle(
-                                        fontSize: w * 0.034,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    /// 🔵 BOTTOM LOGIN TEXT
-                    Padding(
-                      padding: EdgeInsets.only(bottom: h * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Already have an account? ",
-                            style: TextStyle(
-                              fontSize: w * 0.033,
-                              color: AppColors.textLight,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const LoginScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Log in",
-                              style: TextStyle(
-                                fontSize: w * 0.033,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
+                  ),
+
+                  /// 🔙 BACK BUTTON
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, top: 8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.25),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_ios_new,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  /// 🚴 BIKE ANIMATION (MAIN PART)
+                  Align(
+                    alignment: const Alignment(0, 0.75),
+                    child: SlideTransition(
+                      position: _bikeMove,
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: 6),
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeInOut,
+                        builder: (context, value, child) {
+                          return Transform.translate(
+                            offset: Offset(0, value), // 🔼🔽 bounce
+                            child: child,
+                          );
+                        },
+                        child: Image.asset(
+                          "assets/images/Gemini_Generated_Image_r94uoer94uoer94u-removebg-preview.png",
+                          width: w * 0.65,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// ⚪ BOTTOM CONTENT
+            Expanded(
+              flex: 5,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: w * 0.08),
+                child: Column(
+                  children: [
+
+                    const SizedBox(height: 32),
+
+                    const Text(
+                      "One App",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    const Text(
+                      "Your trusted marketplace for every category.\nFast • Reliable • Secure",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        height: 1.5,
+                      ),
+                    ),
+
+                    const SizedBox(height: 36),
+
+                    const _UserTypeSwitcher(),
+
+                    const SizedBox(height: 28),
+
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: w * 0.038,
+                          ),
+                          children: [
+                            const TextSpan(text: "Already have an account? "),
+                            TextSpan(
+                              text: "Log In",
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: w * 0.038,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+/// 🔘 CUSTOMER / VENDOR SWITCH
+class _UserTypeSwitcher extends StatefulWidget {
+  const _UserTypeSwitcher();
+
+  @override
+  State<_UserTypeSwitcher> createState() => _UserTypeSwitcherState();
+}
+
+class _UserTypeSwitcherState extends State<_UserTypeSwitcher> {
+  bool isCustomerSelected = true;
+
+  void _navigate(Widget page) {
+    Future.delayed(const Duration(milliseconds: 250), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => page),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+
+    return Container(
+      height: 56,
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+
+          AnimatedAlign(
+            duration: const Duration(milliseconds: 280),
+            curve: Curves.easeInOut,
+            alignment: isCustomerSelected
+                ? Alignment.centerLeft
+                : Alignment.centerRight,
+            child: Container(
+              width: w * 0.38,
+              height: 46,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF215E8B),
+                    Color(0xFF1E4F78),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+
+          Row(
+            children: [
+
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() => isCustomerSelected = true);
+                    _navigate(const LoginScreen());
+                  },
+                  child: Center(
+                    child: Text(
+                      "I'm a customer",
+                      style: TextStyle(
+                        color: isCustomerSelected
+                            ? Colors.white
+                            : Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() => isCustomerSelected = false);
+                    _navigate(const VendorRegisterScreen());
+                  },
+                  child: Center(
+                    child: Text(
+                      "I'm a vendor",
+                      style: TextStyle(
+                        color: !isCustomerSelected
+                            ? Colors.white
+                            : Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 🔵 CURVED CLIPPER
+class BottomCurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 90);
+    path.quadraticBezierTo(
+      size.width / 2,
+      size.height - 150,
+      size.width,
+      size.height - 90,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

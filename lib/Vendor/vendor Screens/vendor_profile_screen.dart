@@ -33,14 +33,6 @@ class VendorProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: VendorTopHeader(
-        onNotificationTap: () {
-          // notification screen open
-        },
-        onProfileTap: () {
-          // profile screen open
-        },
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(w * 0.045),
         child: Column(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../Model/home_model.dart';
+import '../../../../../Model/home_model.dart';
+import '../../../../../l10n/app_localizations.dart';
+import '../../../colors/AppColors.dart';
+import '../../widgets/app_back_button.dart';
 import '../../widgets/top_header.dart';
-import '../../l10n/app_localizations.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({super.key});
@@ -25,35 +26,17 @@ class AllCategoriesScreen extends StatelessWidget {
       body: Column(
         children: [
           /// 🔵 TOP HEADER
-          const TopHeader(),
+          TopHeader(
+),
+
 
           SizedBox(height: h * 0.01),
 
           /// 🔙 BACK BAR
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              borderRadius: BorderRadius.circular(12),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.arrow_back,
-                    color: colors.onBackground,
-                    size: w * 0.055,
-                  ),
-                  SizedBox(width: w * 0.02),
-                  Text(
-                    loc.back,
-                    style: GoogleFonts.inter(
-                      color: colors.onBackground,
-                      fontSize: w * 0.045,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          AppBackButton(
+            width: w,
+            color: AppColors.primary,
+            text: loc.back,
           ),
 
           /// 🔲 CATEGORY GRID

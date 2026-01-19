@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../User/provider/cart_provider.dart';
-import '../User/screen/cart/cart_page.dart';
-import '../User/screen/notification_screen.dart';
-import '../User/screen/profile_screen.dart';
-import '../User/screen/search_screen.dart';
-import '../colors/AppColors.dart';
+import '../../colors/AppColors.dart';
+import '../provider/cart_provider.dart';
+import '../screen/cart/cart_page.dart';
+import '../screen/notification_screen.dart';
+import '../screen/profile_screen.dart';
 
 class TopHeader extends StatelessWidget {
   final bool hideProfileIcon;
@@ -32,34 +30,80 @@ class TopHeader extends StatelessWidget {
           horizontal: width * 0.04,
           vertical: height * 0.012,
         ),
-        decoration: const BoxDecoration(
-          color: AppColors.primary,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primaryBlue,
+              AppColors.primaryOrange,
+            ],
+          ),
         ),
+
         child: SafeArea(
           bottom: false,
           child: Row(
             children: [
               /// LOGO
-              Container(
-                height: width * 0.12,
-                width: width * 0.12,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(width * 0.03),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(width * 0.015),
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.contain,
-                  ),
+              /// LOGO + WELCOME + LOCATION
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      height: width * 0.10,
+                      width: width * 0.10,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(width * 0.03),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(width * 0.020),
+                        child: Image.asset(
+                          "assets/images/HazariBaghLogo-removebg.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(width: width * 0.03),
+
+                    /// WELCOME + LOCATION
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: width * 0.045,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Ratanlok Colony, Indore",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: width * 0.030,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
 
+
               const Spacer(),
 
-              _iconButton(context, Icons.search, const SearchScreen(), width),
-              SizedBox(width: width * 0.06),
 
               _iconButton(
                 context,
@@ -67,7 +111,7 @@ class TopHeader extends StatelessWidget {
                 const NotificationScreen(),
                 width,
               ),
-              SizedBox(width: width * 0.06),
+              SizedBox(width: width * 0.04),
 
               /// 🛒 CART
               Consumer<CartProvider>(
@@ -111,20 +155,11 @@ class TopHeader extends StatelessWidget {
                           ),
                       ],
                     ),
+
+
                   );
                 },
               ),
-
-              /// 👤 PROFILE (conditional)
-              if (!hideProfileIcon) ...[
-                SizedBox(width: width * 0.06),
-                _iconButton(
-                  context,
-                  Icons.person,
-                  const ProfileScreen(),
-                  width,
-                ),
-              ],
             ],
           ),
         ),

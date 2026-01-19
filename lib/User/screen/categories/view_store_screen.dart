@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../colors/AppColors.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../widgets/top_header.dart';
 import '../../provider/store_provider.dart';
 import '../../provider/cart_provider.dart';
+import '../../widgets/app_back_button.dart';
+import '../../widgets/top_header.dart';
 
 
 class ViewStoreScreen extends StatelessWidget {
@@ -31,7 +33,8 @@ class ViewStoreScreen extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       body: Column(
         children: [
-          const TopHeader(),
+          TopHeader(),
+
 
           Expanded(
             child: SingleChildScrollView(
@@ -39,27 +42,10 @@ class ViewStoreScreen extends StatelessWidget {
                 children: [
 
                   /// 🔙 BACK
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: w * 0.04,
-                      vertical: h * 0.01,
-                    ),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Row(
-                        children: [
-                          Icon(Icons.arrow_back, size: w * 0.055),
-                          SizedBox(width: w * 0.02),
-                          Text(
-                            loc.getByKey('back'),
-                            style: GoogleFonts.inter(
-                              fontSize: w * 0.04,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  AppBackButton(
+                    width: w,
+                    color: AppColors.black,
+                    text: loc.back,
                   ),
 
                   /// 🏬 STORE CARD

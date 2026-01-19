@@ -1,42 +1,28 @@
-class UserProfileResponse {
-  final bool success;
-  final String message;
-  final User user;
-
-  UserProfileResponse({
-    required this.success,
-    required this.message,
-    required this.user,
-  });
-
-  factory UserProfileResponse.fromJson(Map<String, dynamic> json) {
-    return UserProfileResponse(
-      success: json['success'] ?? true,
-      message: json['message'] ?? '',
-      user: User.fromJson(json['user']),
-    );
-  }
-}
-
-class User {
+class UserModel {
   final String id;
+  final String name;
   final String phone;
-  final String role;
-  final bool isVerified;
+  final String? gender;
+  final String? profile;
+  final String? dob;
 
-  User({
+  UserModel({
     required this.id,
+    required this.name,
     required this.phone,
-    required this.role,
-    required this.isVerified,
+    this.gender,
+    this.profile,
+    this.dob,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['_id'] ?? '',
-      phone: json['phone']?.toString() ?? '',
-      role: json['role'] ?? '',
-      isVerified: json['isVerified'] ?? false,
+      name: json['name'] ?? '',
+      phone: json['phone'] ?? '',
+      gender: json['gender'],
+      profile: json['profile'],
+      dob: json['dob'],
     );
   }
 }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../Model/product_model.dart';
+import '../../../../colors/AppColors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/top_header.dart';
 import '../../../provider/hotel_provider.dart';
 import '../../../provider/cart_provider.dart';
+import '../../../widgets/app_back_button.dart';
+import '../../../widgets/top_header.dart';
 
 class HotelProductListScreen extends StatelessWidget {
   /// 🔑 ALWAYS ENGLISH KEY
@@ -19,56 +21,37 @@ class HotelProductListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hotelProvider = context.watch<HotelProvider>();
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     final products =
     hotelProvider.getProductsByCategory(categoryTitle);
 
     final w = MediaQuery.of(context).size.width;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    /// 🎨 THEME
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final bgColor =
+    isDark ? const Color(0xFF0F172A) : const Color(0xFFF5F7FA);
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subTextColor =
+    isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+    final cardColor =
+    isDark ? const Color(0xFF1E293B) : Colors.white;
 
     return Scaffold(
-      backgroundColor: colors.surface,
-
+      backgroundColor: Color(0xffF6F6F6FF),
       body: Column(
         children: [
           /// 🔝 TOP HEADER
           const TopHeader(),
 
-          /// 🔙 BACK + TITLE
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: w * 0.04, vertical: 8),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: colors.primary,
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                SizedBox(width: w * 0.02),
-
-                /// 📛 CATEGORY TITLE
-                Text(
-                  loc.getByKey(categoryTitle),
-                  style: GoogleFonts.inter(
-                    color: colors.primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+          /// 🔙 BACK BUTTON
+          AppBackButton(
+            width: w,
+            color: AppColors.primary,
+            text: loc.back,
           ),
 
-          /// 🧺 PRODUCT LIST
+          /// 📦 PRODUCT LIST
           Expanded(
             child: products.isEmpty
                 ? Center(
@@ -77,12 +60,13 @@ class HotelProductListScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
                   fontSize: 16,
-                  color: colors.onSurface.withOpacity(0.6),
+                  color: subTextColor,
                 ),
               ),
             )
                 : ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+              padding:
+              EdgeInsets.symmetric(horizontal: w * 0.04),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return _buildProductCard(
@@ -90,8 +74,10 @@ class HotelProductListScreen extends StatelessWidget {
                   products[index],
                   w,
                   loc,
-                  colors,
                   isDark,
+                  cardColor,
+                  textColor,
+                  subTextColor,
                 );
               },
             ),
@@ -107,8 +93,10 @@ class HotelProductListScreen extends StatelessWidget {
       ProductModel product,
       double w,
       AppLocalizations loc,
-      ColorScheme colors,
       bool isDark,
+      Color cardColor,
+      Color textColor,
+      Color subTextColor,
       ) {
     final cartProvider =
     Provider.of<CartProvider>(context, listen: false);
@@ -118,12 +106,12 @@ class HotelProductListScreen extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.symmetric(vertical: w * 0.02),
-      color: colors.surface,
+      color: cardColor,
       elevation: isDark ? 0 : 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: isDark
-            ? BorderSide(color: colors.outline.withOpacity(0.2))
+            ? BorderSide(color: Colors.white10)
             : BorderSide.none,
       ),
       child: Padding(
@@ -156,7 +144,7 @@ class HotelProductListScreen extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: w * 0.04,
                       fontWeight: FontWeight.w600,
-                      color: colors.onSurface,
+                      color: textColor,
                     ),
                   ),
 
@@ -167,7 +155,7 @@ class HotelProductListScreen extends StatelessWidget {
                     product.price,
                     style: GoogleFonts.inter(
                       fontSize: w * 0.035,
-                      color: colors.primary,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -191,28 +179,30 @@ class HotelProductListScreen extends StatelessWidget {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    backgroundColor: colors.inverseSurface,
+                    backgroundColor: AppColors.primary,
                     content: Text(
                       "${loc.getByKey(product.name)} ${loc.getByKey('added_to_cart')}",
-                      style: GoogleFonts.inter(
-                        color: colors.onInverseSurface,
-                      ),
+                      style: GoogleFonts.inter(color: Colors.white),
                     ),
-                    duration: const Duration(milliseconds: 800),
+                    duration: const Duration(milliseconds: 900),
                   ),
                 );
               },
-              icon: Icon(Icons.shopping_bag, size: w * 0.045),
+              icon: Icon(
+                Icons.shopping_bag,
+                size: w * 0.045,
+                color: Colors.white,
+              ),
               label: Text(
                 loc.getByKey('add'),
                 style: GoogleFonts.inter(
                   fontSize: w * 0.035,
                   fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: colors.primary,
-                foregroundColor: colors.onPrimary,
+                backgroundColor: AppColors.primary,
                 padding: EdgeInsets.symmetric(
                   horizontal: w * 0.025,
                   vertical: w * 0.015,

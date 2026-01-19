@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../colors/AppColors.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../widgets/top_header.dart';
+import '../../widgets/app_back_button.dart';
+import '../../widgets/top_header.dart';
 import '../status_row.dart';
 
 class TrackOrderScreen extends StatelessWidget {
@@ -19,31 +21,16 @@ class TrackOrderScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const TopHeader(),
+            TopHeader(),
+
 
             SizedBox(height: h * 0.01),
 
             /// 🔙 BACK + TITLE
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-              child: InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_back,
-                        color: primaryColor, size: w * 0.055),
-                    SizedBox(width: w * 0.02),
-                    Text(
-                      loc.getByKey('back'),
-                      style: TextStyle(
-                        fontSize: w * 0.045,
-                        fontWeight: FontWeight.w600,
-                        color: primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            AppBackButton(
+              width: w,
+              color: AppColors.black,
+              text: loc.back,
             ),
 
             SizedBox(height: h * 0.02),
