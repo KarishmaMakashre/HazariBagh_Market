@@ -16,7 +16,6 @@
 
 
 
-
     <application
         android:label="hazari_bagh_market"
         android:name="${applicationName}"

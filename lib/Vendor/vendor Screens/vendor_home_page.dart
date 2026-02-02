@@ -3,6 +3,7 @@ import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_add_product_sc
 import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_orders_screen.dart';
 import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_profile_screen.dart';
 import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_reports_screen.dart';
+import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_store_list_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../VendorProvider/vendor_bottom_nav_provider.dart';
@@ -20,9 +21,9 @@ class VendorHomePage extends StatelessWidget {
     final pages = const [
       VendorDashboardScreen(),
       VendorOrdersScreen(),
-      VendorAddProductScreen(),
+      VendorAddStoreScreen(),
+      VendorStoreListScreen(),
       VendorReportsScreen(),
-      VendorProfileScreen(),
     ];
 
     return Scaffold(

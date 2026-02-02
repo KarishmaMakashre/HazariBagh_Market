@@ -1,253 +1,211 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../VendorProvider/product_provider.dart';
-import '../models/product_model.dart';
-import '../widget/vendor_top_header.dart';
+import '../VendorProvider/vendor_store_provider.dart';
+import '../VendorProvider/category_provider.dart';
+import 'vendor_store_list_screen.dart';
 
-class VendorAddProductScreen extends StatefulWidget {
-  const VendorAddProductScreen({super.key});
+class VendorAddStoreScreen extends StatefulWidget {
+  const VendorAddStoreScreen({super.key});
 
   @override
-  State<VendorAddProductScreen> createState() =>
-      _VendorAddProductScreenState();
+  State<VendorAddStoreScreen> createState() => _VendorAddStoreScreenState();
 }
 
-class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
+class _VendorAddStoreScreenState extends State<VendorAddStoreScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final shopCtrl = TextEditingController();
-  final nameCtrl = TextEditingController();
-  final priceCtrl = TextEditingController();
-  final stockCtrl = TextEditingController();
-  final descCtrl = TextEditingController();
+  final nameController = TextEditingController();
+  final descController = TextEditingController();
+  final streetController = TextEditingController();
+  final cityController = TextEditingController();
+  final stateController = TextEditingController();
+  final landmarkController = TextEditingController();
+  final pincodeController = TextEditingController();
+  final latController = TextEditingController();
+  final lngController = TextEditingController();
+  final openController = TextEditingController();
+  final closeController = TextEditingController();
 
-  String selectedCategory = "Select Category";
-  File? productImage;
+
+  //fashion store
+  final titleController = TextEditingController();
+  final priceController = TextEditingController();
+  final mrpController = TextEditingController();
+  final genderController = TextEditingController();
+  final subCategoryController = TextEditingController();
+  final sizesController = TextEditingController();
+  final colorsController = TextEditingController();
+  final clothSizeController = TextEditingController();
+  final pantSizeController = TextEditingController();
+  final shoeSizeController = TextEditingController();
+
+  File? fashionImage;
+
+
+  String? selectedCategory;
+
+  File? storeImage;
+  File? shopLicense;
+  File? fssaiFile;
 
   final ImagePicker picker = ImagePicker();
 
-  final categories = [
-    "Grocery",
-    "Restaurant",
-    "Electronics",
-    "Clothing",
-    "Services",
-  ];
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<CategoryProvider>().getAllCategories();
+    });
+  }
 
-  /// 🔐 Permission + Image Picker
-  Future<void> pickImage(ImageSource source) async {
-    try {
-      if (source == ImageSource.camera) {
-        final status = await Permission.camera.request();
-        if (!status.isGranted) return;
-      }
+  @override
+  void dispose() {
+    nameController.dispose();
+    descController.dispose();
+    streetController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    landmarkController.dispose();
+    pincodeController.dispose();
+    latController.dispose();
+    lngController.dispose();
+    openController.dispose();
+    closeController.dispose();
+    super.dispose();
+  }
 
-      final XFile? image = await picker.pickImage(
-        source: source,
-        imageQuality: 70,
-      );
-
-      if (image != null) {
-        setState(() {
-          productImage = File(image.path);
-        });
-      }
-    } catch (e) {
-      debugPrint("Image pick error: $e");
+  Future<void> pickImage(Function(File) onPicked) async {
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      onPicked(File(picked.path));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final provider = context.read<ProductProvider>();
+    final storeProvider = context.watch<VendorStoreProvider>();
+    final categoryProvider = context.watch<CategoryProvider>();
 
     return Scaffold(
-      appBar: const VendorTopHeader(),
-
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(w * 0.05),
+      appBar: AppBar(title: const Text("Create Store")),
+      body: categoryProvider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
-
-              /// 📸 IMAGE PICKER
-              GestureDetector(
-                onTap: () => showModalBottomSheet(
-                  context: context,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  builder: (_) => _imagePickerSheet(),
-                ),
-                child: Container(
-                  height: 170,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey.shade300),
-                    image: productImage != null
-                        ? DecorationImage(
-                      image: FileImage(productImage!),
-                      fit: BoxFit.cover,
-                    )
-                        : null,
-                  ),
-                  child: productImage == null
-                      ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.camera_alt_outlined,
-                          size: 42, color: Colors.grey.shade600),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Add Product Image",
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  )
-                      : Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: Colors.black54,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.edit,
-                          color: Colors.white, size: 18),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 22),
-
-              _inputField(
-                controller: shopCtrl,
-                label: "Shop Name",
-                icon: Icons.store,
-              ),
-              const SizedBox(height: 14),
-
-              _inputField(
-                controller: nameCtrl,
-                label: "Product Name",
-                icon: Icons.shopping_bag,
-              ),
-              const SizedBox(height: 14),
-
-              _inputField(
-                controller: priceCtrl,
-                label: "Price (₹)",
-                icon: Icons.currency_rupee,
-                keyboard: TextInputType.number,
-              ),
-              const SizedBox(height: 14),
-
-              _inputField(
-                controller: stockCtrl,
-                label: "Stock Quantity",
-                icon: Icons.inventory,
-                keyboard: TextInputType.number,
-              ),
-              const SizedBox(height: 14),
+              _input(nameController, "Store Name"),
 
               DropdownButtonFormField<String>(
                 value: selectedCategory,
+                decoration:
+                const InputDecoration(labelText: "Category"),
+                items: categoryProvider.categoryList
+                    .map<DropdownMenuItem<String>>(
+                      (c) => DropdownMenuItem(
+                    value: c['_id'].toString(),
+                    child: Text(c['name']),
+                  ),
+                )
+                    .toList(),
+                onChanged: (v) =>
+                    setState(() => selectedCategory = v),
                 validator: (v) =>
-                v == "Select Category" ? "Select category" : null,
-                items: [
-                  const DropdownMenuItem(
-                    value: "Select Category",
-                    child: Text("Select Category"),
-                  ),
-                  ...categories.map(
-                        (e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    ),
-                  ),
-                ],
-                onChanged: (v) => setState(() => selectedCategory = v!),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                v == null ? "Select category" : null,
+              ),
+
+              _input(descController, "Description"),
+              _input(streetController, "Street"),
+              _input(cityController, "City"),
+              _input(stateController, "State"),
+              _input(landmarkController, "Landmark"),
+              _input(pincodeController, "Pincode"),
+              _input(latController, "Latitude"),
+              _input(lngController, "Longitude"),
+              _input(openController, "Open Time"),
+              _input(closeController, "Close Time"),
+
+              _file(
+                "Store Image",
+                storeImage,
+                    () => pickImage(
+                      (f) => setState(() => storeImage = f),
+                ),
+              ),
+              _file(
+                "Shop License",
+                shopLicense,
+                    () => pickImage(
+                      (f) => setState(() => shopLicense = f),
+                ),
+              ),
+              _file(
+                "FSSAI",
+                fssaiFile,
+                    () => pickImage(
+                      (f) => setState(() => fssaiFile = f),
                 ),
               ),
 
-              const SizedBox(height: 14),
+              const SizedBox(height: 20),
 
-              TextFormField(
-                controller: descCtrl,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: "Description",
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              ElevatedButton(
+                onPressed: storeProvider.isLoading
+                    ? null
+                    : () async {
+                  if (!_formKey.currentState!.validate()) return;
 
-              const SizedBox(height: 30),
-
-              /// ✅ SUBMIT
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3B73A8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (!_formKey.currentState!.validate()) return;
-
-                    if (productImage == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please add product image"),
-                        ),
-                      );
-                      return;
-                    }
-
-                    provider.addProduct(
-                      ProductModel(
-                        id: DateTime.now().toString(),
-                        shopName: shopCtrl.text,
-                        name: nameCtrl.text,
-                        price: double.parse(priceCtrl.text),
-                        stock: int.parse(stockCtrl.text),
-                        category: selectedCategory,
-                        description: descCtrl.text,
-                        imagePath: productImage!.path,
-                      ),
-                    );
-
+                  if (storeImage == null ||
+                      shopLicense == null ||
+                      fssaiFile == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Product Added Successfully"),
+                        content: Text("All files required"),
                       ),
                     );
+                    return;
+                  }
 
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    "Add Product",
-                    style:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
+                  final success = await context
+                      .read<VendorStoreProvider>()
+                      .createStore(
+                    name: nameController.text,
+                    category: selectedCategory!,
+                    description: descController.text,
+                    street: streetController.text,
+                    city: cityController.text,
+                    state: stateController.text,
+                    landmark: landmarkController.text,
+                    pincode: pincodeController.text,
+                    lat: latController.text,
+                    lng: lngController.text,
+                    openTime: openController.text,
+                    closeTime: closeController.text,
+                    storeImage: storeImage!,
+                    shopLicense: shopLicense!,
+                    fssaiFile: fssaiFile!,
+                  );
+
+                  if (mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                        const VendorStoreListScreen(),
+                      ),
+                    );
+                  }
+                },
+                child: storeProvider.isLoading
+                    ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+                    : const Text("Create Store"),
               ),
             ],
           ),
@@ -256,50 +214,26 @@ class _VendorAddProductScreenState extends State<VendorAddProductScreen> {
     );
   }
 
-  /// 📸 Bottom Sheet
-  Widget _imagePickerSheet() {
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text("Camera"),
-            onTap: () {
-              Navigator.pop(context);
-              pickImage(ImageSource.camera);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo),
-            title: const Text("Gallery"),
-            onTap: () {
-              Navigator.pop(context);
-              pickImage(ImageSource.gallery);
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _input(TextEditingController c, String label) => Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: TextFormField(
+      controller: c,
+      decoration: InputDecoration(labelText: label),
+      validator: (v) => v == null || v.isEmpty ? "Required" : null,
+    ),
+  );
 
-  Widget _inputField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType keyboard = TextInputType.text,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboard,
-      validator: (v) => v!.isEmpty ? "Required" : null,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+  Widget _file(String title, File? file, VoidCallback onTap) => ListTile(
+    title: Text(title),
+    subtitle: Text(
+      file?.path.split('/').last ?? "No file selected",
+      style: TextStyle(
+        color: file == null ? Colors.red : Colors.green,
       ),
-    );
-  }
+    ),
+    trailing: IconButton(
+      icon: const Icon(Icons.upload),
+      onPressed: onTap,
+    ),
+  );
 }

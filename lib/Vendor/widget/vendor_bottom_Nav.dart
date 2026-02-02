@@ -64,15 +64,15 @@ class VendorBottomNavBar extends StatelessWidget {
                 _addButton(primary),
 
                 _navItem(
-                  icon: Icons.bar_chart,
-                  label: "Reports",
+                  icon: Icons.store,
+                  label: "Store",
                   index: 3,
                   primary: primary,
                   inactive: inactiveColor,
                 ),
                 _navItem(
-                  icon: Icons.person,
-                  label: "Profile",
+                  icon: Icons.bar_chart,
+                  label: "Reports",
                   index: 4,
                   primary: primary,
                   inactive: inactiveColor,

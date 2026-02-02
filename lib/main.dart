@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'User/provider/auth_provider.dart';
@@ -19,15 +21,27 @@ import 'User/provider/store_provider.dart';
 import 'User/provider/support_provider.dart';
 import 'User/provider/theme_provider.dart';
 import 'User/screen/splash_screen.dart';
+import 'Vendor/VendorProvider/category_provider.dart';
 import 'Vendor/VendorProvider/dashboard_provider.dart';
 import 'Vendor/VendorProvider/order_provider.dart';
 import 'Vendor/VendorProvider/product_provider.dart';
 import 'Vendor/VendorProvider/vendor_bottom_nav_provider.dart';
 import 'Vendor/VendorProvider/vendor_profile_provider.dart';
 import 'Vendor/VendorProvider/vendor_reports_provider.dart';
+import 'Vendor/VendorProvider/vendor_store_provider.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ INIT HIVE
+  await Hive.initFlutter();
+
+  // ✅ OPEN REQUIRED BOXES
+  await Hive.openBox('appBox');     // for routes / app data
+  await Hive.openBox('userBox');    // if you store user data
+  await Hive.openBox('cartBox');    // if cart uses hive
+
   runApp(
     MultiProvider(
       providers: [
@@ -49,16 +63,19 @@ void main() {
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => VendorProfileProvider()),
         ChangeNotifierProvider(create: (_) => VendorReportsProvider()),
         ChangeNotifierProvider(create: (_) => VendorBottomNavProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => VendorStoreProvider()),
       ],
       child: const MyApp(),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
