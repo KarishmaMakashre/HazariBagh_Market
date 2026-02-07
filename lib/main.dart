@@ -21,14 +21,23 @@ import 'User/provider/store_provider.dart';
 import 'User/provider/support_provider.dart';
 import 'User/provider/theme_provider.dart';
 import 'User/screen/splash_screen.dart';
+import 'Vendor/VendorProvider/Fashion_Provider.dart';
+import 'Vendor/VendorProvider/agriculture_provider.dart';
 import 'Vendor/VendorProvider/category_provider.dart';
 import 'Vendor/VendorProvider/dashboard_provider.dart';
+import 'Vendor/VendorProvider/education_provider.dart';
+import 'Vendor/VendorProvider/food_store_provider.dart';
+import 'Vendor/VendorProvider/govt_provider.dart';
+import 'Vendor/VendorProvider/grocery_store_provider.dart';
+import 'Vendor/VendorProvider/hotel_provider.dart';
+import 'Vendor/VendorProvider/job_provider.dart';
 import 'Vendor/VendorProvider/order_provider.dart';
-import 'Vendor/VendorProvider/product_provider.dart';
+import 'Vendor/VendorProvider/travel_provider.dart';
+import 'Vendor/VendorProvider/vendor_Property_Provider.dart';
 import 'Vendor/VendorProvider/vendor_bottom_nav_provider.dart';
 import 'Vendor/VendorProvider/vendor_profile_provider.dart';
 import 'Vendor/VendorProvider/vendor_reports_provider.dart';
-import 'Vendor/VendorProvider/vendor_store_provider.dart';
+import 'Vendor/VendorProvider/vendor_store_provider.dart' hide StoreProvider;
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -67,9 +76,18 @@ void main() async {
         ChangeNotifierProvider(create: (_) => VendorReportsProvider()),
         ChangeNotifierProvider(create: (_) => VendorBottomNavProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
-        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => GroceryStoreProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => VendorStoreProvider()),
+        ChangeNotifierProvider(create: (_) => GovtProvider()),
+        ChangeNotifierProvider(create: (_) => FashionProductProvider()),
+        ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
+        ChangeNotifierProvider(create: (_) => JobProvider()),
+        ChangeNotifierProvider(create: (_) => VendorPropertyProvider()),
+        ChangeNotifierProvider(create: (_) => EducationProvider()),
+        ChangeNotifierProvider(create: (_) => VendorHotelProvider()),
+        ChangeNotifierProvider(create: (_) => VendorAgricultureProvider()),
+        ChangeNotifierProvider(create: (_) => VendorTravelProvider()),
       ],
       child: const MyApp(),
     ),

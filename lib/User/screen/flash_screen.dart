@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../Vendor/vendor Screens/auth/vendor_register_screen.dart';
+import '../../Vendor/vendor_screens/auth/vendor_register_screen.dart';
 import '../../colors/AppColors.dart';
 import 'Auth/login_screen.dart';
 import 'Auth/registration_screen.dart' hide AppColors;
