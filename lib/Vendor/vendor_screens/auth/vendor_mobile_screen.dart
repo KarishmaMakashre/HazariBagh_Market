@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/Vendor/vendor Screens/auth/vendor_otp_screen.dart';
+import 'package:hazari_bagh_market/Vendor/vendor_screens/auth/vendor_otp_screen.dart';
 import '../../vendorColors/AppColors.dart';
 
 class VendorMobileScreen extends StatefulWidget {

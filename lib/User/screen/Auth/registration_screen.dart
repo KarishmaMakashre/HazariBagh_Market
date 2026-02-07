@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../Vendor/vendor Screens/auth/vendor_doc_bank_screen.dart';
 import '../../../Vendor/vendorColors/AppColors.dart';
+import '../../../Vendor/vendor_screens/auth/vendor_doc_bank_screen.dart';
 
 
 class RegistrationScreen extends StatefulWidget {

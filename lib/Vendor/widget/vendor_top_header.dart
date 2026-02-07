@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../vendor Screens/vendor_notification_screen.dart';
-import '../vendor Screens/vendor_profile_screen.dart';
+
+import '../vendor_screens/vendor_notification_screen.dart';
+import '../vendor_screens/vendor_profile_screen.dart';
 
 class VendorTopHeader extends StatelessWidget
     implements PreferredSizeWidget {

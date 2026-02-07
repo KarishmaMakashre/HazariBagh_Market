@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hazari_bagh_market/Vendor/vendor%20Screens/vendor_dashboard_home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../colors/AppColors.dart';
+import '../vendor_dashboard_home_screen.dart';
 
 class VendorRegisterScreen  extends StatefulWidget {
   const VendorRegisterScreen({super.key});
