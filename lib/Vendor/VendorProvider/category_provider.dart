@@ -1,88 +1,63 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import '../vendor_screens/models/category_model.dart';
-import '../vendor_screens/utils/ApiEndpoints.dart';
 
-class CategoryProvider with ChangeNotifier {
-  bool _isLoading = false;
-  List<CategoryModel> _categoryList = [];
+import '../vendor_screens/VendorAllCreateCategorys/vendor_model/category_model.dart';
+import '../vendor_screens/utils/api_urls.dart';
 
-  bool get isLoading => _isLoading;
-  List<CategoryModel> get categoryList => _categoryList;
+class VendorCategoryProvider with ChangeNotifier {
+  final Box categoryBox;
+  final Box registerBox;
 
-  /// 🔹 Fetch data by category name
-  Future<void> fetchByCategory(String categoryName) async {
-    final endpoint = ApiEndpoints.categoryApiMap[categoryName];
+  List<Category> categories = [];
+  bool isLoading = false;
 
-    if (endpoint == null) {
-      debugPrint("❌ No API found for $categoryName");
-      return;
+  VendorCategoryProvider({
+    required this.categoryBox,
+    required this.registerBox,
+  }) {
+    loadFromLocal();
+    fetchCategories();
+  }
+
+  void loadFromLocal() {
+    final cached = categoryBox.get('categories');
+    if (cached != null) {
+      categories = (cached as List)
+          .map((e) => Category.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+      notifyListeners();
     }
+  }
 
-    _isLoading = true;
-    notifyListeners();
-
-    final url = Uri.parse(ApiEndpoints.baseUrl + endpoint);
-
+  Future<void> fetchCategories() async {
     try {
-      final response = await http.get(url);
+      isLoading = true;
+      notifyListeners();
 
-      if (response.statusCode == 200) {
-        final decoded = jsonDecode(response.body);
+      final res = await http.get(Uri.parse(ApiUrls.getAllCategories));
 
-        final List list = decoded['data'] ?? decoded['categories'] ?? [];
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        final List list = data['categories'];
 
-        _categoryList = list
-            .map((e) => CategoryModel.fromJson(e))
-            .toList();
+        categories = list.map((e) => Category.fromJson(e)).toList();
 
-        debugPrint("✅ Loaded ${_categoryList.length} items for $categoryName");
-      } else {
-        debugPrint("❌ API Error ${response.statusCode}");
+        await categoryBox.put('categories', list);
       }
     } catch (e) {
-      debugPrint("❌ Exception: $e");
+      debugPrint(e.toString());
     }
 
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
   }
 
-  /// 🔹 Clear list when switching category
-  void clear() {
-    _categoryList.clear();
-    notifyListeners();
-  }
-
-  Future<void> getAllCategories() async {
-    _isLoading = true;
-    notifyListeners();
-
-    final url = Uri.parse(
-      "https://api.hazaribagmarket.in/vendor/getallstores",
-    );
-
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final decoded = jsonDecode(response.body);
-
-        final List list = decoded['categories'] ?? [];
-
-        _categoryList =
-            list.map((e) => CategoryModel.fromJson(e)).toList();
-
-        debugPrint("✅ Categories Loaded: ${_categoryList.length}");
-      } else {
-        debugPrint("❌ API Error: ${response.statusCode}");
-      }
-    } catch (e) {
-      debugPrint("❌ Exception: $e");
-    }
-
-    _isLoading = false;
+  void selectCategory(Category category) {
+    registerBox.put('categoryId', category.id);
+    registerBox.put('categoryName', category.name);
     notifyListeners();
   }
 }

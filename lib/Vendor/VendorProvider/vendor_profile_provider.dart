@@ -1,19 +1,42 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class VendorProfileProvider with ChangeNotifier {
-  String shopName = "Ramesh General Store";
-  String phone = "9876543210";
-  File? profileImage;
+class VendorProfileProvider extends ChangeNotifier {
+  String _shopName = "My Shop";
+  String _phone = "9876543210";
+  File? _profileImage;
 
+  /// GETTERS
+  String get shopName => _shopName;
+  String get phone => _phone;
+  File? get profileImage => _profileImage;
+
+  /// UPDATE PROFILE DETAILS
   void updateProfile({
-    String? shop,
-    String? phoneNo,
-    File? image,
+    required String shop,
+    required String phoneNo,
   }) {
-    if (shop != null) shopName = shop;
-    if (phoneNo != null) phone = phoneNo;
-    if (image != null) profileImage = image;
+    _shopName = shop;
+    _phone = phoneNo;
+    notifyListeners();
+  }
+
+  /// PICK PROFILE IMAGE
+  Future<void> pickProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile =
+    await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _profileImage = File(pickedFile.path);
+      notifyListeners();
+    }
+  }
+
+  /// REMOVE IMAGE (optional)
+  void removeProfileImage() {
+    _profileImage = null;
     notifyListeners();
   }
 }

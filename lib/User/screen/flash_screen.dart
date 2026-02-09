@@ -313,7 +313,7 @@ class _UserTypeSwitcherState extends State<_UserTypeSwitcher> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() => isCustomerSelected = false);
-                    _navigate(const VendorRegisterScreen());
+                    _navigate(const RegisterForm());
                   },
                   child: Center(
                     child: Text(

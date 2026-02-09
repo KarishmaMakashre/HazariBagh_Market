@@ -11,7 +11,7 @@ class GroceryItem {
     String? id,
   }) : id = id ?? title.toLowerCase().replaceAll(' ', '_');
 
-  // Optional: Method to create a model from JSON/Map if fetching from an API
+  // Optional: Method to create a vendor_model from JSON/Map if fetching from an API
   factory GroceryItem.fromJson(Map<String, dynamic> json) {
     return GroceryItem(
       title: json['title'] as String,
