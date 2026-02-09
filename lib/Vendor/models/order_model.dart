@@ -10,4 +10,13 @@ class OrderModel {
     required this.amount,
     required this.status,
   });
+
+  OrderModel copyWith({required String status}) {
+    return OrderModel(
+      orderId: orderId,
+      customer: customer,
+      amount: amount,
+      status: status,
+    );
+  }
 }

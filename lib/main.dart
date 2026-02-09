@@ -21,23 +21,11 @@ import 'User/provider/store_provider.dart';
 import 'User/provider/support_provider.dart';
 import 'User/provider/theme_provider.dart';
 import 'User/screen/splash_screen.dart';
-import 'Vendor/VendorProvider/Fashion_Provider.dart';
-import 'Vendor/VendorProvider/agriculture_provider.dart';
 import 'Vendor/VendorProvider/category_provider.dart';
-import 'Vendor/VendorProvider/dashboard_provider.dart';
-import 'Vendor/VendorProvider/education_provider.dart';
-import 'Vendor/VendorProvider/food_store_provider.dart';
-import 'Vendor/VendorProvider/govt_provider.dart';
-import 'Vendor/VendorProvider/grocery_store_provider.dart';
-import 'Vendor/VendorProvider/hotel_provider.dart';
-import 'Vendor/VendorProvider/job_provider.dart';
 import 'Vendor/VendorProvider/order_provider.dart';
-import 'Vendor/VendorProvider/travel_provider.dart';
-import 'Vendor/VendorProvider/vendor_Property_Provider.dart';
 import 'Vendor/VendorProvider/vendor_bottom_nav_provider.dart';
 import 'Vendor/VendorProvider/vendor_profile_provider.dart';
-import 'Vendor/VendorProvider/vendor_reports_provider.dart';
-import 'Vendor/VendorProvider/vendor_store_provider.dart' hide StoreProvider;
+import 'Vendor/vendor_screens/VendorAllCreateCategorys/provider/Vendor_store_provider.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -50,6 +38,8 @@ void main() async {
   await Hive.openBox('appBox');     // for routes / app data
   await Hive.openBox('userBox');    // if you store user data
   await Hive.openBox('cartBox');    // if cart uses hive
+  await Hive.openBox('registerBox'); // ✅ REQUIRED
+  await Hive.openBox('categoriesBox');
 
   runApp(
     MultiProvider(
@@ -61,7 +51,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => JobsServicesProvider()),
         ChangeNotifierProvider(create: (_) => PropertyProvider()),
-        ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => SupportProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
@@ -73,21 +62,15 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => VendorProfileProvider()),
-        ChangeNotifierProvider(create: (_) => VendorReportsProvider()),
         ChangeNotifierProvider(create: (_) => VendorBottomNavProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
-        ChangeNotifierProvider(create: (_) => GroceryStoreProvider()),
-        ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => VendorStoreProvider()),
-        ChangeNotifierProvider(create: (_) => GovtProvider()),
-        ChangeNotifierProvider(create: (_) => FashionProductProvider()),
-        ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
-        ChangeNotifierProvider(create: (_) => JobProvider()),
-        ChangeNotifierProvider(create: (_) => VendorPropertyProvider()),
-        ChangeNotifierProvider(create: (_) => EducationProvider()),
-        ChangeNotifierProvider(create: (_) => VendorHotelProvider()),
-        ChangeNotifierProvider(create: (_) => VendorAgricultureProvider()),
-        ChangeNotifierProvider(create: (_) => VendorTravelProvider()),
+        ChangeNotifierProvider(
+          create: (_) => VendorCategoryProvider(
+            categoryBox: Hive.box('categoriesBox'),
+            registerBox: Hive.box('registerBox'),
+          ),
+        ),
       ],
       child: const MyApp(),
     ),

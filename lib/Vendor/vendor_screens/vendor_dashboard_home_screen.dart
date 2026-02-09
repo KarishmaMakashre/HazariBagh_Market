@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hazari_bagh_market/Vendor/vendor_screens/vendor_add_product_screen.dart';
+import 'package:hazari_bagh_market/Vendor/vendor_screens/vendor_profile_screen.dart';
 import 'package:hazari_bagh_market/Vendor/vendor_screens/vendor_reports_screen.dart';
-import 'package:hazari_bagh_market/Vendor/vendor_screens/vendor_store_list_screen.dart';
 import '../widget/vendor_bottom_Nav.dart';
 import '../widget/vendor_top_header.dart';
 import 'Home/vendor_dashboard_screen.dart';
 import 'vendor_orders_screen.dart';
-import 'vendor_profile_screen.dart';
 
 class VendorDashboardHomeScreen extends StatefulWidget {
   const VendorDashboardHomeScreen({super.key});
@@ -30,9 +29,9 @@ class _VendorDashboardHomeScreenState
     screens = const [
       VendorDashboardScreen(),     // 🏠 Home
       VendorOrdersScreen(),        // 📦 Orders
-      VendorAddProductScreen(storeId: 'storeId',),    // ➕ Add
-      VendorStoreListScreen(),       // 👤 Profile
+      VendorAddProductScreen(),    // ➕ Add
       VendorReportsScreen(),       // 📊 Reports
+      VendorProfileScreen(),
 
     ];
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../VendorProvider/order_provider.dart';
 import '../models/order_model.dart';
-import '../widget/vendor_top_header.dart';
 
 class VendorOrdersScreen extends StatelessWidget {
   const VendorOrdersScreen({super.key});

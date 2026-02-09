@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../vendor_screens/vendor_notification_screen.dart';
-import '../vendor_screens/vendor_profile_screen.dart';
+
 
 class VendorTopHeader extends StatelessWidget
     implements PreferredSizeWidget {
@@ -33,12 +32,12 @@ class VendorTopHeader extends StatelessWidget
           ),
           onPressed: () {
             // Navigate to notification screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const VendorNotificationScreen(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => const VendorNotificationScreen(),
+            //   ),
+            // );
           },
         ),
         const SizedBox(width: 8),
@@ -49,12 +48,12 @@ class VendorTopHeader extends StatelessWidget
           ),
           onPressed: () {
             // Navigate to profile screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const VendorProfileScreen(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => const VendorProfileScreen(),
+            //   ),
+            // );
           },
         ),
         const SizedBox(width: 2),
