@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hazari_bagh_market/Vendor/vendor_screens/vendor_dashboard_home_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,7 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm>
     with SingleTickerProviderStateMixin {
-  /// 🔁 Animation
+  /// 🔁 Animation (kept as-is, just image removed)
   late AnimationController _bikeController;
   late Animation<Offset> _bikeMove;
 
@@ -77,25 +78,21 @@ class _RegisterFormState extends State<RegisterForm>
   void initState() {
     super.initState();
 
-    /// Hive box (ensure opened in main.dart)
     box = Hive.box('registerBox');
     loadDraft();
 
-    /// Animation
     _bikeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
 
-    _bikeMove = Tween<Offset>(
-      begin: const Offset(0, 0.15),
-      end: const Offset(0, -0.05),
-    ).animate(
-      CurvedAnimation(
-        parent: _bikeController,
-        curve: Curves.easeInOut,
-      ),
-    );
+    _bikeMove =
+        Tween<Offset>(
+          begin: const Offset(0, 0.15),
+          end: const Offset(0, -0.05),
+        ).animate(
+          CurvedAnimation(parent: _bikeController, curve: Curves.easeInOut),
+        );
 
     _bikeController.repeat(reverse: true);
   }
@@ -218,7 +215,6 @@ class _RegisterFormState extends State<RegisterForm>
   Widget build(BuildContext context) {
     final provider = context.watch<VendorCategoryProvider>();
     final primary = Theme.of(context).colorScheme.primary;
-    final w = MediaQuery.of(context).size.width;
 
     return WillPopScope(
       onWillPop: () async {
@@ -230,37 +226,13 @@ class _RegisterFormState extends State<RegisterForm>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Register",
-              style: TextStyle(color: Colors.white)),
+          title: const Text("Register", style: TextStyle(color: Colors.white)),
           backgroundColor: primary,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Column(
           children: [
-            /// 🚲 Animated Image
-            Align(
-              alignment: const Alignment(0, 0.75),
-              child: SlideTransition(
-                position: _bikeMove,
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0, end: 6),
-                  duration: const Duration(milliseconds: 600),
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(0, value),
-                      child: child,
-                    );
-                  },
-                  child: Image.asset(
-                    "assets/images/Gemini_Generated_Image_r94uoer94uoer94u-removebg-preview.png",
-                    width: w * 0.35,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-
-            /// 📋 FORM
+            /// 📋 FORM (image removed only)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -269,17 +241,19 @@ class _RegisterFormState extends State<RegisterForm>
                   children: [
                     input("Name", nameController),
                     input("Email", email),
-                    input("Phone", phone,
-                        type: TextInputType.phone),
+                    input("Phone", phone, type: TextInputType.phone),
                     DropdownButtonFormField<Category>(
                       value: selectedCategory,
                       decoration: const InputDecoration(
-                          labelText: "Category"),
+                        labelText: "Category",
+                      ),
                       items: provider.categories
-                          .map((c) => DropdownMenuItem(
-                        value: c,
-                        child: Text(c.name),
-                      ))
+                          .map(
+                            (c) => DropdownMenuItem(
+                          value: c,
+                          child: Text(c.name),
+                        ),
+                      )
                           .toList(),
                       onChanged: (c) =>
                           setState(() => selectedCategory = c),
@@ -292,7 +266,25 @@ class _RegisterFormState extends State<RegisterForm>
                         setState(() => step = 2);
                         saveDraft();
                       },
-                      child: const Text("Next"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primary,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 52),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
                     ),
                   ],
                 )
@@ -304,18 +296,41 @@ class _RegisterFormState extends State<RegisterForm>
                       ElevatedButton(
                         onPressed: () async {
                           await box.clear();
-                          setState(() {
-                            step = 1;
-                            selectedCategory = null;
-                          });
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
+
+                          // HomePage par navigate
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const VendorDashboardHomeScreen(),
+                            ),
+                                (route) => false,
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text(
-                                    "Submitted Successfully")),
+                              content: Text("Submitted Successfully"),
+                            ),
                           );
                         },
-                        child: const Text("Submit"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 52),
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -329,10 +344,27 @@ class _RegisterFormState extends State<RegisterForm>
   }
 
   Widget uploadButton(String label) {
-    return OutlinedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.upload),
-      label: Text(label),
+    final primary = Theme.of(context).colorScheme.primary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: OutlinedButton.icon(
+        onPressed: () {
+          // image picker logic later
+        },
+        icon: Icon(Icons.upload_file, color: primary),
+        label: Text(
+          label,
+          style: TextStyle(color: primary, fontWeight: FontWeight.w600),
+        ),
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 52),
+          side: BorderSide(color: primary, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+      ),
     );
   }
 

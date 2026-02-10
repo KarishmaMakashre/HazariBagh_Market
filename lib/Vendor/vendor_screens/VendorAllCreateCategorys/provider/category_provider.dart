@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import '../vendor_model/category_model.dart';
 
 class CategoryProvider extends ChangeNotifier {
@@ -11,6 +10,8 @@ class CategoryProvider extends ChangeNotifier {
   List<Category> get categories => _categories;
 
   Future<void> fetchCategories() async {
+    if (_categories.isNotEmpty) return; // prevent reloading
+
     try {
       isLoading = true;
       notifyListeners();

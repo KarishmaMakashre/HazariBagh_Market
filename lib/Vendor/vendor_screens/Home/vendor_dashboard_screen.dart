@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../widget/vendor_top_header.dart';
-
 class VendorDashboardScreen extends StatefulWidget {
   const VendorDashboardScreen({super.key});
 
@@ -15,66 +13,49 @@ class VendorDashboardScreen extends StatefulWidget {
 class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
   bool isOnline = true;
 
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final w = size.width;
-    final h = size.height;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+@override
+Widget build(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  final w = size.width;
+  final h = size.height;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness:
-        isDark ? Brightness.light : Brightness.dark,
-      ),
-    );
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness:
+          isDark ? Brightness.light : Brightness.dark,
+    ),
+  );
 
-    final bgColor =
-    isDark ? const Color(0xFF0F172A) : const Color(0xFFF6F8FC);
-    final cardColor =
-    isDark ? const Color(0xFF1E293B) : Colors.white;
-    final textColor =
-    isDark ? Colors.white : const Color(0xFF1F2937);
-    final subTextColor =
-    isDark ? Colors.grey.shade400 : Colors.grey.shade600;
-    final shadowColor =
-    isDark ? Colors.black.withOpacity(0.35) : Colors.black.withOpacity(0.08);
+  final bgColor =
+      isDark ? const Color(0xFF0F172A) : const Color(0xFFF6F8FC);
+  final cardColor =
+      isDark ? const Color(0xFF1E293B) : Colors.white;
+  final textColor =
+      isDark ? Colors.white : const Color(0xFF1F2937);
+  final subTextColor =
+      isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+  final shadowColor =
+      isDark ? Colors.black.withOpacity(0.35) : Colors.black.withOpacity(0.08);
 
-    return Scaffold(backgroundColor: bgColor,
-
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(w * 0.045),
+  return Scaffold(
+    backgroundColor: bgColor,
+    body: SafeArea(
+      child: SingleChildScrollView(
+        // padding: EdgeInsets.all(w * 0.045),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Welcome Back 👋",
-              style: TextStyle(
-                fontSize: w * 0.052,
-                fontWeight: FontWeight.bold,
-                color: textColor,
-              ),
-            ),
-            SizedBox(height: h * 0.006),
-            Text(
-              "Here is your business overview",
-              style: TextStyle(
-                fontSize: w * 0.035,
-                color: subTextColor,
-              ),
-            ),
 
-            SizedBox(height: h * 0.02),
-
-            /// ONLINE / OFFLINE
+            /// ONLINE / OFFLINE STATUS (now top section)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   isOnline ? "Status: Online" : "Status: Offline",
                   style: TextStyle(
-                    fontSize: w * 0.038,
+                    fontSize: w * 0.04,
                     fontWeight: FontWeight.w600,
                     color: isOnline ? Colors.green : Colors.red,
                   ),
@@ -88,9 +69,8 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: isOnline
-                          ? Colors.green
-                          : Colors.grey.shade400,
+                      color:
+                          isOnline ? Colors.green : Colors.grey.shade400,
                     ),
                     child: Align(
                       alignment: isOnline
@@ -161,11 +141,12 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
               child: BarChart(_barChartData()),
             ),
           ],
-        ),
+        
       ),
-    );
-  }
-
+    ),
+  )
+  );
+}
   static BarChartData _barChartData() {
     final values = [1800.0, 2200.0, 1500.0, 3200.0, 2800.0, 4100.0, 3600.0];
 

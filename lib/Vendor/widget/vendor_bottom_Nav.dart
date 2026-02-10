@@ -66,7 +66,7 @@ class VendorBottomNavBar extends StatelessWidget {
                 _navItem(
                   icon: Icons.bar_chart,
                   label: "Reports",
-                  index: 4,
+                  index: 3,
                   primary: primary,
                   inactive: inactiveColor,
                 ),
